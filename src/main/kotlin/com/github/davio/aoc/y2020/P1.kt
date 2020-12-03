@@ -46,7 +46,7 @@ class P1 {
      */
 
     fun getResultPart1() {
-        val entries = getInputAsIntList(1)
+        val entries = getInputAsIntList()
         entries.first { entries.contains(2020 - it) }.run {
             this * (2020 - this)
         }.apply {
@@ -68,7 +68,7 @@ class P1 {
      */
 
     fun getResultPart2() {
-        val entries = getInputAsIntList(1)
+        val entries = getInputAsIntList()
         entries.mapNotNull { e1 ->
             entries.firstOrNull { e2 -> entries.contains(2020 - e1 - e2) }?.run {
                 Pair(e1, this)

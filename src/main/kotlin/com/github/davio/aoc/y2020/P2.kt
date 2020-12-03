@@ -42,7 +42,7 @@ class P2 {
      */
 
     fun getResultPart1() {
-        getInputSequenceAsStrings(2)
+        getInputSequenceAsStrings()
             .map { getLineParts(it) }
             .count { isResultPart1Valid(it) }
             .apply { println(this) }
@@ -85,7 +85,7 @@ class P2 {
      */
 
     fun getResultPart2() {
-        getInputSequenceAsStrings(2)
+        getInputSequenceAsStrings()
             .map { getLineParts(it) }
             .count { isResultPart2Valid(it) }
             .apply { println(this) }

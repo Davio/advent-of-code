@@ -1,9 +1,22 @@
 package com.github.davio.aoc.general
 
-fun getInputList(number: Int) = ClassLoader.getSystemResourceAsStream("$number.txt")!!.bufferedReader().readLines()
+import kotlin.streams.asSequence
 
-fun getInputSequenceAsStrings(number: Int)= getInputList(number).asSequence()
+fun getInputList() = ClassLoader.getSystemResourceAsStream("${getCallingClassNumber()}.txt")!!.bufferedReader().readLines()
 
-fun getInputSequenceAsInts(number: Int)= getInputSequenceAsStrings(number).map { Integer.parseInt(it) }
+fun getInputSequenceAsStrings() = getInputList().asSequence()
 
-fun getInputAsIntList(number: Int): List<Int> = getInputList(number).map { Integer.parseInt(it) }
+fun getInputSequenceAsInts() = getInputSequenceAsStrings().map { Integer.parseInt(it) }
+
+fun getInputAsIntList(): List<Int> = getInputList().map { Integer.parseInt(it) }
+
+fun getCallingClassNumber(): String {
+    val classRegex = Regex(".*P(\\d)")
+    return StackWalker.getInstance().walk {
+        it.asSequence().first { frame ->
+            frame.className.matches(classRegex)
+        }!!.run {
+            classRegex.matchEntire(this.className)!!.groups[1]!!.value
+        }
+    }
+}
