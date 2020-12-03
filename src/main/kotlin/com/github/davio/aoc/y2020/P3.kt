@@ -74,23 +74,23 @@ class P3 {
      */
 
     fun getResultPart1() {
-        var position = 0
+        var index = 0
 
         getInputSequenceAsStrings()
             .count {
-                val hasTree = hasTreeAtPosition(it, position)
-                position = calculateNewPosition(it, position)
+                val hasTree = hasTreeAtIndex(it, index)
+                index = calculateNewIndex(it, index)
                 hasTree
             }
             .apply { println(this) }
     }
 
-    private fun calculateNewPosition(line: String, position: Int, slopeMovementRight: Int = 3): Int {
+    private fun calculateNewIndex(line: String, index: Int, slopeMovementRight: Int = 3): Int {
         val length = line.length
-        return (position + slopeMovementRight) % length
+        return (index + slopeMovementRight) % length
     }
 
-    private fun hasTreeAtPosition(line: String, position: Int) = line[position] == '#'
+    private fun hasTreeAtIndex(line: String, index: Int) = line[index] == '#'
 
     /**
      * --- Part Two ---
@@ -121,7 +121,7 @@ class P3 {
     }
 
     private fun getTreesForSlope(slope: Pair<Int, Int>): Int {
-        var position = 0
+        var index = 0
         var linePos = 0
 
         return getInputSequenceAsStrings()
@@ -131,8 +131,8 @@ class P3 {
                 shouldProcess
             }
             .count {
-                val hasTree = hasTreeAtPosition(it, position)
-                position = calculateNewPosition(it, position, slope.first)
+                val hasTree = hasTreeAtIndex(it, index)
+                index = calculateNewIndex(it, index, slope.first)
                 hasTree
             }
     }
