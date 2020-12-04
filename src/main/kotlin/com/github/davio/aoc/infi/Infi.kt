@@ -124,6 +124,6 @@ Hoeveel stukken stof moeten de elven minimaal kopen om alle zakken te kunnen mak
         (perContinent.map { getLength(it) }.sum() * 8L).apply { println(this) }
     }
 
-    // ABC-formule =  (x1,2 = -b +- Sqrt(b2 - 4ac)) / 2a
+    // ABC-formule = (x1,2 = -b +- Sqrt(b2 - 4ac)) / 2a
     private fun getLength(inhabitants: Long): Int = ceil(((2.0 + sqrt(4.0 + 28.0 * inhabitants)) / 14.0)).toInt()
 }
