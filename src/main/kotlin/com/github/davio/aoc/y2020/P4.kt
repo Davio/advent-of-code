@@ -100,12 +100,8 @@ class P4 {
             Pair("eyr", { rangeMatches((2020..2030), it) }),
             Pair("hgt", {
                 when {
-                    it.endsWith("cm") -> {
-                        (150..193).contains(it.substringBefore("cm").toIntOrNull())
-                    }
-                    it.endsWith("in") -> {
-                        (59..76).contains(it.substringBefore("in").toIntOrNull())
-                    }
+                    it.endsWith("cm") -> rangeMatchesPart((150..193), "cm", it)
+                    it.endsWith("in") -> rangeMatchesPart((59..76), "in", it)
                     else -> false
                 }
             }),
@@ -115,6 +111,8 @@ class P4 {
         )
 
         private fun rangeMatches(range: IntRange, it: String) = range.contains(it.toIntOrNull())
+
+        private fun rangeMatchesPart(range: IntRange, suffix: String, it: String) = range.contains(it.substringBefore(suffix).toIntOrNull())
 
         private val fields: MutableMap<String, String> = hashMapOf()
 
