@@ -120,7 +120,7 @@ class P4 {
             fields[key] = value
         }
 
-        fun isValid(): Boolean = requiredFields.all { fields[it.key]?.let { value -> it.value.invoke(value) } ?: false }
+        fun isValid() = requiredFields.all { fields[it.key]?.let { value -> it.value.invoke(value) } ?: false }
     }
 
     /*
