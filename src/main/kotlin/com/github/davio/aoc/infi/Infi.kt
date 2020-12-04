@@ -82,25 +82,48 @@ class Infi {
     De elven willen graag alle pakjes voor Nederland in één zak stoppen.
 
     Wat is de minimale lengte van een zijde voor de zak die zak?
+    *
+    *  Om een zak te kunnen maken hebben de elven natuurlijk wel voldoende stof nodig. De zak bestaat uit:
+
+    een bodem ‾.
+    de schuine zijdes / of \.
+    De zijkanten|.
+    De bovenkant_.
+
+Conclusie
+
+    Voor een zak met zijde van lengte 1 zijn 8 stukken stof nodig
+    Voor een zak met zijde van lengte 4 zijn 32 stukken stof nodig
+    Voor een zak met zijde van lengte 25 zijn 200 stukken stof nodig
+
+De kerstman kan op zijn tocht in 1 zak alle cadeautjes voor 1 continent meenemen.
+De elven zetten van tevoren alle zakken klaar op de noordpool.
+Na ieder continent komt hij even terug op de noordpool om de volgende zak op te halen.
+De elven weten per continent hoeveel cadeautjes er bezorgd moeten worden:
+
+    Asia           4.541.508.876
+    Africa         1.340.843.814
+    Europe           747.798.502
+    South America    430.872.475
+    North America    368.974.632
+    Oceania           42.720.944
+
+Hoeveel stukken stof moeten de elven minimaal kopen om alle zakken te kunnen maken?
      */
 
     fun getResult() {
-        // 7l*l - 2l - 17.490.031 = 0
-        val solutions = abcFormule(7, 2, -17490031)
-        val minLength = ceil(max(solutions.first, solutions.second)).toInt()
-        println(minLength)
+        val perContinent = sequenceOf(
+            4_541_508_876L,
+            1_340_843_814L,
+            747_798_502L,
+            430_872_475L,
+            368_974_632L,
+            42_720_944L
+        )
+
+        (perContinent.map { getLength(it) }.sum() * 8L).apply { println(this) }
     }
 
-    private fun abcFormule(a: Int, b: Int, c: Int): Pair<Double, Double> {
-        // ABC-formule =  (x1,2 = -b +- Sqrt(b2 - 4ac)) / 2a
-        val discriminant = b * b - 4.0 * a * c
-        return when {
-            discriminant > 0 -> Pair(
-                (-1 * b + sqrt(discriminant)) / (2 * a),
-                (-1 * b - sqrt(discriminant)) / (2 * a)
-            )
-            discriminant == 0.0 -> Pair((-1.0 * b) / (2 * a), Double.NaN)
-            else -> Pair(Double.NaN, Double.NaN)
-        }
-    }
+    // ABC-formule =  (x1,2 = -b +- Sqrt(b2 - 4ac)) / 2a
+    private fun getLength(inhabitants: Long): Int = ceil(((2.0 + sqrt(4.0 + 28.0 * inhabitants)) / 14.0)).toInt()
 }
