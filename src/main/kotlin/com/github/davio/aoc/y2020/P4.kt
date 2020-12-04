@@ -8,7 +8,7 @@ fun main() {
 
 class P4 {
 
-    /**
+    /*
      * --- Day 4: Passport Processing ---
 
     You arrive at the airport only to realize that you grabbed your North Pole Credentials instead of your passport.
@@ -123,7 +123,7 @@ class P4 {
         fun isValid(): Boolean = requiredFields.all { fields[it.key]?.let { value -> it.value.invoke(value) } ?: false }
     }
 
-    /**
+    /*
      * --- Part Two ---
 
     The line is moving more quickly now, but you overhear airport security talking about how passports with invalid data are getting through.

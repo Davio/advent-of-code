@@ -9,7 +9,7 @@ fun main() {
 
 class P3 {
 
-    /**
+    /*
      * --- Day 3: Toboggan Trajectory ---
 
     With the toboggan login problems resolved, you set off toward the airport.
@@ -92,7 +92,7 @@ class P3 {
 
     private fun hasTreeAtIndex(line: String, index: Int) = line[index] == '#'
 
-    /**
+    /*
      * --- Part Two ---
 
     Time to check the rest of the slopes - you need to minimize the probability of a sudden arboreal stop, after all.

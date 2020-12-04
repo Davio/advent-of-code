@@ -9,7 +9,7 @@ fun main() {
 
 class P1 {
 
-    /**
+    /*
      * --- Day 1: Report Repair ---
 
     After saving Christmas five years in a row, you've decided to take a vacation at a nice resort on a tropical island.
@@ -54,7 +54,7 @@ class P1 {
         }
     }
 
-    /**
+    /*
      * --- Part Two ---
 
     The Elves in accounting are thankful for your help; one of them even offers you a starfish coin they had left over from a past vacation.
