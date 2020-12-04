@@ -1,7 +1,6 @@
 package com.github.davio.aoc.infi
 
 import kotlin.math.ceil
-import kotlin.math.max
 import kotlin.math.sqrt
 
 fun main() {
