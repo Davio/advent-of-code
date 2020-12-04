@@ -110,11 +110,11 @@ class P4 {
             Pair("pid", { it.matches(Regex("\\d{9}")) }),
         )
 
+        private val fields: MutableMap<String, String> = hashMapOf()
+
         private fun rangeMatches(range: IntRange, it: String) = range.contains(it.toIntOrNull())
 
         private fun rangeMatchesPart(range: IntRange, suffix: String, it: String) = range.contains(it.substringBefore(suffix).toIntOrNull())
-
-        private val fields: MutableMap<String, String> = hashMapOf()
 
         fun addField(key: String, value: String) {
             fields[key] = value
