@@ -1,6 +1,6 @@
 package com.github.davio.aoc.y2020
 
-import com.github.davio.aoc.general.getInputSequenceAsStrings
+import com.github.davio.aoc.general.getInputAsStringSequence
 
 fun main() {
     P2().getResultPart1()
@@ -42,7 +42,7 @@ class P2 {
      */
 
     fun getResultPart1() {
-        getInputSequenceAsStrings()
+        getInputAsStringSequence()
             .map { getLineParts(it) }
             .count { isResultPart1Valid(it) }
             .apply { println(this) }
@@ -85,7 +85,7 @@ class P2 {
      */
 
     fun getResultPart2() {
-        getInputSequenceAsStrings()
+        getInputAsStringSequence()
             .map { getLineParts(it) }
             .count { isResultPart2Valid(it) }
             .apply { println(this) }

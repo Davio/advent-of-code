@@ -1,6 +1,6 @@
 package com.github.davio.aoc.y2020
 
-import com.github.davio.aoc.general.getInputSequenceAsStrings
+import com.github.davio.aoc.general.getInputAsStringSequence
 
 fun main() {
     P3().getResultPart1()
@@ -76,7 +76,7 @@ class P3 {
     fun getResultPart1() {
         var index = 0
 
-        getInputSequenceAsStrings()
+        getInputAsStringSequence()
             .count {
                 val hasTree = hasTreeAtIndex(it, index)
                 index = calculateNewIndex(it, index)
@@ -124,7 +124,7 @@ class P3 {
         var index = 0
         var linePos = 0
 
-        return getInputSequenceAsStrings()
+        return getInputAsStringSequence()
             .filter {
                 val shouldProcess = linePos % slope.second == 0
                 linePos++
