@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsStringSequence
 
 fun main() {
@@ -64,67 +65,8 @@ class P4 {
 
     Count the number of valid passports - those that have all required fields. Treat cid as optional. In your batch file,
     how many passports are valid?
-     */
-
-    fun getResult() {
-        var activePassport = Passport()
-        getInputAsStringSequence().sumBy { line ->
-            var returnVal = 0
-            if (line.isBlank()) {
-                if (activePassport.isValid()) {
-                    returnVal = 1
-                }
-                activePassport = Passport()
-            } else {
-                parsePassportLine(line, activePassport)
-            }
-            returnVal
-        }.apply {
-            println(this)
-        }
-    }
-
-    private fun parsePassportLine(line: String, passport: Passport) {
-        val lineParts = line.split(" ")
-        lineParts.forEach {
-            val fieldParts = it.split(":")
-            passport.addField(fieldParts[0], fieldParts[1])
-        }
-    }
-
-    class Passport {
-
-        private val requiredFields = mapOf<String, (String) -> Boolean>(
-            Pair("byr", { rangeMatches((1920..2002), it) }),
-            Pair("iyr", { rangeMatches((2010..2020), it) }),
-            Pair("eyr", { rangeMatches((2020..2030), it) }),
-            Pair("hgt", {
-                when {
-                    it.endsWith("cm") -> rangeMatchesPart((150..193), "cm", it)
-                    it.endsWith("in") -> rangeMatchesPart((59..76), "in", it)
-                    else -> false
-                }
-            }),
-            Pair("hcl", { it.matches(Regex("#[0-9a-f]{6}")) }),
-            Pair("ecl", { setOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(it) }),
-            Pair("pid", { it.matches(Regex("\\d{9}")) }),
-        )
-
-        private val fields: MutableMap<String, String> = hashMapOf()
-
-        private fun rangeMatches(range: IntRange, it: String) = range.contains(it.toIntOrNull())
-
-        private fun rangeMatchesPart(range: IntRange, suffix: String, it: String) = range.contains(it.substringBefore(suffix).toIntOrNull())
-
-        fun addField(key: String, value: String) {
-            fields[key] = value
-        }
-
-        fun isValid() = requiredFields.all { fields[it.key]?.let { value -> it.value.invoke(value) } ?: false }
-    }
-
-    /*
-     * --- Part Two ---
+    *
+    * --- Part Two ---
 
     The line is moving more quickly now, but you overhear airport security talking about how passports with invalid data are getting through.
     Better add some data validation, quick!
@@ -197,4 +139,61 @@ class P4 {
     Count the number of valid passports - those that have all required fields and valid values. Continue to treat cid as optional.
     In your batch file, how many passports are valid?
      */
+
+    fun getResult() {
+        var activePassport = Passport()
+        getInputAsStringSequence().sumBy { line ->
+            var returnVal = 0
+            if (line.isBlank()) {
+                if (activePassport.isValid()) {
+                    returnVal = 1
+                }
+                activePassport = Passport()
+            } else {
+                parsePassportLine(line, activePassport)
+            }
+            returnVal
+        }.call {
+            println(it)
+        }
+    }
+
+    private fun parsePassportLine(line: String, passport: Passport) {
+        val lineParts = line.split(" ")
+        lineParts.forEach {
+            val fieldParts = it.split(":")
+            passport.addField(fieldParts[0], fieldParts[1])
+        }
+    }
+
+    class Passport {
+
+        private val requiredFields = mapOf<String, (String) -> Boolean>(
+            Pair("byr", { rangeMatches((1920..2002), it) }),
+            Pair("iyr", { rangeMatches((2010..2020), it) }),
+            Pair("eyr", { rangeMatches((2020..2030), it) }),
+            Pair("hgt", {
+                when {
+                    it.endsWith("cm") -> rangeMatchesPart((150..193), "cm", it)
+                    it.endsWith("in") -> rangeMatchesPart((59..76), "in", it)
+                    else -> false
+                }
+            }),
+            Pair("hcl", { it.matches(Regex("#[0-9a-f]{6}")) }),
+            Pair("ecl", { setOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(it) }),
+            Pair("pid", { it.matches(Regex("\\d{9}")) }),
+        )
+
+        private val fields: MutableMap<String, String> = hashMapOf()
+
+        private fun rangeMatches(range: IntRange, it: String) = range.contains(it.toIntOrNull())
+
+        private fun rangeMatchesPart(range: IntRange, suffix: String, it: String) = range.contains(it.substringBefore(suffix).toIntOrNull())
+
+        fun addField(key: String, value: String) {
+            fields[key] = value
+        }
+
+        fun isValid() = requiredFields.all { fields[it.key]?.let { value -> it.value.invoke(value) } ?: false }
+    }
 }

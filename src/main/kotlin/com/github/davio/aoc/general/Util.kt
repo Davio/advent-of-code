@@ -22,3 +22,7 @@ fun getCallingClassNumber(): String {
         }
     }
 }
+
+inline fun <T> T.call(block: (T) -> Unit) {
+    block(this)
+}

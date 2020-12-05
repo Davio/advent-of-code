@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsIntList
 
 fun main() {
@@ -43,19 +44,8 @@ class P1 {
     Multiplying them together produces 1721 * 299 = 514579, so the correct answer is 514579.
 
     Of course, your expense report is much larger. Find the two entries that sum to 2020; what do you get if you multiply them together?
-     */
-
-    fun getResultPart1() {
-        val entries = getInputAsIntList()
-        entries.first { entries.contains(2020 - it) }.run {
-            this * (2020 - this)
-        }.apply {
-            println(this)
-        }
-    }
-
-    /*
-     * --- Part Two ---
+    *
+    * --- Part Two ---
 
     The Elves in accounting are thankful for your help; one of them even offers you a starfish coin they had left over from a past vacation.
     They offer you a second one if you can find three numbers in your expense report that meet the same criteria.
@@ -64,8 +54,16 @@ class P1 {
     Multiplying them together produces the answer, 241861950.
 
     In your expense report, what is the product of the three entries that sum to 2020?
-
      */
+
+    fun getResultPart1() {
+        val entries = getInputAsIntList()
+        entries.first { entries.contains(2020 - it) }.run {
+            this * (2020 - this)
+        }.call {
+            println(it)
+        }
+    }
 
     fun getResultPart2() {
         val entries = getInputAsIntList()
@@ -75,8 +73,8 @@ class P1 {
             }
         }.first().run {
             this.first * this.second * (2020 - this.first - this.second)
-        }.apply {
-            println(this)
+        }.call {
+            println(it)
         }
     }
 }

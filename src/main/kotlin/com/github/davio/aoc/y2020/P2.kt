@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsStringSequence
 
 fun main() {
@@ -38,31 +39,8 @@ class P2 {
     The first and third passwords are valid: they contain one a or nine c, both within the limits of their respective policies.
 
     How many passwords are valid according to their policies?
-
-     */
-
-    fun getResultPart1() {
-        getInputAsStringSequence()
-            .map { getLineParts(it) }
-            .count { isResultPart1Valid(it) }
-            .apply { println(this) }
-    }
-
-    private fun getLineParts(line: String): Pair<String, String> {
-        val parts = splitLine(line)
-        val policy = parts[0]
-        val password = parts[1].trim()
-        return Pair(policy, password)
-    }
-
-    private fun splitLine(line: String) = line.split(":")
-
-    private fun isResultPart1Valid(parts: Pair<String, String>): Boolean {
-        return PasswordPolicy.parse(parts.first).checkPart1(parts.second)
-    }
-
-    /*
-     * --- Part Two ---
+    *
+    * --- Part Two ---
 
     While it appears you validated the passwords correctly, they don't seem to be what the
     Official Toboggan Corporate Authentication System is expecting.
@@ -84,11 +62,31 @@ class P2 {
     How many passwords are valid according to the new interpretation of the policies?
      */
 
+    fun getResultPart1() {
+        getInputAsStringSequence()
+            .map { getLineParts(it) }
+            .count { isResultPart1Valid(it) }
+            .call { println(it) }
+    }
+
+    private fun getLineParts(line: String): Pair<String, String> {
+        val parts = splitLine(line)
+        val policy = parts[0]
+        val password = parts[1].trim()
+        return Pair(policy, password)
+    }
+
+    private fun splitLine(line: String) = line.split(":")
+
+    private fun isResultPart1Valid(parts: Pair<String, String>): Boolean {
+        return PasswordPolicy.parse(parts.first).checkPart1(parts.second)
+    }
+
     fun getResultPart2() {
         getInputAsStringSequence()
             .map { getLineParts(it) }
             .count { isResultPart2Valid(it) }
-            .apply { println(this) }
+            .call { println(it) }
     }
 
     private fun isResultPart2Valid(parts: Pair<String, String>): Boolean {

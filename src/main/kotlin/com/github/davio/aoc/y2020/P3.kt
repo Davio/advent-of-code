@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsStringSequence
 
 fun main() {
@@ -71,29 +72,8 @@ class P3 {
     In this example, traversing the map using this slope would cause you to encounter 7 trees.
 
     Starting at the top-left corner of your map and following a slope of right 3 and down 1, how many trees would you encounter?
-     */
-
-    fun getResultPart1() {
-        var index = 0
-
-        getInputAsStringSequence()
-            .count {
-                val hasTree = hasTreeAtIndex(it, index)
-                index = calculateNewIndex(it, index)
-                hasTree
-            }
-            .apply { println(this) }
-    }
-
-    private fun calculateNewIndex(line: String, index: Int, slopeMovementRight: Int = 3): Int {
-        val length = line.length
-        return (index + slopeMovementRight) % length
-    }
-
-    private fun hasTreeAtIndex(line: String, index: Int) = line[index] == '#'
-
-    /*
-     * --- Part Two ---
+    *
+    * --- Part Two ---
 
     Time to check the rest of the slopes - you need to minimize the probability of a sudden arboreal stop, after all.
 
@@ -110,6 +90,26 @@ class P3 {
 
     What do you get if you multiply together the number of trees encountered on each of the listed slopes?
      */
+
+    fun getResultPart1() {
+        var index = 0
+
+        getInputAsStringSequence()
+            .count {
+                val hasTree = hasTreeAtIndex(it, index)
+                index = calculateNewIndex(it, index)
+                hasTree
+            }
+            .call { println(it) }
+    }
+
+    private fun calculateNewIndex(line: String, index: Int, slopeMovementRight: Int = 3): Int {
+        val length = line.length
+        return (index + slopeMovementRight) % length
+    }
+
+    private fun hasTreeAtIndex(line: String, index: Int) = line[index] == '#'
+
     private val slopes = sequenceOf(
         Pair(1, 1), Pair(3, 1), Pair(5, 1), Pair(7, 1), Pair(1, 2)
     )
@@ -117,7 +117,7 @@ class P3 {
     fun getResultPart2() {
         slopes.map { slope -> getTreesForSlope(slope).toLong() }
             .reduce { acc, i -> acc * i }
-            .apply { println(this) }
+            .call { println(it) }
     }
 
     private fun getTreesForSlope(slope: Pair<Int, Int>): Int {

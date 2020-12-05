@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsStringList
 import com.github.davio.aoc.general.getInputAsStringSequence
 
@@ -76,20 +77,20 @@ What is the ID of your seat?
 
     fun getResultPart1() {
         getInputAsStringSequence().map {
-            BoardingPass.parse(it)
-        }.maxByOrNull {
-            it.getId()
-        }.apply {
-            println(this!!.getId())
+            BoardingPass.parse(it).getId()
+        }.maxOrNull().call {
+            println(it)
         }
     }
 
     fun getResultPart2() {
-        val possibleBoardingPassIds = (1..126).flatMap { col ->
-            (0..7).map { row ->
-                BoardingPass(col, row).getId()
-            }
-        }.toMutableSet()
+        val possibleBoardingPassIds = (1..126)
+            .flatMap { col ->
+                (0..7)
+                    .map { row ->
+                        BoardingPass(col, row).getId()
+                    }
+            }.toMutableSet()
 
         val existingBoardingPassIds = getInputAsStringList().map {
             BoardingPass.parse(it).getId()
@@ -99,8 +100,8 @@ What is the ID of your seat?
 
         possibleBoardingPassIds.first {
             existingBoardingPassIds.contains(it + 1) && existingBoardingPassIds.contains(it - 1)
-        }.apply {
-            println(this)
+        }.call {
+            println(it)
         }
     }
 
