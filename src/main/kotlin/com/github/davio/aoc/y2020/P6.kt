@@ -99,20 +99,18 @@ For each group, count the number of questions to which everyone answered "yes". 
      */
 
     fun getResult() {
-        val groups = arrayListOf<Group>()
         var activeGroup = Group()
-        groups.add(activeGroup)
 
-        getInputAsStringSequence().forEach { line ->
+        (getInputAsStringSequence().sumBy { line ->
             if (line.isBlank()) {
+                val yesAnswerCount = activeGroup.getAllYesAnswerCount()
                 activeGroup = Group()
-                groups.add(activeGroup)
+                yesAnswerCount
             } else {
                 parseAnswerLine(line, activeGroup)
+                0
             }
-        }
-
-        groups.sumBy { it.getAllYesAnswerCount() }.call { println(it) }
+        } + activeGroup.getAllYesAnswerCount()).call { println(it) }
     }
 
     private fun parseAnswerLine(line: String, group: Group) {

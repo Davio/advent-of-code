@@ -142,7 +142,7 @@ class P4 {
 
     fun getResult() {
         var activePassport = Passport()
-        getInputAsStringSequence().sumBy { line ->
+        (getInputAsStringSequence().sumBy { line ->
             var returnVal = 0
             if (line.isBlank()) {
                 if (activePassport.isValid()) {
@@ -153,7 +153,7 @@ class P4 {
                 parsePassportLine(line, activePassport)
             }
             returnVal
-        }.call {
+        } + (if (activePassport.isValid()) 1 else 0)).call {
             println(it)
         }
     }
