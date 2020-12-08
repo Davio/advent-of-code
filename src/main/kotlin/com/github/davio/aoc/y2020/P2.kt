@@ -98,16 +98,9 @@ class P2 {
         private val n2: Int,
         private val char: Char
     ) {
-        fun checkPart1(password: String): Boolean {
-            val charCount = password.count { it == char }
-            return charCount in n1..n2
-        }
+        fun checkPart1(password: String) = password.count { it == char } in n1..n2
 
-        fun checkPart2(password: String): Boolean {
-            val charAtFirstPos = password[n1 - 1] == char
-            val charAtSecondPos = password[n2 - 1] == char
-            return charAtFirstPos xor charAtSecondPos
-        }
+        fun checkPart2(password: String) = (password[n1 - 1] == char) xor (password[n2 - 1] == char)
 
         companion object {
 
