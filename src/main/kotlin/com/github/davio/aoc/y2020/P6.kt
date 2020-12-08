@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsStringSequence
+import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
     P6().getResult()
@@ -101,7 +101,7 @@ For each group, count the number of questions to which everyone answered "yes". 
     fun getResult() {
         var activeGroup = Group()
 
-        (getInputAsStringSequence().sumBy { line ->
+        (getInputAsSequence().sumBy { line ->
             if (line.isBlank()) {
                 val yesAnswerCount = activeGroup.getAllYesAnswerCount()
                 activeGroup = Group()

@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsStringList
+import com.github.davio.aoc.general.getInputAsList
 
 fun main() {
     P7().getResult()
@@ -82,7 +82,7 @@ How many individual bags are required inside your single shiny gold bag?
      */
 
     fun getResult() {
-        val lines = getInputAsStringList()
+        val lines = getInputAsList()
         val bags = HashMap<String, Bag>(lines.size)
 
         lines.forEach { line ->

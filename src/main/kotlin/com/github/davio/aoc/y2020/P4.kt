@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsStringSequence
+import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
     P4().getResult()
@@ -142,7 +142,7 @@ class P4 {
 
     fun getResult() {
         var activePassport = Passport()
-        (getInputAsStringSequence().sumBy { line ->
+        (getInputAsSequence().sumBy { line ->
             var returnVal = 0
             if (line.isBlank()) {
                 if (activePassport.isValid()) {
