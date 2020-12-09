@@ -10,7 +10,11 @@ fun getInputAsSequence() = getInputReader().lineSequence()
 
 fun getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
 
-fun getInputAsIntList(): List<Int> = getInputAsList().map { it.toInt() }
+fun getInputAsIntList() = getInputAsList().map { it.toInt() }
+
+fun getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
+
+fun getInputAsLongList() = getInputAsList().map { it.toLong() }
 
 fun getCallingClassNumber(): String {
     val classRegex = Regex(".*P(\\d)")

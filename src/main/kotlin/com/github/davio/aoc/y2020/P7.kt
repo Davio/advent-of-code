@@ -152,8 +152,8 @@ How many individual bags are required inside your single shiny gold bag?
                 currentBags[color] = bag
             }
 
-            private fun getOrCreateBag(currentBags: MutableMap<String, Bag>, otherBagColor: String) = currentBags
-                .computeIfAbsent(otherBagColor) {
+            private fun getOrCreateBag(currentBags: MutableMap<String, Bag>, otherBagColor: String) =
+                currentBags.computeIfAbsent(otherBagColor) {
                     Bag(otherBagColor)
                 }
         }
