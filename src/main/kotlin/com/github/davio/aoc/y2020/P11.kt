@@ -6,8 +6,7 @@ import com.github.davio.aoc.general.getInputAsSequence
 import java.lang.System.lineSeparator
 
 fun main() {
-    P11().getResultPart1()
-//    P11().getResultPart2()
+    P11().getResult()
 }
 
 class P11 {
@@ -242,7 +241,7 @@ Given the new visibility method and the rule change for occupied seats becoming 
     private val inputList = getInputAsList()
     private val seatingLayout = SeatingLayout(inputList.size)
 
-    fun getResultPart1() {
+    fun getResult() {
         getInputAsSequence().forEach {
             seatingLayout.parseLine(it)
         }
