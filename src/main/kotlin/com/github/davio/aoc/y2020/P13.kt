@@ -2,10 +2,13 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
+import kotlin.system.measureTimeMillis
 
 fun main() {
     P13().getResultPart1()
-    P13().getResultPart2()
+    measureTimeMillis {
+        P13().getResultPart2()
+    }.call { println(it) }
 }
 
 class P13 {
@@ -176,23 +179,26 @@ What is the earliest timestamp such that all of the listed bus IDs depart at off
         }
             .filter { it.second != "x" }
             .map { Pair(it.first, it.second.toInt()) }
+            .toList()
 
-        var increment = schedulesWithIndex[0].second.toLong()
+        val sortedSchedules = listOf(schedulesWithIndex[0]) + schedulesWithIndex.drop(1).sortedByDescending { it.second }
+
+        var step = sortedSchedules[0].second.toLong()
         var checkIndex = 1
-        var checkSchedule = schedulesWithIndex[1]
+        var checkSchedule = sortedSchedules[1]
 
         return generateSequence(0L) {
-            it + increment
+            it + step
         }
             .first { departureTime ->
                 if ((departureTime + checkSchedule.first) % checkSchedule.second == 0L) {
-                    increment = schedulesWithIndex.take(checkIndex + 1).map { it.second.toLong() }.reduce { acc, value -> acc * value }
+                    step = sortedSchedules.take(checkIndex + 1).map { it.second.toLong() }.reduce { acc, value -> acc * value }
                     checkIndex++
-                    if (checkIndex <= schedulesWithIndex.lastIndex) {
-                        checkSchedule = schedulesWithIndex[checkIndex]
+                    if (checkIndex <= sortedSchedules.lastIndex) {
+                        checkSchedule = sortedSchedules[checkIndex]
                     }
                 }
-                checkIndex > schedulesWithIndex.lastIndex
+                checkIndex > sortedSchedules.lastIndex
             }
     }
 }
