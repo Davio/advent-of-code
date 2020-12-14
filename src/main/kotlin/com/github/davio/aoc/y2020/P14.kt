@@ -204,8 +204,8 @@ Execute the initialization program using an emulator for a version 2 decoder chi
         }
     }
 
-    private fun getAddressesForMaskedAddress(maskedAddress: String): Sequence<String> {
-        val firstFloatingBitIndex = (0..35).firstOrNull { maskedAddress[it] == 'X' } ?: return sequenceOf(maskedAddress)
+    private fun getAddressesForMaskedAddress(maskedAddress: String): List<String> {
+        val firstFloatingBitIndex = (0..35).firstOrNull { maskedAddress[it] == 'X' } ?: return listOf(maskedAddress)
 
         val maskChars = maskedAddress.toCharArray()
         maskChars[firstFloatingBitIndex] = '0'
