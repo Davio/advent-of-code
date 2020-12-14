@@ -136,7 +136,6 @@ Execute the initialization program using an emulator for a version 2 decoder chi
     private val input = getInputAsSequence()
     private val memory = hashMapOf<String, Long>()
     private var mask: String = ""
-    private val masksWithFloatingBits = arrayListOf<String>()
     private val memoryPattern = Regex("""mem\[(\d+)]""")
 
     fun getResultPart1() {
