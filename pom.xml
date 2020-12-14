@@ -15,10 +15,11 @@
 
     <properties>
         <!-- General properties -->
-        <java.version>11</java.version>
+        <java.version>15</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <kotlin.compiler.jvmTarget>15</kotlin.compiler.jvmTarget>
         <!-- Compiler plugins versions -->
         <kotlin.version>1.4.20</kotlin.version>
         <kotlinx.version>1.4.2</kotlinx.version>
@@ -39,7 +40,6 @@
 
         <!-- Plugin versions -->
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
-        <flatten-maven-plugin.version>1.2.5</flatten-maven-plugin.version>
         <dependency-check-maven.version>6.0.2</dependency-check-maven.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
@@ -60,10 +60,6 @@
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
-        <jib-maven-plugin.version>2.6.0</jib-maven-plugin.version>
-        <pitest-maven.version>1.5.2</pitest-maven.version>
-        <pitest-junit5-plugin.version>0.12</pitest-junit5-plugin.version>
-        <pitest-cucumber-plugin.version>0.10</pitest-cucumber-plugin.version>
     </properties>
 
     <dependencies>
@@ -93,67 +89,6 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-ext</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit-jupiter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit-jupiter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit-jupiter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-jupiter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-engine</artifactId>
-            <version>${junit-platform.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-commons</artifactId>
-            <version>${junit-platform.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${mockito.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
         </dependency>
     </dependencies>
 
@@ -320,41 +255,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>${dependency-check-maven.version}</version>
-                <inherited>false</inherited>
-                <configuration>
-                    <failBuildOnCVSS>10</failBuildOnCVSS>
-                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-                    <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>${versions-maven-plugin.version}</version>
-                <configuration>
-                    <processDependencyManagement>false</processDependencyManagement>
-                    <rulesUri>https://raw.githubusercontent.com/gephi/gephi/master/maven-version-rules.xml</rulesUri>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>display-versions-updates</id>
-                        <goals>
-                            <goal>display-dependency-updates</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>${maven-dependency-plugin.version}</version>
@@ -386,35 +286,6 @@
                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
             <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>${pitest-maven.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>${pitest-junit5-plugin.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.github.alexvictoor</groupId>
-                        <artifactId>pitest-cucumber-plugin</artifactId>
-                        <version>${pitest-cucumber-plugin.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <timestampedReports>false</timestampedReports>
-                    <threads>4</threads>
-                    <withHistory>true</withHistory>
-                    <avoidCallsTo>
-                        <avoidCallsTo>java.util.logging</avoidCallsTo>
-                        <avoidCallsTo>org.apache.log4j</avoidCallsTo>
-                        <avoidCallsTo>org.slf4j</avoidCallsTo>
-                        <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
-                        <avoidCallsTo>io.micrometer</avoidCallsTo>
-                    </avoidCallsTo>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${maven-jar-plugin.version}</version>
@@ -431,11 +302,6 @@
                 <configuration>
                     <deployAtEnd>true</deployAtEnd>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>${jib-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
