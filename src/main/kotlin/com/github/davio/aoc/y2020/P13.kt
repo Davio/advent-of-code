@@ -151,7 +151,7 @@ What is the earliest timestamp such that all of the listed bus IDs depart at off
 
     fun getResultPart1() {
         val busSchedulesWithTime = busSchedules
-            .filter { it != "x" }
+            .filterNot { it == "x" }
             .map { it.toInt() }
 
         getEarliestBusAndWaitingTime(busSchedulesWithTime)
@@ -177,7 +177,7 @@ What is the earliest timestamp such that all of the listed bus IDs depart at off
         val schedulesWithIndex = busSchedules.toList().mapIndexed { index, schedule ->
             Pair(index, schedule)
         }
-            .filter { it.second != "x" }
+            .filterNot { it.second == "x" }
             .map { Pair(it.first, it.second.toInt()) }
             .toList()
 
