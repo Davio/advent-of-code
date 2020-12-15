@@ -2,9 +2,12 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
+import kotlin.system.measureTimeMillis
 
 fun main() {
-    P15().getResult()
+    measureTimeMillis {
+        P15().getResult()
+    }.call { println("$it ms") }
 }
 
 class P15 {
@@ -119,7 +122,6 @@ Given your starting numbers, what will be the 30000000th number spoken?
         if (myTurns.size > 2) {
             myTurns.removeAt(0)
         }
-        println("Turn $currentTurn, spoken number: $spokenNumber")
         return spokenNumber
     }
 }
