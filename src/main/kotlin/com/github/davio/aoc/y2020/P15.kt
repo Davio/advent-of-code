@@ -104,9 +104,7 @@ Given your starting numbers, what will be the 30000000th number spoken?
 
     private fun getNextNumber(previousNumber: Int): Int {
         currentTurn++
-//        println("Turn $currentTurn, previous number: $previousNumber")
         val turns = spokenNumbersWithTurns[previousNumber]!!
-//        println("Previous turns: $turns")
         val spokenNumber =
             if (turns.size > 1) {
                 turns[1] - turns[0]
