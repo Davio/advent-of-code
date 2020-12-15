@@ -88,7 +88,9 @@ Given your starting numbers, what will be the 30000000th number spoken?
             .mapIndexed { index, value ->
                 lastNumber = value.toInt()
                 currentTurn = index + 1
-                Pair(lastNumber, arrayListOf(currentTurn))
+                val list = ArrayList<Int>(3)
+                list.add(currentTurn)
+                Pair(lastNumber, list)
             }.toMap()
 
         spokenNumbersWithTurns.putAll(startingNumbers)
@@ -112,7 +114,7 @@ Given your starting numbers, what will be the 30000000th number spoken?
                 0
             }
 
-        val myTurns = spokenNumbersWithTurns.computeIfAbsent(spokenNumber) { arrayListOf() }
+        val myTurns = spokenNumbersWithTurns.computeIfAbsent(spokenNumber) { ArrayList(3) }
         myTurns.add(currentTurn)
         if (myTurns.size > 2) {
             myTurns.removeAt(0)
