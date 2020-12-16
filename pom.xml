@@ -22,7 +22,7 @@
         <kotlin.compiler.jvmTarget>15</kotlin.compiler.jvmTarget>
         <maven.test.skip>false</maven.test.skip>
         <!-- Compiler plugins versions -->
-        <kotlin.version>1.4.20</kotlin.version>
+        <kotlin.version>1.4.21</kotlin.version>
         <kotlinx.version>1.4.2</kotlinx.version>
 
         <!-- Plugin versions -->
