@@ -308,7 +308,8 @@ Given the new visibility method and the rule change for occupied seats becoming 
             return positionType == PositionType.OCCUPIED && getVisibleSeats(row, col).count { it == PositionType.OCCUPIED } >= 5
         }
 
-        fun getAdjacentSeats(myRow: Int, myCol: Int): List<PositionType> {
+        @Suppress("unused")
+        private fun getAdjacentSeats(myRow: Int, myCol: Int): List<PositionType> {
             val startRow = myRow - 1
             val endRow = myRow + 1
             val startCol = myCol - 1
@@ -326,7 +327,7 @@ Given the new visibility method and the rule change for occupied seats becoming 
             }
         }
 
-        fun getVisibleSeats(myRow: Int, myCol: Int): List<PositionType> {
+        private fun getVisibleSeats(myRow: Int, myCol: Int): List<PositionType> {
             return (-1..1).flatMap { rowDirection ->
                 (-1..1).filter { colDirection ->
                     !(rowDirection == 0 && colDirection == 0)
