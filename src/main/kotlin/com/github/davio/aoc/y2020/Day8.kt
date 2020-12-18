@@ -4,10 +4,10 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 
 fun main() {
-    P8().getResult()
+    Day8.getResult()
 }
 
-class P8 {
+object Day8 {
 
     /*
      * --- Day 8: Handheld Halting ---

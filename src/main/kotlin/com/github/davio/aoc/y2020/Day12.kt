@@ -5,10 +5,10 @@ import com.github.davio.aoc.general.plus
 import kotlin.math.*
 
 fun main() {
-    P12().getResult()
+    Day12.getResult()
 }
 
-class P12 {
+object Day12 {
 
     /*
      * --- Day 12: Rain Risk ---

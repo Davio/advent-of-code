@@ -6,10 +6,10 @@ import com.github.davio.aoc.general.getInputAsSequence
 import java.lang.System.lineSeparator
 
 fun main() {
-    P11().getResult()
+    Day11.getResult()
 }
 
-class P11 {
+object Day11 {
 
     /*
      * --- Day 10: Adapter Array ---

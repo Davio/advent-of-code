@@ -4,11 +4,11 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
-    P3().getResultPart1()
-    P3().getResultPart2()
+    Day3.getResultPart1()
+    Day3.getResultPart2()
 }
 
-class P3 {
+object Day3 {
 
     /*
      * --- Day 3: Toboggan Trajectory ---

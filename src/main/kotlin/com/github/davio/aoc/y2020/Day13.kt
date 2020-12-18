@@ -5,13 +5,13 @@ import com.github.davio.aoc.general.getInputAsList
 import kotlin.system.measureTimeMillis
 
 fun main() {
-    P13().getResultPart1()
+    Day13.getResultPart1()
     measureTimeMillis {
-        P13().getResultPart2()
+        Day13.getResultPart2()
     }.call { println(it) }
 }
 
-class P13 {
+object Day13 {
 
     /*
      * --- Day 13: Shuttle Search ---

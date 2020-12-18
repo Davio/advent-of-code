@@ -5,10 +5,10 @@ import com.github.davio.aoc.general.getInputAsLongList
 import com.github.davio.aoc.general.getInputAsLongSequence
 
 fun main() {
-    P9().getResult()
+    Day9.getResult()
 }
 
-class P9 {
+object Day9 {
 
     /*
      * --- Day 9: Encoding Error ---

@@ -4,11 +4,11 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
-    P2().getResultPart1()
-    P2().getResultPart2()
+    Day2.getResultPart1()
+    Day2.getResultPart2()
 }
 
-class P2 {
+object Day2 {
 
     /*
      * --- Day 2: Password Philosophy ---

@@ -5,11 +5,11 @@ import com.github.davio.aoc.general.getInputAsList
 import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
-    P5().getResultPart1()
-    P5().getResultPart2()
+    Day5.getResultPart1()
+    Day5.getResultPart2()
 }
 
-class P5 {
+object Day5 {
 
     /*
      * --- Day 5: Binary Boarding ---

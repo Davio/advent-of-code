@@ -4,10 +4,10 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 
 fun main() {
-    P7().getResult()
+    Day7.getResult()
 }
 
-class P7 {
+object Day7 {
 
     /*
      * --- Day 7: Handy Haversacks ---

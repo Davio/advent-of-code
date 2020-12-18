@@ -4,11 +4,11 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsIntList
 
 fun main() {
-    P10().getResultPart1()
-    P10().getResultPart2()
+    Day10.getResultPart1()
+    Day10.getResultPart2()
 }
 
-class P10 {
+object Day10 {
 
     /*
      * --- Day 10: Adapter Array ---

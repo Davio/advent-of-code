@@ -7,11 +7,11 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     measureTimeMillis {
-        P17().getResult()
+        Day17.getResult()
     }.call { println("$it ms") }
 }
 
-class P17 {
+object Day17 {
 
     /*
      * --- Day 17: Conway Cubes ---

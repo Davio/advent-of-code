@@ -5,13 +5,13 @@ import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
-    P14().getResultPart1()
+    Day14.getResultPart1()
     measureTimeMillis {
-        P14().getResultPart2()
+        Day14.getResultPart2()
     }.call { println(it) }
 }
 
-class P14 {
+object Day14 {
 
     /*
      * --- Day 14: Docking Data ---

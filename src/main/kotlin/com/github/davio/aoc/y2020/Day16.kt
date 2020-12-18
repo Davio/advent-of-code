@@ -6,11 +6,11 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     measureTimeMillis {
-        P16().getResult()
+        Day16.getResult()
     }.call { println("$it ms") }
 }
 
-class P16 {
+object Day16 {
 
     /*
      * --- Day 16: Ticket Translation ---

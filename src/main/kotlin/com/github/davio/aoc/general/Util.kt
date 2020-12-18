@@ -20,7 +20,7 @@ fun getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
 fun getInputAsLongList() = getInputAsList().map { it.toLong() }
 
 fun getCallingClassNumber(): String {
-    val classRegex = Regex(".*P(\\d+)")
+    val classRegex = Regex(".*Day(\\d+)")
     return StackWalker.getInstance().walk {
         it.asSequence().first { frame ->
             frame.className.matches(classRegex)

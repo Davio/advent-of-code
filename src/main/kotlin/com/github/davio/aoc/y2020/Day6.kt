@@ -4,10 +4,10 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
-    P6().getResult()
+    Day6.getResult()
 }
 
-class P6 {
+object Day6 {
 
     /*
      * --- Day 6: Custom Customs ---

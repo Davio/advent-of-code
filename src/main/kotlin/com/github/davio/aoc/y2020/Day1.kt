@@ -4,11 +4,11 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsIntList
 
 fun main() {
-    P1().getResultPart1()
-    P1().getResultPart2()
+    Day1.getResultPart1()
+    Day1.getResultPart2()
 }
 
-class P1 {
+object Day1 {
 
     /*
      * --- Day 1: Report Repair ---

@@ -6,11 +6,11 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     measureTimeMillis {
-        P15().getResult()
+        Day15.getResult()
     }.call { println("$it ms") }
 }
 
-class P15 {
+object Day15 {
 
     /*
      * --- Day 15: Rambunctious Recitation ---

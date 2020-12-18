@@ -4,10 +4,10 @@ import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
 fun main() {
-    P4().getResult()
+    Day4.getResult()
 }
 
-class P4 {
+object Day4 {
 
     /*
      * --- Day 4: Passport Processing ---
