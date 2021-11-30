@@ -7,7 +7,7 @@ import kotlin.streams.asSequence
 
 fun getInputAsList() = getInputReader().readLines()
 
-private fun getInputReader() = ClassLoader.getSystemResourceAsStream("y2021/${getCallingClassNumber()}.txt")!!.bufferedReader()
+private fun getInputReader() = ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
 
 fun getInputAsSequence() = getInputReader().lineSequence()
 
@@ -19,13 +19,17 @@ fun getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
 
 fun getInputAsLongList() = getInputAsList().map { it.toLong() }
 
-fun getCallingClassNumber(): String {
-    val classRegex = Regex(".*Day(\\d+)")
+fun getCallingClassResourceFile(): String {
+    val classRegex = Regex(""".*(y\d{4})\.Day(\d+)""")
     return StackWalker.getInstance().walk {
         it.asSequence().first { frame ->
+            println(frame.className)
             frame.className.matches(classRegex)
         }!!.run {
-            classRegex.matchEntire(this.className)!!.groups[1]!!.value
+            val matchResult = classRegex.matchEntire(this.className)!!
+            val year = matchResult.groups[1]!!.value
+            val dayNumber = matchResult.groups[2]!!.value
+            "$year/$dayNumber.txt"
         }
     }
 }
