@@ -7,7 +7,7 @@ import kotlin.streams.asSequence
 
 fun getInputAsList() = getInputReader().readLines()
 
-private fun getInputReader() = ClassLoader.getSystemResourceAsStream("${getCallingClassNumber()}.txt")!!.bufferedReader()
+private fun getInputReader() = ClassLoader.getSystemResourceAsStream("y2021/${getCallingClassNumber()}.txt")!!.bufferedReader()
 
 fun getInputAsSequence() = getInputReader().lineSequence()
 
@@ -30,8 +30,8 @@ fun getCallingClassNumber(): String {
     }
 }
 
-inline fun <T> T.call(block: (T) -> Unit) {
-    block(this)
+inline fun <T> T.call(codeBlock: (T) -> Unit) {
+    codeBlock(this)
 }
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
@@ -54,4 +54,30 @@ fun lcm(n1: Int, n2: Int): Int {
         val gcd = gcd(n1, n2)
         abs(n1 * n2) / gcd
     }
+}
+
+fun <T> permutate(list: List<T> = emptyList(), k: Int = list.size): Sequence<List<T>> {
+    val newList = ArrayList<T>(list)
+
+    if (k == 1) {
+        return sequenceOf(newList)
+    }
+
+    return sequence {
+        for (i in (0 until k)) {
+            yieldAll(permutate(newList, k - 1))
+
+            if ((k - 1) % 2 == 0) {
+                swap(newList, i, k - 1)
+            } else {
+                swap(newList, 0, k - 1)
+            }
+        }
+    }
+}
+
+private fun <T> swap(list: MutableList<T>, index1: Int, index2: Int) {
+    val temp = list[index1]
+    list[index1] = list[index2]
+    list[index2] = temp
 }

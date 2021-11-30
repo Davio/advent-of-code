@@ -98,7 +98,7 @@ Given your starting numbers, what will be the 30000000th number spoken?
 
         spokenNumbersWithTurns.putAll(startingNumbers)
 
-        getNumbers().drop(30000000 - startingNumbers.size).take(1).call { println(it.first()) }
+        getNumbers().drop(2020 - startingNumbers.size).take(1).call { println(it.first()) }
     }
 
     private fun getNumbers(): Sequence<Int> {

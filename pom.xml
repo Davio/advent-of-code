@@ -15,36 +15,35 @@
 
     <properties>
         <!-- General properties -->
-        <java.version>15</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <kotlin.compiler.jvmTarget>15</kotlin.compiler.jvmTarget>
+        <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <maven.test.skip>false</maven.test.skip>
         <!-- Compiler plugins versions -->
-        <kotlin.version>1.4.21</kotlin.version>
-        <kotlinx.version>1.4.2</kotlinx.version>
+        <kotlin.version>1.6.0</kotlin.version>
 
         <!-- Plugin versions -->
-        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
         <dependency-check-maven.version>6.0.2</dependency-check-maven.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
-        <git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>4.9.9</git-commit-id-plugin.version>
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
-        <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
-        <checkstyle.version>8.38</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+        <checkstyle.version>9.2</checkstyle.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
         <maven-install-plugin.version>3.0.0-M1</maven-install-plugin.version>
-        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
     </properties>
@@ -55,16 +54,6 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-core</artifactId>
-            <version>${kotlinx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-jdk8</artifactId>
-            <version>${kotlinx.version}</version>
         </dependency>
     </dependencies>
 

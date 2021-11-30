@@ -101,7 +101,7 @@ For each group, count the number of questions to which everyone answered "yes". 
     fun getResult() {
         var activeGroup = Group()
 
-        (getInputAsSequence().sumBy { line ->
+        (getInputAsSequence().sumOf { line: String ->
             if (line.isBlank()) {
                 val yesAnswerCount = activeGroup.getAllYesAnswerCount()
                 activeGroup = Group()

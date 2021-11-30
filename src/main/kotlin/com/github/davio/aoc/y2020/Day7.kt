@@ -120,7 +120,7 @@ How many individual bags are required inside your single shiny gold bag?
                 return 0
             }
 
-            return otherBags.entries.sumBy { entry ->
+            return otherBags.entries.sumOf { entry ->
                 entry.value + entry.value * entry.key.getNumberOfIndividualBags()
             }
         }

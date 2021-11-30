@@ -142,7 +142,7 @@ object Day4 {
 
     fun getResult() {
         var activePassport = Passport()
-        (getInputAsSequence().sumBy { line ->
+        (getInputAsSequence().sumOf { line: String ->
             var returnVal = 0
             if (line.isBlank()) {
                 if (activePassport.isValid()) {
