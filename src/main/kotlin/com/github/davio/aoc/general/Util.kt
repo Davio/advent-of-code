@@ -23,7 +23,6 @@ fun getCallingClassResourceFile(): String {
     val classRegex = Regex(""".*(y\d{4})\.Day(\d+)""")
     return StackWalker.getInstance().walk {
         it.asSequence().first { frame ->
-            println(frame.className)
             frame.className.matches(classRegex)
         }!!.run {
             val matchResult = classRegex.matchEntire(this.className)!!
