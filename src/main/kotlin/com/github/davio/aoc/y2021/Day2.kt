@@ -1,9 +1,7 @@
 package com.github.davio.aoc.y2021
 
-import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.plus
-import com.github.davio.aoc.y2021.Day2.Direction.*
 
 fun main() {
     Day2.getResultPart1()
@@ -50,15 +48,18 @@ What do you get if you multiply your final horizontal position by your final dep
      */
 
     fun getResultPart1() {
-        getInputAsSequence().fold(Pair(0, 0)) { acc, line ->
-            val instruction = Instruction.parse(line)
-            val distance = instruction.amount
-            acc + when (instruction.direction) {
-                FORWARD -> Pair(distance, 0)
-                UP -> Pair(0, -distance)
-                DOWN -> Pair(0, distance)
+        var position = Pair(0, 0)
+        getInputAsSequence().map {
+            Instruction.parse(it)
+        }.forEach {
+            val distance = it.amount
+            position += when (it.direction) {
+                Direction.FORWARD -> Pair(distance, 0)
+                Direction.UP -> Pair(0, -distance)
+                Direction.DOWN -> Pair(0, distance)
             }
-        }.call { println(it.first * it.second) }
+        }
+        println(position.first * position.second)
     }
 
     /*
@@ -91,15 +92,13 @@ Using this new interpretation of the commands, calculate the horizontal position
 
 */
     fun getResultPart2() {
-        getInputAsSequence().fold(Submarine()) { acc, line ->
-            val instruction = Instruction.parse(line)
-            val amount = instruction.amount
-            when (instruction.direction) {
-                FORWARD -> Submarine(acc.position + Pair(amount, acc.aim * amount), acc.aim)
-                UP -> Submarine(acc.position, acc.aim - amount)
-                DOWN -> Submarine(acc.position, acc.aim + amount)
-            }
-        }.call { println(it.position.first * it.position.second) }
+        val sub = Submarine()
+        getInputAsSequence().map {
+            Instruction.parse(it)
+        }.forEach {
+            sub.move(it)
+        }
+        println(sub.position.first * sub.position.second)
     }
 
     private data class Instruction(val direction: Direction, val amount: Int) {
@@ -109,15 +108,28 @@ Using this new interpretation of the commands, calculate the horizontal position
             private val pattern = Regex("""([a-z]+) (\d+)""")
 
             fun parse(line: String): Instruction {
-                val matchResult = pattern.matchEntire(line)!!
-                val direction = Direction.valueOf(matchResult.groups[1]!!.value.uppercase())
-                val amount = matchResult.groups[2]!!.value.toInt()
-                return Instruction(direction, amount)
+                val (direction, amount) = pattern.matchEntire(line)!!.destructured
+                return Instruction(Direction.valueOf(direction.uppercase()), amount.toInt())
             }
         }
     }
 
     private enum class Direction { FORWARD, UP, DOWN }
 
-    private data class Submarine(val position: Pair<Int, Int> = Pair(0, 0), val aim: Int = 0)
+    private class Submarine {
+
+        var position = Pair(0, 0)
+        var aim = 0
+
+        fun move(instruction: Instruction) {
+            val (direction, amount) = instruction
+            if (direction == Direction.FORWARD) {
+                position += Pair(amount, aim * amount)
+            } else {
+                aim += if (direction == Direction.DOWN) {
+                    amount
+                } else -amount
+            }
+        }
+    }
 }
