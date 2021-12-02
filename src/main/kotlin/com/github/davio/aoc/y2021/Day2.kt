@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.plus
 import com.github.davio.aoc.y2021.Day2.Direction.*
@@ -48,20 +49,16 @@ Calculate the horizontal position and depth you would have after following the p
 What do you get if you multiply your final horizontal position by your final depth?
      */
 
-
-
     fun getResultPart1() {
-        var position = Pair(0, 0)
-        getInputAsSequence().forEach { line ->
-             val instruction = Instruction.parse(line)
-             val distance = instruction.amount
-             position += when (instruction.direction) {
+        getInputAsSequence().fold(Pair(0, 0)) { acc, line ->
+            val instruction = Instruction.parse(line)
+            val distance = instruction.amount
+            acc + when (instruction.direction) {
                 FORWARD -> Pair(distance, 0)
                 UP -> Pair(0, -distance)
                 DOWN -> Pair(0, distance)
             }
-        }
-        println(position.first * position.second)
+        }.call { println(it.first * it.second) }
     }
 
     /*
@@ -94,18 +91,15 @@ Using this new interpretation of the commands, calculate the horizontal position
 
 */
     fun getResultPart2() {
-        var position = Pair(0, 0)
-        var aim = 0
-        getInputAsSequence().forEach { line ->
+        getInputAsSequence().fold(Submarine()) { acc, line ->
             val instruction = Instruction.parse(line)
             val amount = instruction.amount
             when (instruction.direction) {
-                FORWARD -> position += Pair(amount, aim * amount)
-                UP -> aim -= amount
-                DOWN -> aim += amount
+                FORWARD -> Submarine(acc.position + Pair(amount, acc.aim * amount), acc.aim)
+                UP -> Submarine(acc.position, acc.aim - amount)
+                DOWN -> Submarine(acc.position, acc.aim + amount)
             }
-        }
-        println(position.first * position.second)
+        }.call { println(it.position.first * it.position.second) }
     }
 
     private data class Instruction(val direction: Direction, val amount: Int) {
@@ -124,4 +118,6 @@ Using this new interpretation of the commands, calculate the horizontal position
     }
 
     private enum class Direction { FORWARD, UP, DOWN }
+
+    private data class Submarine(val position: Pair<Int, Int> = Pair(0, 0), val aim: Int = 0)
 }
