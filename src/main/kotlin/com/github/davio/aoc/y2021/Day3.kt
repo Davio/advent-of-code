@@ -117,23 +117,23 @@ Use the binary numbers in your diagnostic report to calculate the oxygen generat
     fun getResultPart2() {
         val input = getInputAsList()
         var bitIndex = 0
-        var oxygenPartition = input
-        var co2Partition = input
+        var oxygenCandidates = input
+        var co2Candidates = input
 
-        while (oxygenPartition.size > 1 || co2Partition.size > 1) {
-            if (oxygenPartition.size > 1) {
-                oxygenPartition = getNextCandidates(oxygenPartition, bitIndex) { left, right -> left > right }
+        while (oxygenCandidates.size > 1 || co2Candidates.size > 1) {
+            if (oxygenCandidates.size > 1) {
+                oxygenCandidates = getNextCandidates(oxygenCandidates, bitIndex) { left, right -> left > right }
             }
 
-            if (co2Partition.size > 1) {
-                co2Partition = getNextCandidates(co2Partition, bitIndex) { left, right -> left <= right }
+            if (co2Candidates.size > 1) {
+                co2Candidates = getNextCandidates(co2Candidates, bitIndex) { left, right -> left <= right }
             }
 
             bitIndex++
         }
 
-        val oxygenRating = oxygenPartition[0].toInt(2)
-        val co2Rating = co2Partition[0].toInt(2)
+        val oxygenRating = oxygenCandidates[0].toInt(2)
+        val co2Rating = co2Candidates[0].toInt(2)
         println("Oxygen rating $oxygenRating, CO2 rating $co2Rating")
         println("${oxygenRating * co2Rating}")
     }
