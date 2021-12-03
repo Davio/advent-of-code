@@ -120,13 +120,20 @@ Use the binary numbers in your diagnostic report to calculate the oxygen generat
         var oxygenCandidates = input
         var co2Candidates = input
 
+        val getNextCandidates = { candidates: List<String>, comparison: BiPredicate<Int, Int> ->
+            val partitions = candidates.partition { line -> line[bitIndex] == '0' }
+            val zerosPartition = partitions.first
+            val onesPartition = partitions.second
+            if (comparison.test(zerosPartition.size, onesPartition.size)) zerosPartition else onesPartition
+        }
+
         while (oxygenCandidates.size > 1 || co2Candidates.size > 1) {
             if (oxygenCandidates.size > 1) {
-                oxygenCandidates = getNextCandidates(oxygenCandidates, bitIndex) { left, right -> left > right }
+                oxygenCandidates = getNextCandidates(oxygenCandidates) { left, right -> left > right }
             }
 
             if (co2Candidates.size > 1) {
-                co2Candidates = getNextCandidates(co2Candidates, bitIndex) { left, right -> left <= right }
+                co2Candidates = getNextCandidates(co2Candidates) { left, right -> left <= right }
             }
 
             bitIndex++
@@ -136,12 +143,5 @@ Use the binary numbers in your diagnostic report to calculate the oxygen generat
         val co2Rating = co2Candidates[0].toInt(2)
         println("Oxygen rating $oxygenRating, CO2 rating $co2Rating")
         println("${oxygenRating * co2Rating}")
-    }
-
-    private fun getNextCandidates(candidates: List<String>, bitIndex: Int, comparison: BiPredicate<Int, Int>): List<String> {
-        val partitions = candidates.partition { line -> line[bitIndex] == '0' }
-        val zerosPartition = partitions.first
-        val onesPartition = partitions.second
-        return if (comparison.test(zerosPartition.size, onesPartition.size)) zerosPartition else onesPartition
     }
 }
