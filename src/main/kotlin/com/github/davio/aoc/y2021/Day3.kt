@@ -2,6 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.getInputAsList
 import java.util.function.BiPredicate
+import kotlin.math.pow
 
 fun main() {
     Day3.getResultPart1()
@@ -60,19 +61,10 @@ Use the binary numbers in your diagnostic report to calculate the gamma rate and
         }
 
         val halfSize = input.size / 2
-        val gammaArr = CharArray(lineLength)
-        val epsilonArr = CharArray(lineLength)
-        numberOfOnes.forEachIndexed { index, count ->
-            if (count >= halfSize) {
-                gammaArr[index] = '1'
-                epsilonArr[index] = '0'
-            } else {
-                gammaArr[index] = '0'
-                epsilonArr[index] = '1'
-            }
-        }
-        val gamma = gammaArr.concatToString().toInt(2)
-        val epsilon = epsilonArr.concatToString().toInt(2)
+        val gamma = numberOfOnes.map {
+            if (it >= halfSize) '1' else '0'
+        }.toCharArray().concatToString().toInt(2)
+        val epsilon = gamma.inv() and 2.0.pow(lineLength).toInt() - 1
 
         println("Gamma $gamma Epsilon $epsilon")
         println("${gamma * epsilon}")
