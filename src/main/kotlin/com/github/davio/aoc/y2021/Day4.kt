@@ -102,7 +102,7 @@ To guarantee victory against the giant squid, figure out which board will win fi
 
     private fun getBingoCards(input: List<String>): MutableList<BingoCard> {
         var bingoCardNumber = 0
-        var yIndex = 0;
+        var yIndex = 0
         var bingoCard: BingoCard? = null
         val bingoCards = mutableListOf<BingoCard>()
 
@@ -162,7 +162,7 @@ Figure out which board will win last. Once it wins, what would its final score b
         }
 
         val cardWithBingo = newCardsWithBingo[0]
-        println("Last Bingo! for card number ${cardWithBingo!!.number} with number $drawnNumber")
+        println("Last Bingo! for card number ${cardWithBingo.number} with number $drawnNumber")
         println(cardWithBingo)
 
         val unmarkedNumbersSum = cardWithBingo.numbers.flatten().filter { !it.marked }.sumOf { it.number }
