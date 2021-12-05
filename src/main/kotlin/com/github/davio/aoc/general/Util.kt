@@ -39,6 +39,32 @@ inline fun <T> T.call(codeBlock: (T) -> Unit) {
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
 
+operator fun Pair<Int, Int>.rangeTo(endInclusive: Pair<Int, Int>) = sequence{
+    val startInclusive = this@rangeTo
+    if (startInclusive.first == endInclusive.first) {
+        val firstPair = if (startInclusive.second < endInclusive.second) startInclusive else endInclusive
+        val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
+        (firstPair.second..secondPair.second).forEach { y ->
+            yield(Pair(startInclusive.first, y))
+        }
+    } else if (startInclusive.second == endInclusive.second) {
+        val firstPair = if (startInclusive.first < endInclusive.first) startInclusive else endInclusive
+        val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
+        (firstPair.first..secondPair.first).forEach { x ->
+            yield(Pair(x, startInclusive.second))
+        }
+    } else {
+        val firstPair = if (startInclusive.first < endInclusive.first) startInclusive else endInclusive
+        val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
+        val yInc = if (firstPair.second < secondPair.second) 1 else -1
+        var y = firstPair.second
+        (firstPair.first..secondPair.first).forEach { x ->
+            yield(Pair(x, y))
+            y += yInc
+        }
+    }
+}
+
 fun gcd(n1: Int, n2: Int): Int {
     return when {
         n1 == 0 -> n2
