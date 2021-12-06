@@ -110,7 +110,7 @@ How many lanternfish would there be after 256 days?
             state[8] = fishAtZero
         }
 
-        println(state.toSortedMap())
+        println("Final state: ${state.toSortedMap()}")
         println("${state.values.sum()}")
     }
 
