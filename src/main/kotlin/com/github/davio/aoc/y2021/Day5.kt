@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.rangeTo
@@ -63,8 +64,8 @@ Consider only horizontal and vertical lines. At how many points do at least two 
 
         getInputAsSequence().forEach { line ->
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
-            val startCoordinate = Pair(x1.toInt(), y1.toInt())
-            val endCoordinate = Pair(x2.toInt(), y2.toInt())
+            val startCoordinate = Point(x1.toInt(), y1.toInt())
+            val endCoordinate = Point(x2.toInt(), y2.toInt())
             if (startCoordinate.first == endCoordinate.first || startCoordinate.second == endCoordinate.second) {
                 println("Adding $startCoordinate -> $endCoordinate")
                 grid.addLine(startCoordinate, endCoordinate)
@@ -112,8 +113,8 @@ Consider all of the lines. At how many points do at least two lines overlap?
 
         getInputAsSequence().forEach { line ->
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
-            val startCoordinate = Pair(x1.toInt(), y1.toInt())
-            val endCoordinate = Pair(x2.toInt(), y2.toInt())
+            val startCoordinate = Point(x1.toInt(), y1.toInt())
+            val endCoordinate = Point(x2.toInt(), y2.toInt())
             println("Adding $startCoordinate -> $endCoordinate")
             grid.addLine(startCoordinate, endCoordinate)
         }
@@ -132,15 +133,14 @@ Consider all of the lines. At how many points do at least two lines overlap?
         var maxX = 0
         var maxY = 0
 
-        val lines = mutableMapOf<Pair<Int, Int>, Int>()
+        val lines = mutableMapOf<Point, Int>()
 
-        fun addLine(startCoordinate: Pair<Int, Int>, endCoordinate: Pair<Int, Int>) {
+        fun addLine(startCoordinate: Point, endCoordinate: Point) {
             maxX = max(maxX, max(startCoordinate.first, endCoordinate.first))
             maxY = max(maxY, max(startCoordinate.second, endCoordinate.second))
 
             (startCoordinate..endCoordinate).forEach { coordinate ->
-                val intersections = lines.getOrPut(coordinate) { 0 } + 1
-                lines[coordinate] = intersections
+                lines[coordinate] = lines.getOrPut(coordinate) { 0 } + 1
             }
         }
 
@@ -148,7 +148,7 @@ Consider all of the lines. At how many points do at least two lines overlap?
             val sb = StringBuilder()
             (0..maxY).forEach { y ->
                 (0..maxX).forEach { x ->
-                    sb.append(lines.get(Pair(x, y))?.toString() ?: '.')
+                    sb.append(lines[Point(x, y)]?.toString() ?: '.')
                 }
                 sb.appendLine()
             }

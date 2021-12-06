@@ -37,6 +37,8 @@ inline fun <T> T.call(codeBlock: (T) -> Unit) {
     codeBlock(this)
 }
 
+typealias Point = Pair<Int, Int>
+
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
 
 operator fun Pair<Int, Int>.rangeTo(endInclusive: Pair<Int, Int>) = sequence{
@@ -56,6 +58,8 @@ operator fun Pair<Int, Int>.rangeTo(endInclusive: Pair<Int, Int>) = sequence{
     } else {
         val firstPair = if (startInclusive.first < endInclusive.first) startInclusive else endInclusive
         val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
+        //val slope = (secondPair.second.toDouble() - firstPair.second) / (secondPair.first.toDouble() / firstPair.first)
+
         val yInc = if (firstPair.second < secondPair.second) 1 else -1
         var y = firstPair.second
         (firstPair.first..secondPair.first).forEach { x ->
