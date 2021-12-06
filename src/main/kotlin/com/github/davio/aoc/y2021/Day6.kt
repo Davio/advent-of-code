@@ -97,20 +97,17 @@ After 256 days in the example above, there would be a total of 26984457539 lante
 How many lanternfish would there be after 256 days?
     */
     fun getResultPart2() {
-        val state = (0..8).associateWith { 0L }.toMutableMap()
+        var state = (0..8).associateWith { 0L }.toMutableMap()
         getInputAsList()[0].split(",").map { it.toInt() }.groupBy { it }
             .forEach { (k, v) -> state[k] = v.size.toLong() }
         println("Initial state: ${state.toSortedMap()}")
 
         val days = 256
         (1..days).forEach { _ ->
-            val fishAtZero = state[0]
-            (1..8).forEach { timer ->
-                state[timer - 1] = state[timer]!!
-            }
-
-            state[6] = state[6]!! + fishAtZero!!
-            state[8] = fishAtZero
+            state = state.mapKeys { it.key - 1 }.toMutableMap()
+            state[8] = state.remove(-1)?.apply {
+                state[6] = state[6]!! + this
+            } ?: 0
         }
 
         println("Final state: ${state.toSortedMap()}")
