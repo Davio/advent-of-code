@@ -1,10 +1,13 @@
 package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.getInputAsList
+import kotlin.system.measureTimeMillis
 
 fun main() {
     Day6.getResultPart1()
-    Day6.getResultPart2()
+    measureTimeMillis {
+        Day6.getResultPart2()
+    }.let {println("Took $it ms")}
 }
 
 object Day6 {
@@ -114,15 +117,12 @@ How many lanternfish would there be after 256 days?
         println("${state.values.sum()}")
     }
 
-    private data class Lanternfish(var timer: Int, var isNew: Boolean = false) {
+    private data class Lanternfish(var timer: Int) {
 
         fun advanceTimerAndSpawnFish(): Lanternfish? {
             if (--timer == -1) {
                 timer = 6
-                if (isNew) {
-                    isNew = false
-                }
-                return Lanternfish(8, true)
+                return Lanternfish(8)
             }
 
             return null
