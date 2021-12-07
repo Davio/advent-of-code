@@ -7,7 +7,7 @@ fun main() {
     Day6.getResultPart1()
     measureTimeMillis {
         Day6.getResultPart2()
-    }.let {println("Took $it ms")}
+    }.let { println("Took $it ms") }
 }
 
 object Day6 {
