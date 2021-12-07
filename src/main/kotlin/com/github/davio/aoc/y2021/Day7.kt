@@ -3,6 +3,7 @@ package com.github.davio.aoc.y2021
 import com.github.davio.aoc.general.getInputAsList
 import kotlin.math.abs
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -99,7 +100,7 @@ Determine the horizontal position that the crabs can align to using the least fu
                 val position = entry.key
                 val numberOfCrabsAtPosition = entry.value
                 val distance = abs(position - target)
-                val fuel = (.5 * distance.toDouble().pow(2) + .5 * distance).toInt()
+                val fuel = (.5 * distance.toDouble().pow(2) + .5 * distance).roundToInt()
                 fuelSpent += fuel * numberOfCrabsAtPosition
                 if (fuelSpent > currentMinimumFuel) {
                     break
