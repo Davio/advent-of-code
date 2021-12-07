@@ -88,16 +88,19 @@ This costs a total of 168 fuel. This is the new cheapest possible outcome; the o
 
 Determine the horizontal position that the crabs can align to using the least fuel possible so they can make you an escape route! How much fuel must they spend to align to that position?
     */
+
     fun getResultPart2() {
         val crabsByPosition = getCrabs()
         var currentMinimumFuel = Int.MAX_VALUE
+        val fuelCache = mutableMapOf(Pair(0, 0), Pair(1, 1))
+
         (0..crabsByPosition.keys.maxOrNull()!!).forEach { target ->
             var fuelSpent = 0
             for (entry in crabsByPosition.entries) {
                 val position = entry.key
                 val numberOfCrabsAtPosition = entry.value
                 val distance = abs(position - target)
-                val fuel = (.5 * distance.toDouble().pow(2) + .5 * distance).toInt()
+                val fuel = fuelCache.getOrPut(distance) { (.5 * distance.toDouble().pow(2) + .5 * distance).toInt() }
                 fuelSpent += fuel * numberOfCrabsAtPosition
                 if (fuelSpent > currentMinimumFuel) {
                     break
@@ -107,6 +110,7 @@ Determine the horizontal position that the crabs can align to using the least fu
                 currentMinimumFuel = fuelSpent
             }
         }
+        println(fuelCache)
         println(currentMinimumFuel)
     }
 
