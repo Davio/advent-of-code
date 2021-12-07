@@ -92,7 +92,6 @@ Determine the horizontal position that the crabs can align to using the least fu
     fun getResultPart2() {
         val crabsByPosition = getCrabs()
         var currentMinimumFuel = Int.MAX_VALUE
-        val fuelCache = mutableMapOf(Pair(0, 0), Pair(1, 1))
 
         (0..crabsByPosition.keys.maxOrNull()!!).forEach { target ->
             var fuelSpent = 0
@@ -100,7 +99,7 @@ Determine the horizontal position that the crabs can align to using the least fu
                 val position = entry.key
                 val numberOfCrabsAtPosition = entry.value
                 val distance = abs(position - target)
-                val fuel = fuelCache.getOrPut(distance) { (.5 * distance.toDouble().pow(2) + .5 * distance).toInt() }
+                val fuel = (.5 * distance.toDouble().pow(2) + .5 * distance).toInt()
                 fuelSpent += fuel * numberOfCrabsAtPosition
                 if (fuelSpent > currentMinimumFuel) {
                     break
@@ -110,7 +109,6 @@ Determine the horizontal position that the crabs can align to using the least fu
                 currentMinimumFuel = fuelSpent
             }
         }
-        println(fuelCache)
         println(currentMinimumFuel)
     }
 
