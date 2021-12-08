@@ -188,39 +188,27 @@ For each entry, determine all of the wire/segment connections and decode the fou
         signalPatterns.filter { it.length == 6 }.forEach { pattern ->
             val charSet = pattern.toSet()
             // Find numbers 0, 6 and 9 which all have length 6
-            findDigitWith6Segments(digitToPatternMap, charSet, pattern)
+            digitToPatternMap[findDigitWith6Segments(digitToPatternMap, charSet)] = pattern
         }
 
         signalPatterns.filter { it.length == 5 }.forEach { pattern ->
             val charSet = pattern.toSet()
-            // Find numbers 0, 6 and 9 which all have length 6
-            findDigitWith5Segments(digitToPatternMap, charSet, pattern)
+            // Find numbers 2, 3 and 5 which all have length 5
+            digitToPatternMap[findDigitWith5Segments(digitToPatternMap, charSet)] = pattern
         }
 
         return digitToPatternMap.map { entry -> entry.value.toCharArray().also { it.sort() }.concatToString() to entry.key }.toMap()
     }
 
-    private fun findDigitWith6Segments(digitToPatternMap: MutableMap<Int, String>, charSet: Set<Char>, pattern: String) {
-        if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) {
-            if (charSet.containsAll(digitToPatternMap[4]!!.toSet())) {
-                digitToPatternMap[9] = pattern
-            } else {
-                digitToPatternMap[0] = pattern
-            }
-        } else {
-            digitToPatternMap[6] = pattern
-        }
+    private fun findDigitWith6Segments(digitToPatternMap: MutableMap<Int, String>, charSet: Set<Char>): Int {
+        return if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) {
+            if (charSet.containsAll(digitToPatternMap[4]!!.toSet())) 9 else 0
+        } else 6
     }
 
-    private fun findDigitWith5Segments(digitToPatternMap: MutableMap<Int, String>, charSet: Set<Char>, pattern: String) {
-        if (digitToPatternMap[6]!!.count { charSet.contains(it) } == 5) {
-            digitToPatternMap[5] = pattern
-        } else {
-            if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) {
-                digitToPatternMap[3] = pattern
-            } else {
-                digitToPatternMap[2] = pattern
-            }
+    private fun findDigitWith5Segments(digitToPatternMap: MutableMap<Int, String>, charSet: Set<Char>): Int {
+        return if (digitToPatternMap[6]!!.count { charSet.contains(it) } == 5) 5 else {
+            if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) 3 else 2
         }
     }
 }
