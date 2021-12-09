@@ -130,39 +130,46 @@ Find the three largest basins and multiply their sizes together. In the above ex
 What do you get if you multiply together the sizes of the three largest basins?
     */
 
-    private val basins: MutableList<Set<Pair<Int, Int>>> = mutableListOf()
+    private var basinIndex = -1
+    private val basinSizes: MutableList<Int> = mutableListOf()
+    private val pointsInBasins: MutableSet<Pair<Int, Int>> = mutableSetOf()
 
     fun getResultPart2() {
         cave = getCave()
         (cave.indices).forEach { y ->
             (cave[0].indices).asSequence().filter { x ->
-                cave[y][x] != 9 && basins.none { basin -> basin.contains(Pair(x, y)) }
+                cave[y][x] != 9 && !pointsInBasins.contains(Pair(x, y))
             }.forEach { x ->
-                basins.add(getBasin(x, y))
+                addBasin(x, y)
             }
         }
-        val largestThreeBasins = basins.map { it.size }.sortedDescending().take(3)
-        println(largestThreeBasins.reduce { left, right -> left * right })
+        val largestThreeBasinSizesMultiplied = basinSizes.sortedDescending()
+            .take(3)
+            .also { println(it) }
+            .reduce { left, right -> left * right }
+        println(largestThreeBasinSizesMultiplied)
     }
 
-    private fun getBasin(x: Int, y: Int): Set<Pair<Int, Int>> {
-        val basin = mutableSetOf(Pair(x, y))
-        addBasinNeighbors(x, y, basin)
-        return basin
+    private fun addBasin(x: Int, y: Int) {
+        basinSizes.add(1)
+        basinIndex++
+        pointsInBasins.add(Pair(x, y))
+        addBasinNeighbors(x, y)
     }
 
-    private fun addBasinNeighbors(x: Int, y: Int, currentBasin: MutableSet<Pair<Int, Int>>) {
+    private fun addBasinNeighbors(x: Int, y: Int) {
         (y - 1..y + 1).forEach { yNeighbor ->
-            (x - 1..x + 1).filter { xNeighbor ->
+            (x - 1..x + 1).asSequence().filter { xNeighbor ->
                 (yNeighbor == y || xNeighbor == x)
                         && !(yNeighbor == y && xNeighbor == x)
                         && yNeighbor in (cave.indices)
                         && xNeighbor in (cave[0].indices)
                         && cave[yNeighbor][xNeighbor] != 9
-                        && !currentBasin.contains(Pair(xNeighbor, yNeighbor))
+                        && !pointsInBasins.contains(Pair(xNeighbor, yNeighbor))
             }.forEach { xNeighbor ->
-                currentBasin.add(Pair(xNeighbor, yNeighbor))
-                addBasinNeighbors(xNeighbor, yNeighbor, currentBasin)
+                pointsInBasins.add(Pair(xNeighbor, yNeighbor))
+                addBasinNeighbors(xNeighbor, yNeighbor)
+                basinSizes[basinIndex]++
             }
         }
     }
