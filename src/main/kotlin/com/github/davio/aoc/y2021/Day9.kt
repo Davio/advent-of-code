@@ -140,7 +140,6 @@ What do you get if you multiply together the sizes of the three largest basins?
             }.forEach { x ->
                 basins.add(getBasin(x, y))
             }
-            println()
         }
         val largestThreeBasins = basins.map { it.size }.sortedDescending().take(3)
         println(largestThreeBasins.reduce { left, right -> left * right })
