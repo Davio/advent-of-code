@@ -234,7 +234,5 @@ If you can calculate the exact moments when the octopuses will all flash simulta
         }.toTypedArray()
     }
 
-    private data class Octopus(val x: Int, val y: Int, var energyLevel: Int, var flashed: Boolean = false) {
-
-    }
+    private data class Octopus(val x: Int, val y: Int, var energyLevel: Int, var flashed: Boolean = false)
 }

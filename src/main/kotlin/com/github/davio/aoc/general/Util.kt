@@ -58,7 +58,6 @@ operator fun Pair<Int, Int>.rangeTo(endInclusive: Pair<Int, Int>) = sequence{
     } else {
         val firstPair = if (startInclusive.first < endInclusive.first) startInclusive else endInclusive
         val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
-        //val slope = (secondPair.second.toDouble() - firstPair.second) / (secondPair.first.toDouble() / firstPair.first)
 
         val yInc = if (firstPair.second < secondPair.second) 1 else -1
         var y = firstPair.second
