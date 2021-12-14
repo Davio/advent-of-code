@@ -138,8 +138,7 @@ How many paths through this cave system are there that visit small caves at most
     }
 
     fun getResultPart1() {
-        parseInput()
-
+        numberOfRoutes = 0
         getRoutesPart1()
 
         println(numberOfRoutes)
@@ -225,7 +224,6 @@ Given these new rules, how many paths through this cave system are there?
 
     private fun getRoutesPart2(originalCave: Cave = startCave, currentRoute: MutableList<Cave> = mutableListOf(startCave)) {
         if (originalCave == endCave) {
-            println(currentRoute.joinToString(",") { it.name })
             numberOfRoutes++
             return
         }
