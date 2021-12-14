@@ -15,14 +15,14 @@
 
     <properties>
         <!-- General properties -->
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <kotlin.compiler.jvmTarget>16</kotlin.compiler.jvmTarget>
+        <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <maven.test.skip>false</maven.test.skip>
         <!-- Compiler plugins versions -->
-        <kotlin.version>1.5.10</kotlin.version>
+        <kotlin.version>1.6.10</kotlin.version>
 
         <!-- Plugin versions -->
         <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
