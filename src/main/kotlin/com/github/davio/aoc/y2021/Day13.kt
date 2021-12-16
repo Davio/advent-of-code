@@ -192,8 +192,8 @@ What code do you use to activate the infrared thermal imaging camera system?
         val grid: MutableList<MutableList<Boolean>> = mutableListOf(mutableListOf(false))
 
         fun markPoint(dot: Point, isDot: Boolean = true) {
-            val x = dot.first
-            val y = dot.second
+            val x = dot.x
+            val y = dot.y
             val maxX = getMaxX()
             val maxY = getMaxY()
 

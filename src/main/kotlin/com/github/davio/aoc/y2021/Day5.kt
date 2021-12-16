@@ -66,7 +66,7 @@ Consider only horizontal and vertical lines. At how many points do at least two 
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
             val startCoordinate = Point(x1.toInt(), y1.toInt())
             val endCoordinate = Point(x2.toInt(), y2.toInt())
-            if (startCoordinate.first == endCoordinate.first || startCoordinate.second == endCoordinate.second) {
+            if (startCoordinate.x == endCoordinate.x || startCoordinate.y == endCoordinate.y) {
                 println("Adding $startCoordinate -> $endCoordinate")
                 grid.addLine(startCoordinate, endCoordinate)
             }
@@ -136,8 +136,8 @@ Consider all of the lines. At how many points do at least two lines overlap?
         val lines = mutableMapOf<Point, Int>()
 
         fun addLine(startCoordinate: Point, endCoordinate: Point) {
-            maxX = max(maxX, max(startCoordinate.first, endCoordinate.first))
-            maxY = max(maxY, max(startCoordinate.second, endCoordinate.second))
+            maxX = max(maxX, max(startCoordinate.x, endCoordinate.x))
+            maxY = max(maxY, max(startCoordinate.x, endCoordinate.y))
 
             (startCoordinate..endCoordinate).forEach { coordinate ->
                 lines[coordinate] = lines.getOrPut(coordinate) { 0 } + 1

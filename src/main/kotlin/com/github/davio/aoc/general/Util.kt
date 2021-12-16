@@ -37,32 +37,36 @@ inline fun <T> T.call(codeBlock: (T) -> Unit) {
     codeBlock(this)
 }
 
-typealias Point = Pair<Int, Int>
+data class Point(val x: Int = 0, val y: Int = 0) {
+
+    operator fun Point.plus(other: Point) = Point(this.x + other.x, this.y + other.y)
+    operator fun Point.minus(other: Point) = Point(this.x - other.x, this.y - other.y)
+}
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
 
-operator fun Pair<Int, Int>.rangeTo(endInclusive: Pair<Int, Int>) = sequence{
+operator fun Point.rangeTo(endInclusive: Point) = sequence {
     val startInclusive = this@rangeTo
-    if (startInclusive.first == endInclusive.first) {
-        val firstPair = if (startInclusive.second < endInclusive.second) startInclusive else endInclusive
+    if (startInclusive.x == endInclusive.x) {
+        val firstPair = if (startInclusive.y < endInclusive.y) startInclusive else endInclusive
         val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
-        (firstPair.second..secondPair.second).forEach { y ->
-            yield(Pair(startInclusive.first, y))
+        (firstPair.y..secondPair.y).forEach { y ->
+            yield(Point(startInclusive.x, y))
         }
-    } else if (startInclusive.second == endInclusive.second) {
-        val firstPair = if (startInclusive.first < endInclusive.first) startInclusive else endInclusive
+    } else if (startInclusive.y == endInclusive.y) {
+        val firstPair = if (startInclusive.x < endInclusive.x) startInclusive else endInclusive
         val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
-        (firstPair.first..secondPair.first).forEach { x ->
-            yield(Pair(x, startInclusive.second))
+        (firstPair.x..secondPair.x).forEach { x ->
+            yield(Point(x, startInclusive.y))
         }
     } else {
-        val firstPair = if (startInclusive.first < endInclusive.first) startInclusive else endInclusive
+        val firstPair = if (startInclusive.x < endInclusive.x) startInclusive else endInclusive
         val secondPair = if (firstPair == startInclusive) endInclusive else startInclusive
 
-        val yInc = if (firstPair.second < secondPair.second) 1 else -1
-        var y = firstPair.second
-        (firstPair.first..secondPair.first).forEach { x ->
-            yield(Pair(x, y))
+        val yInc = if (firstPair.y < secondPair.y) 1 else -1
+        var y = firstPair.y
+        (firstPair.x..secondPair.x).forEach { x ->
+            yield(Point(x, y))
             y += yInc
         }
     }
