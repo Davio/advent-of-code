@@ -7,7 +7,7 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     Day15.parseInput()
-//    Day15.getResultPart1()
+    Day15.getResultPart1()
     measureTimeMillis {
         Day15.getResultPart2()
     }.call { println("Took $it ms") }
