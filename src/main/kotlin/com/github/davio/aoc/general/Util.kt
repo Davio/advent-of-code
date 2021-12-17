@@ -37,10 +37,15 @@ inline fun <T> T.call(codeBlock: (T) -> Unit) {
     codeBlock(this)
 }
 
-data class Point(val x: Int = 0, val y: Int = 0) {
+data class Point(var x: Int = 0, var y: Int = 0) {
 
     operator fun Point.plus(other: Point) = Point(this.x + other.x, this.y + other.y)
     operator fun Point.minus(other: Point) = Point(this.x - other.x, this.y - other.y)
+
+    operator fun plusAssign(point: Point) {
+        this.x += point.x
+        this.y += point.y
+    }
 }
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
