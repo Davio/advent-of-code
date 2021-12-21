@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
-import com.github.davio.aoc.general.permutate
+import com.github.davio.aoc.general.permutations
 import java.lang.System.lineSeparator
 import kotlin.system.measureTimeMillis
 
@@ -231,7 +231,7 @@ Assemble the tiles into an image. What do you get if you multiply together the I
     }
 
     private fun getAllTileConfigurations(): Sequence<List<Tile>> {
-        return permutate(tiles)
+        return tiles.permutations()
     }
 
     private data class Tile(val id: Int) {

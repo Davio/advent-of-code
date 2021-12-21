@@ -1,9 +1,11 @@
 package com.github.davio.aoc.general
 
+import org.apache.commons.math3.util.CombinatoricsUtils
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.streams.asSequence
+
 
 fun getInputAsList() = getInputReader().readLines()
 
@@ -97,8 +99,32 @@ fun lcm(n1: Int, n2: Int): Int {
     }
 }
 
-fun <T> permutate(list: List<T> = emptyList(), k: Int = list.size): Sequence<List<T>> {
-    val newList = ArrayList<T>(list)
+fun <T> List<T>.combinations(k: Int): Sequence<List<T>> {
+    if (k == 0 || this.isEmpty()) {
+        return emptySequence()
+    }
+
+    if (k == this.size) {
+        return sequenceOf(this)
+    }
+
+    val indexIterator = CombinatoricsUtils.combinationsIterator(this.size, k)
+    return sequence {
+        while (indexIterator.hasNext()) {
+            val indexList = indexIterator.next()
+            println("${indexList.asList()}")
+            val list = ArrayList<T>(k)
+            indexList.forEach { index ->
+                list.add(this@combinations[index])
+            }
+            println("List $list")
+            yield(list)
+        }
+    }
+}
+
+fun <T> List<T>.permutations(k: Int = this.size): Sequence<List<T>> {
+    val newList = ArrayList<T>(this)
 
     if (k == 1) {
         return sequenceOf(newList)
@@ -106,7 +132,7 @@ fun <T> permutate(list: List<T> = emptyList(), k: Int = list.size): Sequence<Lis
 
     return sequence {
         for (i in (0 until k)) {
-            yieldAll(permutate(newList, k - 1))
+            yieldAll(newList.permutations( k - 1))
 
             if ((k - 1) % 2 == 0) {
                 swap(newList, i, k - 1)
