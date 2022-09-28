@@ -99,6 +99,10 @@ In this example, there are 5 sums that are larger than the previous sum.
 Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 */
     fun getResultPart2() {
-        getInputAsIntSequence().windowed(3) { it.sum() }.zipWithNext { left, right ->  right - left }.count { it > 0 }.call { println(it) }
+        getInputAsIntSequence().windowed(3) {
+            it.sum()
+        }.zipWithNext { left, right ->
+            right - left
+        }.count { it > 0 }.call { println(it) }
     }
 }

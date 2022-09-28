@@ -238,10 +238,8 @@ How many distinct initial velocity values cause the probe to be within the targe
                 return true
             }
 
-            if (velocity.x == 0) {
-                if (velocity.y < 0 && point.y < yRange.last) {
-                    return true
-                }
+            if (velocity.x == 0 && velocity.y < 0 && point.y < yRange.last) {
+                return true
             }
 
             return false

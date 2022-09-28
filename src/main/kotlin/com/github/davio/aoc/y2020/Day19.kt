@@ -256,7 +256,7 @@ After updating rules 8 and 11, how many messages completely match rule 0?
                                 ""
                             }
                         }.joinToString("")
-                        Regex("lef$leftHandSidet$rightHandSideHandSide|rightHandSide")
+                        Regex("(?:$leftHandSide|$rightHandSide)")
                     }
                 }
             }

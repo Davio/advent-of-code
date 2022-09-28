@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.getInputAsSequence
-import com.github.davio.aoc.general.plus
 
 fun main() {
     Day2.getResultPart1()
@@ -48,18 +48,18 @@ What do you get if you multiply your final horizontal position by your final dep
      */
 
     fun getResultPart1() {
-        var position = Pair(0, 0)
+        val position = Point(0, 0)
         getInputAsSequence().map {
             Instruction.parse(it)
         }.forEach {
             val distance = it.amount
             position += when (it.direction) {
-                Direction.FORWARD -> Pair(distance, 0)
-                Direction.UP -> Pair(0, -distance)
-                Direction.DOWN -> Pair(0, distance)
+                Direction.FORWARD -> Point(distance, 0)
+                Direction.UP -> Point(0, -distance)
+                Direction.DOWN -> Point(0, distance)
             }
         }
-        println(position.first * position.second)
+        println(position.x * position.y)
     }
 
     /*
@@ -98,7 +98,7 @@ Using this new interpretation of the commands, calculate the horizontal position
         }.forEach {
             sub.move(it)
         }
-        println(sub.position.first * sub.position.second)
+        println(sub.position.x * sub.position.y)
     }
 
     private data class Instruction(val direction: Direction, val amount: Int) {
@@ -118,13 +118,13 @@ Using this new interpretation of the commands, calculate the horizontal position
 
     private class Submarine {
 
-        var position = Pair(0, 0)
+        var position = Point(0, 0)
         var aim = 0
 
         fun move(instruction: Instruction) {
             val (direction, amount) = instruction
             if (direction == Direction.FORWARD) {
-                position += Pair(amount, aim * amount)
+                position += Point(amount, aim * amount)
             } else {
                 aim += if (direction == Direction.DOWN) {
                     amount

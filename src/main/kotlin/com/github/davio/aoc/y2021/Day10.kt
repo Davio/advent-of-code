@@ -60,14 +60,17 @@ Some of the lines aren't corrupted, just incomplete; you can ignore these lines 
 
 Stop at the first incorrect closing character on each corrupted line.
 
-Did you know that syntax checkers actually have contests to see who can get the high score for syntax errors in a file? It's true! To calculate the syntax error score for a line, take the first illegal character on the line and look it up in the following table:
+Did you know that syntax checkers actually have contests to see who can get the high score for syntax errors in a file? It's true!
+To calculate the syntax error score for a line, take the first illegal character on the line and look it up in the following table:
 
     ): 3 points.
     ]: 57 points.
     }: 1197 points.
     >: 25137 points.
 
-In the above example, an illegal ) was found twice (2*3 = 6 points), an illegal ] was found once (57 points), an illegal } was found once (1197 points), and an illegal > was found once (25137 points). So, the total syntax error score for this file is 6+57+1197+25137 = 26397 points!
+In the above example, an illegal ) was found twice (2*3 = 6 points), an illegal ] was found once (57 points), an illegal }
+was found once (1197 points), and an illegal > was found once (25137 points).
+So, the total syntax error score for this file is 6+57+1197+25137 = 26397 points!
 
 Find the first illegal character in each corrupted line of the navigation subsystem. What is the total syntax error score for those errors?
     */
