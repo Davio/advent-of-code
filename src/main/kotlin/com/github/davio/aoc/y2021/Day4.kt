@@ -155,7 +155,7 @@ Figure out which board will win last. Once it wins, what would its final score b
             }
 
             newCardsWithBingo = bingoCards.filter { it.hasBingo() }
-            bingoCards.removeAll(newCardsWithBingo)
+            bingoCards.removeAll(newCardsWithBingo.toSet())
             if (bingoCards.isEmpty()) {
                 break
             }

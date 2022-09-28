@@ -435,16 +435,6 @@ What is the largest magnitude of any sum of two different snailfish numbers from
         }
     }
 
-    private fun traversePreOrder(snailfishPair: SnailfishPair): String {
-        val sb = StringBuilder()
-        sb.append(snailfishPair.getValue())
-        val pointerRight = "└──"
-        val pointerLeft = "├──"
-        traverseNodes(sb, "", pointerLeft, snailfishPair.left, true)
-        traverseNodes(sb, "", pointerRight, snailfishPair.right, false)
-        return sb.toString()
-    }
-
 
     private fun traverseNodes(
         sb: StringBuilder, padding: String?, pointer: String?, node: SnailfishNumber?, hasRightSibling: Boolean

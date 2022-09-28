@@ -67,11 +67,11 @@ object Day1 {
 
     fun getResultPart2() {
         val entries = getInputAsIntList()
-        entries.mapNotNull { e1 ->
+        entries.firstNotNullOf { e1 ->
             entries.firstOrNull { e2 -> entries.contains(2020 - e1 - e2) }?.run {
                 Pair(e1, this)
             }
-        }.first().run {
+        }.run {
             this.first * this.second * (2020 - this.first - this.second)
         }.call {
             println(it)

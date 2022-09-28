@@ -169,19 +169,19 @@ object Day4 {
     class Passport {
 
         private val requiredFields = mapOf<String, (String) -> Boolean>(
-            Pair("byr", { rangeMatches((1920..2002), it) }),
-            Pair("iyr", { rangeMatches((2010..2020), it) }),
-            Pair("eyr", { rangeMatches((2020..2030), it) }),
-            Pair("hgt", {
+            Pair("byr") { rangeMatches((1920..2002), it) },
+            Pair("iyr") { rangeMatches((2010..2020), it) },
+            Pair("eyr") { rangeMatches((2020..2030), it) },
+            Pair("hgt") {
                 when {
                     it.endsWith("cm") -> rangeMatchesPart((150..193), "cm", it)
                     it.endsWith("in") -> rangeMatchesPart((59..76), "in", it)
                     else -> false
                 }
-            }),
-            Pair("hcl", { it.matches(Regex("#[0-9a-f]{6}")) }),
-            Pair("ecl", { setOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(it) }),
-            Pair("pid", { it.matches(Regex("\\d{9}")) }),
+            },
+            Pair("hcl") { it.matches(Regex("#[0-9a-f]{6}")) },
+            Pair("ecl") { setOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(it) },
+            Pair("pid") { it.matches(Regex("\\d{9}")) },
         )
 
         private val fields: MutableMap<String, String> = hashMapOf()

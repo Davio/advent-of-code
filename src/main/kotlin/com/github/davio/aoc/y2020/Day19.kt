@@ -175,7 +175,7 @@ After updating rules 8 and 11, how many messages completely match rule 0?
     private val input = getInputAsSequence()
     private val rules = hashMapOf<Int, Rule>()
     private val characterRegex = Regex("\"([a-z])\"")
-    private val maxRecursionDepth = 20
+    private const val maxRecursionDepth = 20
 
     fun getResult() {
         input.count { line ->
@@ -256,7 +256,7 @@ After updating rules 8 and 11, how many messages completely match rule 0?
                                 ""
                             }
                         }.joinToString("")
-                        Regex("(?:$leftHandSide|$rightHandSide)")
+                        Regex("lef$leftHandSidet$rightHandSideHandSide|rightHandSide")
                     }
                 }
             }

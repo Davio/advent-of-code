@@ -96,7 +96,7 @@ What is the ID of your seat?
             BoardingPass.parse(it).getId()
         }.toList()
 
-        possibleBoardingPassIds.removeAll(existingBoardingPassIds)
+        possibleBoardingPassIds.removeAll(existingBoardingPassIds.toSet())
 
         possibleBoardingPassIds.first {
             existingBoardingPassIds.contains(it + 1) && existingBoardingPassIds.contains(it - 1)

@@ -48,6 +48,10 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         this.x += point.x
         this.y += point.y
     }
+
+    override fun toString(): String {
+        return "$x,$y"
+    }
 }
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)

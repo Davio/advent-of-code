@@ -107,7 +107,7 @@ To find the encryption weakness, add together the smallest and largest number in
 What is the encryption weakness in your XMAS-encrypted list of numbers?
      */
 
-    private val preambleSize = 25
+    private const val preambleSize = 25
     private val inputList = getInputAsLongList()
 
     fun getResult() {
