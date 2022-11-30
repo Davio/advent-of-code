@@ -1,5 +1,6 @@
 package com.github.davio.aoc.general
 
+import kotlinx.coroutines.flow.asFlow
 import org.apache.commons.math3.util.CombinatoricsUtils
 import kotlin.math.abs
 import kotlin.math.max
@@ -21,6 +22,8 @@ fun getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
 
 fun getInputAsLongList() = getInputAsList().map { it.toLong() }
 
+fun getInputAsFlow() = getInputReader().lineSequence().asFlow()
+
 fun getCallingClassResourceFile(): String {
     val classRegex = Regex(""".*(y\d{4})\.Day(\d+)""")
     return StackWalker.getInstance().walk {
@@ -35,8 +38,8 @@ fun getCallingClassResourceFile(): String {
     }
 }
 
-inline fun <T> T.call(codeBlock: (T) -> Unit) {
-    codeBlock(this)
+inline fun <T> T.call(block: (T) -> Unit) {
+    block(this)
 }
 
 data class Point(var x: Int = 0, var y: Int = 0) {
@@ -134,6 +137,12 @@ fun <T> List<T>.permutations(k: Int = this.size): Sequence<List<T>> {
         return sequenceOf(newList)
     }
 
+    fun <T> swap(list: MutableList<T>, index1: Int, index2: Int) {
+        val temp = list[index1]
+        list[index1] = list[index2]
+        list[index2] = temp
+    }
+
     return sequence {
         for (i in (0 until k)) {
             yieldAll(newList.permutations( k - 1))
@@ -145,10 +154,4 @@ fun <T> List<T>.permutations(k: Int = this.size): Sequence<List<T>> {
             }
         }
     }
-}
-
-private fun <T> swap(list: MutableList<T>, index1: Int, index2: Int) {
-    val temp = list[index1]
-    list[index1] = list[index2]
-    list[index2] = temp
 }
