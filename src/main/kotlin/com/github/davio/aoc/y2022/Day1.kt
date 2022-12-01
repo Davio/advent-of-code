@@ -3,7 +3,6 @@ package com.github.davio.aoc.y2022
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.split
-import com.github.davio.aoc.general.top
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -59,8 +58,9 @@ Find the Elf carrying the most Calories. How many total Calories is that Elf car
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
             .max()
-            .call { println(it)
-        }
+            .call {
+                println(it)
+            }
     }
 
     /*
@@ -79,11 +79,45 @@ Find the top three Elves carrying the most Calories. How many Calories are those
     */
 
     fun getResultPart2() {
+        val fixedSizeList = FixedSizeList(3, { 0 }) { newElement ->
+            this.mapIndexed { index, element -> Pair(index, element) }
+                .filter { newElement > it.second }
+                .minByOrNull { it.second }
+                ?.first ?: -1
+        }
+
         getInputAsSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
-            .top(3)
-            .sum()
-            .call { println(it) }
+            .forEach { fixedSizeList.add(it) }
+
+        println(fixedSizeList.sum())
+    }
+
+    private class FixedSizeList<T>(
+        private val maxSize: Int,
+        private val initializer: () -> T,
+        private val additionIndexBlock: FixedSizeList<T>.(T) -> Int
+    ) : ArrayList<T>(maxSize) {
+
+        init {
+            repeat(maxSize) {
+                add(initializer.invoke())
+            }
+        }
+
+        override fun add(element: T): Boolean {
+            if (size < maxSize) {
+                return super.add(element)
+            }
+
+            val indexOfElementToOverwrite = additionIndexBlock.invoke(this, element)
+            return if (indexOfElementToOverwrite > -1) {
+                this[indexOfElementToOverwrite] = element
+                true
+            } else {
+                false
+            }
+        }
     }
 }
