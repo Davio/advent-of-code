@@ -2,6 +2,7 @@ package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
+import kotlin.math.max
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -58,7 +59,7 @@ Find the Elf carrying the most Calories. How many total Calories is that Elf car
 
         getInputAsSequence().fold(0) { acc, line ->
             if (line.isBlank()) {
-                maxElfCalories = maxOf(acc, maxElfCalories)
+                maxElfCalories = max(acc, maxElfCalories)
                 0
             } else {
                 acc + line.toInt()
