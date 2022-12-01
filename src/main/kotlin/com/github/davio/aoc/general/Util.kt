@@ -24,6 +24,31 @@ fun getInputAsLongList() = getInputAsList().map { it.toLong() }
 
 fun getInputAsFlow() = getInputReader().lineSequence().asFlow()
 
+fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>> {
+    val iterator = this.iterator()
+    val buffer = mutableListOf<T>()
+
+    return sequence {
+        while (iterator.hasNext()) {
+            val element = iterator.next()
+            if (separatorPredicate.invoke(element)) {
+                yield(buffer.toList())
+                buffer.clear()
+            } else {
+                buffer.add(element)
+            }
+        }
+        if (buffer.isNotEmpty()) {
+            yield(buffer.toList())
+        }
+    }
+}
+
+fun <T : Comparable<T>> List<T>.top(n: Int): List<T> = this.sortedDescending().take(n)
+fun <T : Comparable<T>> List<T>.bottom(n: Int): List<T> = this.sorted().take(n)
+fun <T : Comparable<T>> Sequence<T>.top(n: Int): Sequence<T> = this.sortedDescending().take(n)
+fun <T : Comparable<T>> Sequence<T>.bottom(n: Int): Sequence<T> = this.sorted().take(n)
+
 fun getCallingClassResourceFile(): String {
     val classRegex = Regex(""".*(y\d{4})\.Day(\d+)""")
     return StackWalker.getInstance().walk {
@@ -145,7 +170,7 @@ fun <T> List<T>.permutations(k: Int = this.size): Sequence<List<T>> {
 
     return sequence {
         for (i in (0 until k)) {
-            yieldAll(newList.permutations( k - 1))
+            yieldAll(newList.permutations(k - 1))
 
             if ((k - 1) % 2 == 0) {
                 swap(newList, i, k - 1)

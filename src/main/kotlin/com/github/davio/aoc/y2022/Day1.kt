@@ -2,7 +2,8 @@ package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
-import kotlin.math.max
+import com.github.davio.aoc.general.split
+import com.github.davio.aoc.general.top
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -53,18 +54,13 @@ being carried by the Elf carrying the most Calories. In the example above, this 
 Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
     */
 
-
     fun getResultPart1() {
-        var maxElfCalories = 0
-
-        getInputAsSequence().fold(0) { acc, line ->
-            if (line.isBlank()) {
-                maxElfCalories = max(acc, maxElfCalories)
-                0
-            } else {
-                acc + line.toInt()
-            }
-        }.call { println(maxElfCalories) }
+        getInputAsSequence()
+            .split { it.isBlank() }
+            .map { it.sumOf(String::toInt) }
+            .max()
+            .call { println(it)
+        }
     }
 
     /*
@@ -83,18 +79,10 @@ Find the top three Elves carrying the most Calories. How many Calories are those
     */
 
     fun getResultPart2() {
-        val elfCalories = mutableListOf<Int>()
-
-        getInputAsSequence().fold(0) { acc, line ->
-            if (line.isBlank()) {
-                elfCalories.add(acc)
-                0
-            } else {
-                acc + line.toInt()
-            }
-        }.call {
-            elfCalories.sortDescending()
-            println(elfCalories.take(3).sum())
-        }
+        getInputAsSequence()
+            .split { it.isBlank() }
+            .map { it.sumOf(String::toInt) }
+            .top(3)
+            .call { println(it) }
     }
 }
