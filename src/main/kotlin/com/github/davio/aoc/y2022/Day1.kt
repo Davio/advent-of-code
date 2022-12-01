@@ -56,7 +56,7 @@ Find the Elf carrying the most Calories. How many total Calories is that Elf car
 
     fun getResultPart1() {
         getInputAsSequence()
-            .split { it.isBlank() }
+            .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
             .max()
             .call { println(it)
@@ -80,9 +80,10 @@ Find the top three Elves carrying the most Calories. How many Calories are those
 
     fun getResultPart2() {
         getInputAsSequence()
-            .split { it.isBlank() }
+            .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
             .top(3)
+            .sum()
             .call { println(it) }
     }
 }
