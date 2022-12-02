@@ -87,20 +87,13 @@ Find the top three Elves carrying the most Calories. How many Calories are those
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
             .fold(intArrayOf(0, 0, 0)) { acc, element ->
-                if (element > acc[0]) {
-                    if (element > acc[1]) {
-                        acc[0] = acc[1]
-                        if (element > acc[2]) {
-                            acc[1] = acc[2]
-                            acc[2] = element
-                        } else {
-                            acc[1] = element
-                        }
-                    } else {
-                        acc[0] = element
+                val indexToInsert = acc.indexOfLast { element > it }
+                if (indexToInsert > -1) {
+                    (0 until indexToInsert).forEach { index ->
+                        acc[index] = acc[index + 1]
                     }
+                    acc[indexToInsert] = element
                 }
-                println(acc.joinToString())
                 acc
             }.sum()
             .call { println(it) }
