@@ -2,6 +2,7 @@ package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.y2022.Day2.Outcome.*
 import com.github.davio.aoc.y2022.Day2.RockPaperScissors.*
 import kotlin.system.measureTimeMillis
 
@@ -17,79 +18,73 @@ fun main() {
  */
 object Day2 {
 
-    enum class RockPaperScissors(private val opponentCode: Char, private val yourCode: Char, val points: Int) : Playable {
-        ROCK('A', 'X', 1) {
-            override fun getOutcomeAgainst(other: RockPaperScissors) =
-                when (other) {
-                    ROCK -> 3
-                    SCISSORS -> 6
-                    PAPER -> 0
-                }
-        },
-        PAPER('B', 'Y', 2) {
-            override fun getOutcomeAgainst(other: RockPaperScissors) =
-                when (other) {
-                    PAPER -> 3
-                    ROCK -> 6
-                    SCISSORS -> 0
-                }
-        },
-        SCISSORS('C', 'Z', 3) {
-            override fun getOutcomeAgainst(other: RockPaperScissors) =
-                when (other) {
-                    SCISSORS -> 3
-                    PAPER -> 6
-                    ROCK -> 0
-                }
-        };
+    enum class Outcome(val points: Int) {
+        WIN(6),
+        DRAW(3),
+        LOSE(0)
+    }
 
-        fun getPointsAgainst(other: RockPaperScissors) =
-            points + getOutcomeAgainst(other)
+    enum class RockPaperScissors(val points: Int) {
+        ROCK(1),
+        PAPER(2),
+        SCISSORS(3),
+    }
 
-        companion object {
-            private val opponentCodeMap = values().associateBy { it.opponentCode }
-            private val yourCodeMap = values().associateBy { it.yourCode }
+    private val opponentCodeMap = mapOf(
+        'A' to ROCK,
+        'B' to PAPER,
+        'C' to SCISSORS
+    )
 
-            fun fromOpponentCode(opponentCode: Char) = opponentCodeMap[opponentCode]!!
-            fun fromYourCode(yourCode: Char) = yourCodeMap[yourCode]!!
+    private val rspStructure = arrayOf(SCISSORS, ROCK, PAPER)
+    private fun RockPaperScissors.getOutcomeAgainstOpponent(opponentChoice: RockPaperScissors): Outcome {
+        if (this == opponentChoice) {
+            return DRAW
+        }
+
+        val choiceToWin = rspStructure[(rspStructure.indexOf(opponentChoice) + 1) % rspStructure.size]
+
+        return if (this == choiceToWin) {
+            WIN
+        } else {
+            LOSE
         }
     }
 
-    interface Playable {
-        fun getOutcomeAgainst(other: RockPaperScissors): Int
-    }
-
     fun getResultPart1() {
+        val yourCodeMap = mapOf(
+            'X' to ROCK,
+            'Y' to PAPER,
+            'Z' to SCISSORS
+        )
+
         getInputAsSequence().map {
-            val opponentChoice = RockPaperScissors.fromOpponentCode(it.first())
-            val yourChoice = RockPaperScissors.fromYourCode(it[2])
-            yourChoice.getPointsAgainst(opponentChoice)
+            val opponentChoice = opponentCodeMap[(it.first())]!!
+            val yourChoice = yourCodeMap[it[2]]!!
+            yourChoice.points + yourChoice.getOutcomeAgainstOpponent(opponentChoice).points
         }.sum()
             .call { println(it) }
     }
 
     fun getResultPart2() {
-        fun getLosingChoice(opponentChoice: RockPaperScissors) =
-            when (opponentChoice) {
-                ROCK -> SCISSORS
-                PAPER -> ROCK
-                else -> PAPER
-            }
-
-        fun getWinningChoice(opponentChoice: RockPaperScissors) =
-            when (opponentChoice) {
-                ROCK -> PAPER
-                PAPER -> SCISSORS
-                else -> ROCK
-            }
+        val desiredOutcomeMap = mapOf(
+            'X' to LOSE,
+            'Y' to DRAW,
+            'Z' to WIN
+        )
 
         getInputAsSequence().map {
-            val opponentChoice = RockPaperScissors.fromOpponentCode(it.first())
-            it[2].let { c ->
-                when (c) {
-                    'X' -> 0 + getLosingChoice(opponentChoice).points
-                    'Y' -> 3 + opponentChoice.points
-                    else -> 6 + getWinningChoice(opponentChoice).points
+            val opponentChoice = opponentCodeMap[(it.first())]!!
+            val desiredOutcome = desiredOutcomeMap[it[2]]!!
+
+            desiredOutcome.points + when (desiredOutcome) {
+                DRAW -> opponentChoice.points
+                WIN -> rspStructure[(rspStructure.indexOf(opponentChoice) + 1) % rspStructure.size].points
+                LOSE -> {
+                    val losingIndex = (rspStructure.indexOf(opponentChoice) - 1).let { index ->
+                        if (index < 0) index + rspStructure.size else index
+                    }
+                    rspStructure[losingIndex].points
                 }
             }
         }.sum()
