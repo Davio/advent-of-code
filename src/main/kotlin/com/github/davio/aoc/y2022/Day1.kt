@@ -76,48 +76,33 @@ In the example above, the top three Elves are the fourth Elf (with 24000 Calorie
 then the fifth Elf (with 10000 Calories). The sum of the Calories carried by these three elves is 45000.
 
 Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
+
+2 4 6
+3 -> 3 4 6
+5 -> 4 5 6
+7 -> 4 6 7
     */
-
     fun getResultPart2() {
-        val fixedSizeList = FixedSizeList(3, { 0 }) { newElement ->
-            this.mapIndexed { index, element -> Pair(index, element) }
-                .filter { newElement > it.second }
-                .minByOrNull { it.second }
-                ?.first ?: -1
-        }
-
         getInputAsSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
-            .forEach { fixedSizeList.add(it) }
-
-        println(fixedSizeList.sum())
-    }
-
-    private class FixedSizeList<T>(
-        private val maxSize: Int,
-        private val initializer: () -> T,
-        private val additionIndexBlock: FixedSizeList<T>.(T) -> Int
-    ) : ArrayList<T>(maxSize) {
-
-        init {
-            repeat(maxSize) {
-                add(initializer.invoke())
-            }
-        }
-
-        override fun add(element: T): Boolean {
-            if (size < maxSize) {
-                return super.add(element)
-            }
-
-            val indexOfElementToOverwrite = additionIndexBlock.invoke(this, element)
-            return if (indexOfElementToOverwrite > -1) {
-                this[indexOfElementToOverwrite] = element
-                true
-            } else {
-                false
-            }
-        }
+            .fold(intArrayOf(0, 0, 0)) { acc, element ->
+                if (element > acc[0]) {
+                    if (element > acc[1]) {
+                        acc[0] = acc[1]
+                        if (element > acc[2]) {
+                            acc[1] = acc[2]
+                            acc[2] = element
+                        } else {
+                            acc[1] = element
+                        }
+                    } else {
+                        acc[0] = element
+                    }
+                }
+                println(acc.joinToString())
+                acc
+            }.sum()
+            .call { println(it) }
     }
 }
