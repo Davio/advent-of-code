@@ -12,10 +12,11 @@ fun main() {
     }.call { println("Took $it ms") }
 }
 
+/**
+ * See [Advent of Code 2022 Day 2](https://adventofcode.com/2022/day/2#part2])
+ */
 object Day2 {
 
-    /*
-    */
     enum class RockPaperScissors(private val opponentCode: Char, private val yourCode: Char, val points: Int) : Playable {
         ROCK('A', 'X', 1) {
             override fun getOutcomeAgainst(other: RockPaperScissors) =
@@ -66,9 +67,6 @@ object Day2 {
         }.sum()
             .call { println(it) }
     }
-
-    /*
-    */
 
     fun getResultPart2() {
         fun getLosingChoice(opponentChoice: RockPaperScissors) =
