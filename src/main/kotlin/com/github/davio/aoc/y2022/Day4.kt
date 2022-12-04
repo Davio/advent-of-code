@@ -15,26 +15,27 @@ fun main() {
  */
 object Day4 {
 
+    private fun parseLine(line: String) = line.split(",").let {
+            lineParts -> lineParts[0].toIntRange() to lineParts[1].toIntRange()
+    }
+
     fun getResultPart1(): Int {
         fun IntRange.contains(other: IntRange) = this.first <= other.first && this.last >= other.last
 
         return getInputAsSequence()
-            .map { line -> line.split(",") }
-            .map { lineParts -> lineParts[0].toIntRange() to lineParts[1].toIntRange() }
+            .map { line -> parseLine(line) }
             .count { ranges -> ranges.first.contains(ranges.second) || ranges.second.contains(ranges.first) }
     }
 
     fun getResultPart2(): Int {
-        fun IntRange.overlaps(other: IntRange) = this.any { other.contains(it) }
+        fun IntRange.overlaps(other: IntRange) = this.intersect(other).isNotEmpty()
 
         return getInputAsSequence()
-            .map { line -> line.split(",") }
-            .map { lineParts -> lineParts[0].toIntRange() to lineParts[1].toIntRange() }
+            .map { line -> parseLine(line) }
             .count { ranges -> ranges.first.overlaps(ranges.second) }
     }
 
-    private fun String.toIntRange(): IntRange {
-        val parts =this.split("-")
-        return parts[0].toInt()..parts[1].toInt()
+    private fun String.toIntRange(): IntRange = this.split("-").let {
+        it[0].toInt()..it[1].toInt()
     }
 }
