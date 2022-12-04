@@ -20,7 +20,7 @@ object Day4 {
     }
 
     fun getResultPart1(): Int {
-        fun IntRange.contains(other: IntRange) = this.first <= other.first && this.last >= other.last
+        fun IntRange.contains(other: IntRange) = this.first in other && this.last in other
 
         return getInputAsSequence()
             .map { line -> parseLine(line) }
