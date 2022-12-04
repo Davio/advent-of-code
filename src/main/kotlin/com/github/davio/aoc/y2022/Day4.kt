@@ -15,8 +15,8 @@ fun main() {
  */
 object Day4 {
 
-    private fun parseLine(line: String) = line.split(",").let {
-            lineParts -> lineParts[0].toIntRange() to lineParts[1].toIntRange()
+    private fun parseLine(line: String) = line.split(",").let { lineParts ->
+        lineParts[0].toIntRange() to lineParts[1].toIntRange()
     }
 
     fun getResultPart1(): Int {
@@ -28,7 +28,7 @@ object Day4 {
     }
 
     fun getResultPart2(): Int {
-        fun IntRange.overlaps(other: IntRange) = this.intersect(other).isNotEmpty()
+        fun IntRange.overlaps(other: IntRange) = this.first in other || this.last in other || other.first in this
 
         return getInputAsSequence()
             .map { line -> parseLine(line) }
