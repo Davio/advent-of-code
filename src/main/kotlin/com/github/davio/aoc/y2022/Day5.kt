@@ -18,7 +18,7 @@ object Day5 {
 
     private data class Move(val amount: Int, val from: Int, val to: Int)
 
-    private fun parseInput(): Pair<List<MutableList<Char>>, List<Move>> {
+    private fun parseInput(): Pair<List<MutableList<String>>, List<Move>> {
         val parts = getInputAsSequence()
             .split(String::isBlank)
             .toList()
@@ -26,7 +26,7 @@ object Day5 {
         val noOfColumns = stackLines.last().split(" ").last().toInt()
 
         val stacks = (0 until noOfColumns).map {
-            mutableListOf<Char>()
+            mutableListOf<String>()
         }.toList()
 
         stackLines.take(stackLines.size - 1).forEach { line ->
@@ -35,8 +35,8 @@ object Day5 {
                 if (startIndex > line.lastIndex) {
                     return@repeat
                 }
-                val crate = line.substring(startIndex, startIndex + 1)[0]
-                if (crate != ' ') {
+                val crate = line.substring(startIndex, startIndex + 1)
+                if (crate != " ") {
                     stacks[columnNo].add(crate)
                 }
             }
@@ -61,9 +61,7 @@ object Day5 {
         }
 
         moves.forEach { moveCrates(it) }
-        return stacks.fold("") { acc, chars ->
-            acc + (chars.firstOrNull() ?: "")
-        }
+        return stacks.joinToString(separator = "") { it.firstOrNull() ?: "" }
     }
 
     fun getResultPart2(): String {
@@ -78,8 +76,6 @@ object Day5 {
         }
 
         moves.forEach { moveCrates(it) }
-        return stacks.fold("") { acc, chars ->
-            acc + (chars.firstOrNull() ?: "")
-        }
+        return stacks.joinToString(separator = "") { it.firstOrNull() ?: "" }
     }
 }
