@@ -15,9 +15,16 @@ fun main() {
  */
 object Day6 {
 
+    private val set = hashSetOf<Char>()
+
     private fun getStartMarker(messageLength: Int) = getInputAsLine()
-        .windowed(messageLength)
-        .indexOfFirst { it.toSet().size == it.length } + messageLength
+        .windowedSequence(messageLength)
+        .indexOfFirst { !it.hasDuplicates } + messageLength
+
+    private val String.hasDuplicates: Boolean get() {
+        set.clear()
+        return this.any { !set.add(it) }
+    }
 
     fun getResultPart1() = getStartMarker(4)
     fun getResultPart2() = getStartMarker(14)
