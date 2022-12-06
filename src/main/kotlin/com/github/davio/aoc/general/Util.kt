@@ -1,7 +1,6 @@
 package com.github.davio.aoc.general
 
 import kotlinx.coroutines.flow.asFlow
-import org.apache.commons.math3.util.CombinatoricsUtils
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -129,30 +128,6 @@ fun lcm(n1: Int, n2: Int): Int {
     return if (n1 == 0 || n2 == 0) 0 else {
         val gcd = gcd(n1, n2)
         abs(n1 * n2) / gcd
-    }
-}
-
-fun <T> List<T>.combinations(k: Int): Sequence<List<T>> {
-    if (k == 0 || this.isEmpty()) {
-        return emptySequence()
-    }
-
-    if (k == this.size) {
-        return sequenceOf(this)
-    }
-
-    val indexIterator = CombinatoricsUtils.combinationsIterator(this.size, k)
-    return sequence {
-        while (indexIterator.hasNext()) {
-            val indexList = indexIterator.next()
-            println("${indexList.asList()}")
-            val list = ArrayList<T>(k)
-            indexList.forEach { index ->
-                list.add(this@combinations[index])
-            }
-            println("List $list")
-            yield(list)
-        }
     }
 }
 

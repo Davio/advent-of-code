@@ -1,15 +1,13 @@
 package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.combinations
-import com.github.davio.aoc.general.getInputAsList
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
     Day18.getResultPart1()
     measureTimeMillis {
-        Day18.getResultPart2()
+//        Day18.getResultPart2()
     }.call { println("Took $it ms") }
 }
 
@@ -251,23 +249,23 @@ The largest magnitude of the sum of any two snailfish numbers in this list is 39
 What is the largest magnitude of any sum of two different snailfish numbers from the homework assignment?
     */
 
-    fun getResultPart2() {
-        val numbers = getInputAsList().map { line ->
-            parseSnailfishPair(line)
-        }
-
-        numbers.combinations(2).flatMap {
-            println("${it[0]} + ${it[1]}")
-            println("${it[1]} + ${it[0]}")
-            sequenceOf(it[0] + it[1], it[1] + it[0])
-        }.maxOf {
-            val reduced = it.reduce()
-            println("Reduced sum: $reduced")
-            val magnitude = reduced.getMagnitude()
-            println("$reduced $magnitude")
-            magnitude
-        }.call { println(it) }
-    }
+//    fun getResultPart2() {
+//        val numbers = getInputAsList().map { line ->
+//            parseSnailfishPair(line)
+//        }
+//
+//        numbers.combinations(2).flatMap {
+//            println("${it[0]} + ${it[1]}")
+//            println("${it[1]} + ${it[0]}")
+//            sequenceOf(it[0] + it[1], it[1] + it[0])
+//        }.maxOf {
+//            val reduced = it.reduce()
+//            println("Reduced sum: $reduced")
+//            val magnitude = reduced.getMagnitude()
+//            println("$reduced $magnitude")
+//            magnitude
+//        }.call { println(it) }
+//    }
 
     private sealed class SnailfishNumber(var parent: SnailfishPair? = null) {
 
