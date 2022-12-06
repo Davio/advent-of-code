@@ -7,6 +7,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.streams.asSequence
 
+fun getInputAsLine() = getInputReader().readLine()
 
 fun getInputAsList() = getInputReader().readLines()
 
