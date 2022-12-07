@@ -30,21 +30,10 @@ object Day7 {
         val files: MutableList<File> = mutableListOf()
     ) : TerminalOutput, DirectoryOrFileOutput {
         override fun getTotalSize(): Long = subdirectories.sumOf { it.getTotalSize() } + files.sumOf { it.getTotalSize() }
-
-        override fun toString(): String {
-            var output = "- $name (dir)"
-            if (subdirectories.isEmpty() && files.isEmpty()) return output
-            output += System.lineSeparator()
-            output += "  " + subdirectories.joinToString { it.toString() } + System.lineSeparator() +
-                    "  " + files.joinToString(System.lineSeparator()) { it.toString() }
-            return output
-        }
     }
 
     private data class File(val name: String, val size: Long) : TerminalOutput, DirectoryOrFileOutput {
         override fun getTotalSize() = size
-
-        override fun toString() = "- $name (file, size=$size)"
     }
 
     fun getResultPart1() {
