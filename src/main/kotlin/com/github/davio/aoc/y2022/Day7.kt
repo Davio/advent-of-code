@@ -45,8 +45,8 @@ object Day7 {
         }.forEach {
             currentWorkingDirectory = processTerminalOutput(it, currentWorkingDirectory)
         }
-        recursiveVisit(root, { dir -> dir.getTotalSize() < 100000L }, 0L, { left, right -> left + right }) {
-            it.getTotalSize()
+        recursiveVisit(root, { dir -> dir.getTotalSize() < 100000L }, 0L, { it.getTotalSize() }) { left, right ->
+            left + right
         }
     }
 
@@ -66,10 +66,8 @@ object Day7 {
         val unusedSpace = totalDiskSpace - totalSpaceUsed
         val spaceToFree = freeSpaceNeeded - unusedSpace
 
-        recursiveVisit(root, { dir ->
-            dir.getTotalSize() >= spaceToFree
-        }, Long.MAX_VALUE, { left, right -> minOf(left, right) }) {
-            it.getTotalSize()
+        recursiveVisit(root, { dir -> dir.getTotalSize() >= spaceToFree }, Long.MAX_VALUE, { it.getTotalSize() }) { left, right ->
+            minOf(left, right)
         }
     }
 
@@ -126,12 +124,12 @@ object Day7 {
         dir: Directory,
         filter: (Directory) -> Boolean,
         defaultValue: T,
-        combinator: (T, T) -> T,
-        operation: (Directory) -> T
+        operation: (Directory) -> T,
+        combinator: (T, T) -> T
     ): T {
         var result = if (filter.invoke(dir)) operation.invoke(dir) else defaultValue
         dir.subdirectories.forEach { subdir ->
-            result = combinator.invoke(result, recursiveVisit(subdir, filter, defaultValue, combinator, operation))
+            result = combinator.invoke(result, recursiveVisit(subdir, filter, defaultValue, operation, combinator))
         }
         return result
     }
