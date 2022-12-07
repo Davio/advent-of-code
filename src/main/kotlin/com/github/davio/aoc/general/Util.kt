@@ -4,25 +4,25 @@ import kotlinx.coroutines.flow.asFlow
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.streams.asSequence
 
-fun getInputAsLine(): String = getInputReader().readLine()
+fun Any.getInputReader() =
+    ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
 
-fun getInputAsList() = getInputReader().readLines()
+fun Any.getInputAsLine(): String = getInputReader().readLine()
 
-fun getInputReader() = ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
+fun Any.getInputAsList() = getInputReader().readLines()
 
-fun getInputAsSequence() = getInputReader().lineSequence()
+fun Any.getInputAsSequence() = getInputReader().lineSequence()
 
-fun getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
+fun Any.getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
 
-fun getInputAsIntList() = getInputAsList().map { it.toInt() }
+fun Any.getInputAsIntList() = getInputAsList().map { it.toInt() }
 
-fun getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
+fun Any.getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
 
-fun getInputAsLongList() = getInputAsList().map { it.toLong() }
+fun Any.getInputAsLongList() = getInputAsList().map { it.toLong() }
 
-fun getInputAsFlow() = getInputReader().lineSequence().asFlow()
+fun Any.getInputAsFlow() = getInputReader().lineSequence().asFlow()
 
 fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>> {
     val iterator = this.iterator()
@@ -49,17 +49,12 @@ fun <T : Comparable<T>> List<T>.bottom(n: Int): List<T> = this.sorted().take(n)
 fun <T : Comparable<T>> Sequence<T>.top(n: Int): Sequence<T> = this.sortedDescending().take(n)
 fun <T : Comparable<T>> Sequence<T>.bottom(n: Int): Sequence<T> = this.sorted().take(n)
 
-fun getCallingClassResourceFile(): String {
-    val classRegex = Regex(""".*(y\d{4})\.Day(\d+)""")
-    return StackWalker.getInstance().walk {
-        it.asSequence().first { frame ->
-            frame.className.matches(classRegex)
-        }!!.run {
-            val matchResult = classRegex.matchEntire(this.className)!!
-            val year = matchResult.groups[1]!!.value
-            val dayNumber = matchResult.groups[2]!!.value
-            "$year/$dayNumber.txt"
-        }
+fun Any.getCallingClassResourceFile(): String {
+    val clazz = this::class
+    val classRegex = Regex("""Day(\d+)""")
+    return clazz.qualifiedName!!.split(".").run {
+        val (dayNumber) = classRegex.matchEntire(this.last())!!.destructured
+        "${this[this.lastIndex - 1]}/${dayNumber}.txt"
     }
 }
 
@@ -73,8 +68,8 @@ data class Point(var x: Int = 0, var y: Int = 0) {
     operator fun Point.minus(other: Point) = Point(this.x - other.x, this.y - other.y)
 
     operator fun plusAssign(point: Point) {
-        this.x += point.x
-        this.y += point.y
+        x += point.x
+        y += point.y
     }
 
     override fun toString(): String {
@@ -82,7 +77,7 @@ data class Point(var x: Int = 0, var y: Int = 0) {
     }
 }
 
-operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
+operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(first + other.first, second + other.second)
 
 operator fun Point.rangeTo(endInclusive: Point) = sequence {
     val startInclusive = this@rangeTo
@@ -131,7 +126,7 @@ fun lcm(n1: Int, n2: Int): Int {
     }
 }
 
-fun <T> List<T>.permutations(k: Int = this.size): Sequence<List<T>> {
+fun <T> List<T>.permutations(k: Int = size): Sequence<List<T>> {
     val newList = ArrayList<T>(this)
 
     if (k == 1) {

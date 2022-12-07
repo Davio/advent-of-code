@@ -1,7 +1,11 @@
 package com.github.davio.aoc.y2022
 
-import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.*
+import java.util.concurrent.TimeUnit
 
+@State(Scope.Benchmark)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 open class Day6Benchmark {
 
     @Benchmark
