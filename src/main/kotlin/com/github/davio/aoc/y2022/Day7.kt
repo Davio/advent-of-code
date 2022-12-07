@@ -126,7 +126,8 @@ object Day7 {
         dir: Directory,
         filter: (Directory) -> Boolean,
         defaultValue: T,
-        combinator: (T, T) -> T, operation: (Directory) -> T
+        combinator: (T, T) -> T,
+        operation: (Directory) -> T
     ): T {
         var result = if (filter.invoke(dir)) operation.invoke(dir) else defaultValue
         dir.subdirectories.forEach { subdir ->
