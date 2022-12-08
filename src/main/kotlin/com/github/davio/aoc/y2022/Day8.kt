@@ -3,6 +3,7 @@ package com.github.davio.aoc.y2022
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.takeUntil
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -59,18 +60,6 @@ object Day8 {
         val viewingDistanceLeft = (point.x - 1 downTo 0).takeUntil { x -> grid[point.y][x] >= treeHeight }.count()
         val viewingDistanceRight = (point.x + 1..grid[0].lastIndex).takeUntil { x -> grid[point.y][x] >= treeHeight }.count()
         return viewingDistanceTop * viewingDistanceLeft * viewingDistanceBottom * viewingDistanceRight
-    }
-
-    private inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
-        val list = ArrayList<T>()
-        for (item in this) {
-            if (predicate(item)) {
-                list.add(item)
-                break
-            }
-            list.add(item)
-        }
-        return list
     }
 
     fun getResultPart2(): Int {

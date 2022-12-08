@@ -112,6 +112,18 @@ operator fun Point.rangeTo(endInclusive: Point) = sequence {
     }
 }
 
+inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
+    val list = ArrayList<T>()
+    for (item in this) {
+        if (predicate(item)) {
+            list.add(item)
+            break
+        }
+        list.add(item)
+    }
+    return list
+}
+
 fun gcd(n1: Int, n2: Int): Int {
     return when {
         n1 == 0 -> n2
