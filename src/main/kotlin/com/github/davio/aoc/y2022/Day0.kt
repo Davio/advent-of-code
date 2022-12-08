@@ -4,12 +4,15 @@ import com.github.davio.aoc.general.call
 import kotlin.system.measureTimeMillis
 
 fun main() {
-    Day0.getResultPart1()
+    println(Day0.getResultPart1())
     measureTimeMillis {
-        Day0.getResultPart2()
+        println(Day0.getResultPart2())
     }.call { println("Took $it ms") }
 }
 
+/**
+ * See [Advent of Code 2022 Day X](https://adventofcode.com/2022/day/X#part2])
+ */
 object Day0 {
 
     /*
