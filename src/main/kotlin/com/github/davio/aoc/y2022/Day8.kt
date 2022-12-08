@@ -54,14 +54,14 @@ object Day8 {
 
     private fun getScenicScore(grid: List<List<Int>>, point: Point): Int {
         val treeHeight = grid[point.y][point.x]
-        val viewingDistanceTop = (point.y - 1 downTo 0).takeWhileWithLast { y -> grid[y][point.x] < treeHeight }.count()
-        val viewingDistanceBottom = (point.y + 1..grid.lastIndex).takeWhileWithLast { y -> grid[y][point.x] < treeHeight }.count()
-        val viewingDistanceLeft = (point.x - 1 downTo 0).takeWhileWithLast { x -> grid[point.y][x] < treeHeight }.count()
-        val viewingDistanceRight = (point.x + 1..grid[0].lastIndex).takeWhileWithLast { x -> grid[point.y][x] < treeHeight }.count()
+        val viewingDistanceTop = (point.y - 1 downTo 0).takeWhileWithBreakingElement { y -> grid[y][point.x] < treeHeight }.count()
+        val viewingDistanceBottom = (point.y + 1..grid.lastIndex).takeWhileWithBreakingElement { y -> grid[y][point.x] < treeHeight }.count()
+        val viewingDistanceLeft = (point.x - 1 downTo 0).takeWhileWithBreakingElement { x -> grid[point.y][x] < treeHeight }.count()
+        val viewingDistanceRight = (point.x + 1..grid[0].lastIndex).takeWhileWithBreakingElement { x -> grid[point.y][x] < treeHeight }.count()
         return viewingDistanceTop * viewingDistanceLeft * viewingDistanceBottom * viewingDistanceRight
     }
 
-    private inline fun <T> Iterable<T>.takeWhileWithLast(predicate: (T) -> Boolean): List<T> {
+    private inline fun <T> Iterable<T>.takeWhileWithBreakingElement(predicate: (T) -> Boolean): List<T> {
         val list = ArrayList<T>()
         for (item in this) {
             if (!predicate(item)) {
