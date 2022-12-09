@@ -59,11 +59,10 @@ object Day9 {
                 val knots = acc.second
                 repeat(move.amount) {
                     knots[0] += move.direction.vector
-                    knots.indices.drop(1).forEach { index ->
+                    for (index in knots.indices.drop(1)) {
                         val knotMovement = getKnotMovement(knots[index - 1], knots[index])
-                        if (knotMovement != Point.ZERO) {
-                            knots[index] += knotMovement
-                        }
+                        if (knotMovement == Point.ZERO) break
+                        knots[index] += knotMovement
                     }
                     acc.first.add(knots.last())
                 }
