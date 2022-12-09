@@ -34,34 +34,27 @@ object Day9 {
 
     private data class Move(val direction: Direction, val amount: Int)
 
-    fun getResultPart1(): Int {
-        var head = Point(0, 0)
-        var tail = Point(0, 0)
-        val tailPositions = mutableSetOf(tail)
-
-        getInputAsSequence()
-            .map { parseMove(it) }
-            .forEach { move ->
-                repeat(move.amount) {
-                    head += move.direction.vector
-                    val tailMovement = getKnotMovement(head, tail)
-                    if (tailMovement != Vector.ZERO) {
-                        tail += tailMovement
-                        tailPositions.add(tail.copy())
-                    }
+    fun getResultPart1() = getInputAsSequence()
+        .map { parseMove(it) }
+        .fold(Triple(mutableSetOf(Point.ZERO), Point.ZERO, Point.ZERO)) { acc, move ->
+            var head = acc.second
+            var tail = acc.third
+            repeat(move.amount) {
+                head += move.direction.vector
+                val tailMovement = getKnotMovement(head, tail)
+                if (tailMovement != Vector.ZERO) {
+                    tail += tailMovement
+                    acc.first.add(tail.copy())
                 }
             }
+            Triple(acc.first, head, tail)
+        }.first.size
 
-        return tailPositions.size
-    }
-
-    fun getResultPart2(): Int {
-        val knots = MutableList(10) { Point.ZERO }
-        val tailPositions = mutableSetOf(knots.last())
-
+    fun getResultPart2() =
         getInputAsSequence()
             .map { parseMove(it) }
-            .forEach { move ->
+            .fold(Pair(mutableSetOf(Point.ZERO), MutableList(10) { Point.ZERO })) { acc, move ->
+                val knots = acc.second
                 repeat(move.amount) {
                     knots[0] += move.direction.vector
                     knots.indices.drop(1).forEach { index ->
@@ -70,12 +63,10 @@ object Day9 {
                             knots[index] += knotMovement
                         }
                     }
-                    tailPositions.add(knots.last())
+                    acc.first.add(knots.last())
                 }
-            }
-
-        return tailPositions.size
-    }
+                Pair(acc.first, knots)
+            }.first.size
 
     private fun parseMove(line: String) = line.split(" ").let { Move(Direction.fromChar(it[0][0]), it[1].toInt()) }
 
