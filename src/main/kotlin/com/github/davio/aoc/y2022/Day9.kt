@@ -9,7 +9,9 @@ import kotlin.math.sign
 import kotlin.system.measureTimeMillis
 
 fun main() {
-    println(Day9.getResultPart1())
+    measureTimeMillis {
+        println(Day9.getResultPart1())
+    }.call { println("Took $it ms") }
     measureTimeMillis {
         println(Day9.getResultPart2())
     }.call { println("Took $it ms") }
