@@ -62,15 +62,10 @@ inline fun <T> T.call(block: (T) -> Unit) {
     block(this)
 }
 
-data class Point(var x: Int = 0, var y: Int = 0) : Comparable<Point> {
+data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
 
-    operator fun Point.plus(other: Point) = Point(this.x + other.x, this.y + other.y)
-    operator fun Point.minus(other: Point) = Point(this.x - other.x, this.y - other.y)
-
-    operator fun plusAssign(point: Point) {
-        x += point.x
-        y += point.y
-    }
+    operator fun plus(other: Point) = Point(this.x + other.x, this.y + other.y)
+    operator fun minus(other: Point) = Point(this.x - other.x, this.y - other.y)
 
     override fun toString(): String {
         return "$x,$y"
@@ -81,7 +76,13 @@ data class Point(var x: Int = 0, var y: Int = 0) : Comparable<Point> {
         if (byX != 0) return byX
         return this.y.compareTo(other.y)
     }
+
+    companion object {
+        val ZERO = Point(0, 0)
+    }
 }
+
+typealias Vector = Point
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(first + other.first, second + other.second)
 

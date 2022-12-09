@@ -193,9 +193,9 @@ How many distinct initial velocity values cause the probe to be within the targe
 
         (1..xRange.last).forEach { x ->
             (yRange.first..1000).forEach { y ->
-                val probe = Probe(Point(x, y))
+                var probe = Probe(Point(x, y))
                 while (!probe.hasOvershotOrReachedTargetArea()) {
-                    probe.doStep()
+                    probe = probe.doStep()
                 }
 
                 if (probe.isInTargetArea()) {
@@ -211,14 +211,14 @@ How many distinct initial velocity values cause the probe to be within the targe
 
         var point = Point(0, 0)
 
-        fun doStep() {
+        fun doStep(): Probe {
             point += Point(velocity.x, velocity.y)
             if (velocity.x > 0) {
-                velocity.x--
+                return Probe(Point(velocity.x - 1, velocity.y))
             } else if (velocity.x < 0) {
-                velocity.x++
+                return Probe(Point(velocity.x + 1, velocity.y))
             }
-            velocity.y--
+            return Probe(Point(0, velocity.y - 1))
         }
 
         fun isInTargetArea(): Boolean {

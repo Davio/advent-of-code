@@ -48,7 +48,7 @@ What do you get if you multiply your final horizontal position by your final dep
      */
 
     fun getResultPart1() {
-        val position = Point(0, 0)
+        var position = Point(0, 0)
         getInputAsSequence().map {
             Instruction.parse(it)
         }.forEach {

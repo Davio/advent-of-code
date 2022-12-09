@@ -15,15 +15,8 @@ fun main() {
  */
 object Day0 {
 
-    /*
-    */
-
     fun getResultPart1() {
-
     }
-
-    /*
-    */
 
     fun getResultPart2() {
     }
