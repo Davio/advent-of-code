@@ -68,7 +68,7 @@ object Day10 {
                     Cpu.currentCommand = command
                 }
                 val newX = Cpu.performCycle(x)
-                val signalStrength = if (cycle == 20 || (cycle - 20) % 40 == 0) {
+                val signalStrength = if ((cycle - 20) % 40 == 0) {
                     cycle * x
                 } else {
                     0
