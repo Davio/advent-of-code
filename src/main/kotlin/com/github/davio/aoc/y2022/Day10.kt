@@ -17,10 +17,7 @@ fun main() {
 object Day10 {
 
     private sealed class Command(val cyclesNeeded: Int)
-    private object Noop : Command(1) {
-        override fun toString() = "Noop"
-    }
-
+    private object Noop : Command(1)
     private data class AddX(val amount: Int) : Command(2)
 
     private object Cpu {
