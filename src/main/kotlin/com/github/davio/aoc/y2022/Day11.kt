@@ -82,9 +82,9 @@ object Day11 {
     private val monkeyLine6Regex = Regex("If false: throw to monkey (\\d+)")
 
     private fun parseMonkey(lines: List<String>): Monkey {
-        val number = monkeyLine1Regex.find(lines[0])!!.groupValues[1].toInt()
+        val number = findFirstGroup(monkeyLine1Regex, lines[0]).toInt()
         val startingItems =
-            ArrayDeque(monkeyLine2Regex.find(lines[1])!!.groupValues[1].split(", ").map { it.toLong() })
+            ArrayDeque(findFirstGroup(monkeyLine2Regex, lines[1]).split(", ").map { it.toLong() })
         val operation = monkeyLine3Regex.find(lines[2])!!.destructured.let { (operatorStr, operand) ->
             val operator: (Long, Long) -> Long = when (operatorStr) {
                 "+" -> Long::plus
@@ -97,10 +97,12 @@ object Day11 {
                 { n1: Long -> operator.invoke(n1, operand.toLong()) }
             }
         }
-        val testNumber = monkeyLine4Regex.find(lines[3])!!.groupValues[1].toLong()
-        val trueAction = monkeyLine5Regex.find(lines[4])!!.groupValues[1].toInt()
-        val falseAction = monkeyLine6Regex.find(lines[5])!!.groupValues[1].toInt()
+        val testNumber = findFirstGroup(monkeyLine4Regex, lines[3]).toLong()
+        val trueAction = findFirstGroup(monkeyLine5Regex, lines[4]).toInt()
+        val falseAction = findFirstGroup(monkeyLine6Regex, lines[5]).toInt()
 
         return Monkey(number, startingItems, operation, testNumber, trueAction, falseAction)
     }
+
+    private fun findFirstGroup(regex: Regex, s: String) = regex.find(s)!!.groupValues[1]
 }
