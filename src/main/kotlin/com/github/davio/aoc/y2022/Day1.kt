@@ -6,9 +6,9 @@ import com.github.davio.aoc.general.split
 import kotlin.system.measureTimeMillis
 
 fun main() {
-    Day1.getResultPart1()
+    println(Day1.getResultPart1())
     measureTimeMillis {
-        Day1.getResultPart2()
+        println(Day1.getResultPart2())
     }.call { println("Took $it ms") }
 }
 
@@ -17,17 +17,13 @@ fun main() {
  */
 object Day1 {
 
-    fun getResultPart1() {
+    fun getResultPart1(): Int =
         getInputAsSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
             .max()
-            .call {
-                println(it)
-            }
-    }
 
-    fun getResultPart2() {
+    fun getResultPart2() =
         getInputAsSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
@@ -41,6 +37,4 @@ object Day1 {
                 }
                 acc
             }.sum()
-            .call { println(it) }
-    }
 }

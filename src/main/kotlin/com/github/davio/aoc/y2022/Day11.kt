@@ -11,7 +11,7 @@ fun main() {
 }
 
 /**
- * See [Advent of Code 2022 Day X](https://adventofcode.com/2022/day/X#part2])
+ * See [Advent of Code 2022 Day 11](https://adventofcode.com/2022/day/11#part2])
  */
 object Day11 {
 
