@@ -3,6 +3,7 @@ package com.github.davio.aoc.y2022
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.split
+import com.github.davio.aoc.general.top
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -27,14 +28,6 @@ object Day1 {
         getInputAsSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toInt) }
-            .fold(intArrayOf(0, 0, 0)) { acc, element ->
-                val indexToInsert = acc.indexOfLast { element > it }
-                if (indexToInsert > -1) {
-                    (0 until indexToInsert).forEach { index ->
-                        acc[index] = acc[index + 1]
-                    }
-                    acc[indexToInsert] = element
-                }
-                acc
-            }.sum()
+            .top(3)
+            .sum()
 }
