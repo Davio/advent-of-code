@@ -27,6 +27,7 @@ object Day12 {
     }
 
     fun getResultPart2(): Int {
+        val knownRoutes = mutableMapOf<Point, List<Point>>()
         val lines = getInputAsList()
         val grid = CharGrid(lines.size) { index -> lines[index].toCharArray() }
         val startingPoints = grid.getPoints().filter { p ->
@@ -34,7 +35,16 @@ object Day12 {
             charValue == 'S' || charValue == 'a'
         }
         val endPoint = grid.getPoints().first { p -> grid.getValue(p) == 'E' }
-        val shortestRoute = startingPoints.map { aStar(grid, it, endPoint) }.filter { it.isNotEmpty() }.minBy { it.size }
+        val shortestRoute = startingPoints
+            .map {
+                knownRoutes[it] ?: aStar(grid, it, endPoint).apply {
+                    drop(1)
+                        .filterNot { pointOnRoute -> knownRoutes.containsKey(pointOnRoute) }
+                        .forEachIndexed { index, pointOnRoute ->
+                            knownRoutes[pointOnRoute] = this.subList(index + 1, this.lastIndex)
+                        }
+                }
+            }.filter { it.isNotEmpty() }.minBy { it.size }
         printRoute(grid, shortestRoute)
         return shortestRoute.size - 1
     }
@@ -45,6 +55,7 @@ object Day12 {
         val ansiBgColors = listOf(
             "\u001b[44m", "\u001b[46m", "\u001b[42m", "\u001b[43m", "\u001b[45m", "\u001b[41m"
         )
+
         fun getAnsiBgColor(p: Point): String {
             val height = getCharValue(grid.getValue(p)) - 'a'
             return ansiBgColors[floor(height / (26.0 / ansiBgColors.size)).toInt()]
@@ -125,5 +136,5 @@ object Day12 {
         return emptyList()
     }
 
-    private fun getCharValue(c: Char) = if(c == 'S') 'a' else if(c == 'E') 'z' else c
+    private fun getCharValue(c: Char) = if (c == 'S') 'a' else if (c == 'E') 'z' else c
 }
