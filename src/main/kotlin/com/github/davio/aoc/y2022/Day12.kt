@@ -48,7 +48,6 @@ object Day12 {
         }
     }
 
-
     private fun reconstructPath(cameFrom: Map<Point, Point>, current: Point): List<Point> {
         val totalPath = mutableListOf(current)
         var myCurrent = current
