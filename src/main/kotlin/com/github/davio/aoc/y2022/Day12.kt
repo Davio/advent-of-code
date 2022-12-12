@@ -29,7 +29,10 @@ object Day12 {
     fun getResultPart2(): Int {
         val lines = getInputAsList()
         val grid = CharGrid(lines.size) { index -> lines[index].toCharArray() }
-        val startingPoints = grid.getPoints().filter { p -> grid.getValue(p) == 'S' || grid.getValue(p) == 'a' }
+        val startingPoints = grid.getPoints().filter { p ->
+            val charValue = grid.getValue(p)
+            charValue == 'S' || charValue == 'a'
+        }
         val endPoint = grid.getPoints().first { p -> grid.getValue(p) == 'E' }
         val shortestRoute = startingPoints.map { aStar(grid, it, endPoint) }.filter { it.isNotEmpty() }.minBy { it.size }
         printRoute(grid, shortestRoute)
