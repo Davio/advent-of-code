@@ -1,6 +1,7 @@
 package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.*
+import kotlin.math.floor
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -36,12 +37,25 @@ object Day12 {
     }
 
     private fun printRoute(grid: CharGrid, route: List<Point>) {
-        val boldRedColor = "\u001B[31m\u001B[1m"
-        val ansiReset = "\u001B[0m"
+        val ansiReset = "\u001b[0m"
+
+        val ansiBgColors = listOf(
+            "\u001b[44m", "\u001b[46m", "\u001b[42m", "\u001b[43m", "\u001b[45m", "\u001b[41m"
+        )
+        fun getAnsiBgColor(p: Point): String {
+            val height = getCharValue(grid.getValue(p)) - 'a'
+            return ansiBgColors[floor(height / (26.0 / ansiBgColors.size)).toInt()]
+        }
 
         grid.getPoints().forEach { p ->
-            val ansiColor = if (route.any { it == Point(p.x, p.y) }) boldRedColor else ansiReset
-            print("$ansiColor${grid.getValue(p)}")
+            val ansiBgColor = getAnsiBgColor(p)
+            print(ansiBgColor)
+            if (route.any { it == Point(p.x, p.y) }) {
+                print("\u001b[30m\u001b[1m${grid.getValue(p)}")
+            } else {
+                print(" ")
+            }
+            print(ansiReset)
             if (p.x == grid[0].lastIndex) {
                 println()
             }
