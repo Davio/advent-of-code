@@ -74,9 +74,8 @@ object Day13 {
             .map { parsePacketPair(it) }
             .plus(Pair(divider1, divider2))
             .flatMap { listOf(it.first, it.second) }
-            .sorted()
 
-        return (packetList.indexOf(divider1) + 1) * (packetList.indexOf(divider2) + 1)
+        return (packetList.count { it < divider1 } + 1) * (packetList.count { it < divider2 } + 1)
     }
 
     private fun parsePacketPair(packetLines: List<String>): Pair<Packet, Packet> =
