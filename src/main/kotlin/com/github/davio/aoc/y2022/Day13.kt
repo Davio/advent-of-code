@@ -69,13 +69,14 @@ object Day13 {
         val divider1 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(2)))))
         val divider2 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(6)))))
 
-        val packetList = getInputAsList()
+        return getInputAsList()
             .split { it.isBlank() }
             .map { parsePacketPair(it) }
             .plus(Pair(divider1, divider2))
             .flatMap { listOf(it.first, it.second) }
-
-        return (packetList.count { it < divider1 } + 1) * (packetList.count { it < divider2 } + 1)
+            .sorted()
+            .mapIndexedNotNull { index, packet -> if (packet === divider1 || packet === divider2) index + 1 else null }
+            .reduce(Int::times)
     }
 
     private fun parsePacketPair(packetLines: List<String>): Pair<Packet, Packet> =
