@@ -2,7 +2,10 @@ package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.split
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.*
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -31,7 +34,8 @@ object Day13 {
         override fun toString() = i.toString()
     }
 
-    data class PacketList(val packets: MutableList<Packet> = mutableListOf()) : Packet {
+    @JvmInline
+    value class PacketList(val packets: List<Packet>) : Packet {
         override fun compareTo(other: Packet): Int {
             if (other is PacketValue) {
                 return this.compareTo(PacketList(mutableListOf(other)))
@@ -69,61 +73,25 @@ object Day13 {
         val divider1 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(2)))))
         val divider2 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(6)))))
 
-        return getInputAsList()
-            .split(String::isBlank)
-            .map { parsePacketPair(it) }
-            .plus(Pair(divider1, divider2))
-            .flatMap { listOf(it.first, it.second) }
+        return getInputAsSequence()
+            .filter(String::isNotBlank)
+            .map { parsePacket(it) }
+            .plus(sequenceOf(divider1, divider2))
             .sorted()
-            .mapIndexedNotNull { index, packet -> if (packet === divider1 || packet === divider2) index + 1 else null }
+            .mapIndexedNotNull { index, packet -> if (packet == divider1 || packet == divider2) index + 1 else null }
             .reduce(Int::times)
     }
 
     private fun parsePacketPair(packetLines: List<String>): Pair<Packet, Packet> =
         Pair(parsePacket(packetLines[0]), parsePacket(packetLines[1]))
 
-    private val intRegex = Regex("\\d+")
+    private fun parsePacket(line: String) = parseJson(Json.decodeFromString<JsonArray>(line))
 
-    private fun parsePacket(element: String): Packet {
-        if (element.matches(intRegex)) {
-            return PacketValue(element.toInt())
+    private fun parseJson(jsonElement: JsonElement) : Packet {
+        return when (jsonElement) {
+            is JsonArray -> PacketList(jsonElement.map { parseJson(it) })
+            is JsonPrimitive -> PacketValue(jsonElement.int)
+            else -> throw IllegalStateException()
         }
-
-        val packetList = PacketList()
-        if (element == "[]") return packetList
-
-        val elementSubString = element.substring(1, element.lastIndex)
-        val elementsInCurrentList = mutableListOf<String>()
-        var currentElement = ""
-        var groupLevel = 0
-
-        elementSubString.forEach { c ->
-            if (c.isDigit()) currentElement += c
-            else if (c == ',') {
-                if (groupLevel > 0) {
-                    currentElement += ","
-                }
-                else if (currentElement.isNotBlank()) {
-                    elementsInCurrentList.add(currentElement)
-                    currentElement = ""
-                }
-            }
-            if (c == '[') {
-                currentElement += "["
-                groupLevel++
-            } else if (c == ']') {
-                currentElement += "]"
-                groupLevel--
-                if (groupLevel == 0) {
-                    elementsInCurrentList.add(currentElement)
-                    currentElement = ""
-                }
-            }
-        }
-        if (currentElement.isNotBlank()) {
-            elementsInCurrentList.add(currentElement)
-        }
-        packetList.packets.addAll(elementsInCurrentList.map { parsePacket(it) })
-        return packetList
     }
 }
