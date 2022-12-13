@@ -70,7 +70,7 @@ object Day13 {
         val divider2 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(6)))))
 
         return getInputAsList()
-            .split { it.isBlank() }
+            .split(String::isBlank)
             .map { parsePacketPair(it) }
             .plus(Pair(divider1, divider2))
             .flatMap { listOf(it.first, it.second) }
