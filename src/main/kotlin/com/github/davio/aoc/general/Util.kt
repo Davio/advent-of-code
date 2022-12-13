@@ -40,8 +40,27 @@ fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>>
         }
         if (buffer.isNotEmpty()) {
             yield(buffer.toList())
+            buffer.clear()
         }
     }
+}
+
+fun <T> List<T>.split(separatorPredicate: (T) -> Boolean): List<List<T>> {
+    val buffer = mutableListOf<T>()
+    val mutableList = this.fold(mutableListOf<List<T>>()) { acc, element ->
+        if(separatorPredicate.invoke(element)) {
+            acc.add(buffer.toList())
+            buffer.clear()
+        } else {
+            buffer.add(element)
+        }
+        acc
+    }
+    if (buffer.isNotEmpty()) {
+        mutableList.add(buffer.toList())
+        buffer.clear()
+    }
+    return mutableList.toList()
 }
 
 fun <T : Comparable<T>> Iterable<T>.top(n: Int): Iterable<T> = this.sortedDescending().take(n)
