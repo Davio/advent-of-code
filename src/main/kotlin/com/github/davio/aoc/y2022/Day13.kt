@@ -70,8 +70,8 @@ object Day13 {
             }
 
     fun getResultPart2(): Int {
-        val divider1 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(2)))))
-        val divider2 = PacketList(mutableListOf(PacketList(mutableListOf(PacketValue(6)))))
+        val divider1 = parsePacket("[[2]]")
+        val divider2 = parsePacket("[[6]]")
 
         return getInputAsSequence()
             .filter(String::isNotBlank)
