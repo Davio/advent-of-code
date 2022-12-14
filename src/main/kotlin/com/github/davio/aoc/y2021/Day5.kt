@@ -3,7 +3,6 @@ package com.github.davio.aoc.y2021
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
-import com.github.davio.aoc.general.rangeTo
 import kotlin.math.max
 
 fun main() {
