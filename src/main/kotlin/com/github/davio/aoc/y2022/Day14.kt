@@ -9,6 +9,7 @@ import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
 fun main() {
+    Day14.initialize()
     println(Day14.getResultPart1())
     measureTimeMillis {
         println(Day14.getResultPart2())
@@ -25,57 +26,54 @@ object Day14 {
         fun getStraightLines() = points.zipWithNext()
     }
 
-    fun getResultPart1(): Int {
-        val scan = getInputAsList()
-            .map { parseLine(it).getStraightLines() }
-        val minX = scan.minOf { path -> path.minOf { line -> min(line.first.x, line.second.x) } }
-        val maxX = scan.maxOf { path -> path.maxOf { line -> max(line.first.x, line.second.x) } }
-        val maxY = scan.maxOf { path -> path.maxOf { line -> max(line.first.y, line.second.y) } }
-        val lines = scan.flatten()
-        val blockedPoints = (0..maxY).flatMap { y ->
-            (minX..maxX).map { x ->
-                Point(x, y)
-            }
-        }.filter { p ->
-            lines.any { lineContains(it, p) }
-        }.toSet()
+    private lateinit var scan : List<List<Pair<Point, Point>>>
+    private var minX: Int = 0
+    private var maxX: Int = 0
+    private var maxY: Int = 0
+    private lateinit var lines: List<Pair<Point, Point>>
+    private lateinit var blockedPoints: Set<Point>
+    private lateinit var sandAtRest: MutableSet<Point>
+    private lateinit var currentSand: Point
 
-        val sandAtRest = hashSetOf<Point>()
-        var currentSand = Point(500, 0)
+    fun getResultPart1(): Int {
+        sandAtRest = hashSetOf()
+        currentSand = Point(500, 0)
+
         do {
 //            printScan(blockedPoints, sandAtRest, currentSand, minX, maxX, maxY)
             currentSand = doStep(blockedPoints, sandAtRest, currentSand, maxY + 3)
-            Thread.sleep(200L)
         } while(currentSand.y < maxY)
 
         return sandAtRest.size
     }
 
     fun getResultPart2(): Int {
-        val scan = getInputAsList()
-            .map { parseLine(it).getStraightLines() }
-        var minX = scan.minOf { path -> path.minOf { line -> min(line.first.x, line.second.x) } }
-        var maxX = scan.maxOf { path -> path.maxOf { line -> max(line.first.x, line.second.x) } }
-        val maxY = scan.maxOf { path -> path.maxOf { line -> max(line.first.y, line.second.y) } }
-        val lines = scan.flatten()
-        val blockedPoints = (0..maxY).flatMap { y ->
-            (minX..maxX).map { x ->
-                Point(x, y)
-            }
-        }.filter { p ->
-            lines.any { lineContains(it, p) }
-        }.toSet()
+        sandAtRest = hashSetOf()
+        currentSand = Point(500, 0)
 
-        val sandAtRest = hashSetOf<Point>()
-        var currentSand = Point(500, 0)
         do {
-//            printScan(blockedPoints, sandAtRest, currentSand, minX, maxX, maxY)
             currentSand = doStep(blockedPoints, sandAtRest, currentSand, maxY + 2)
             if (currentSand.x < minX) minX = currentSand.x
             if (currentSand.x > maxX) maxX = currentSand.x
         } while(!sandAtRest.contains(Point(500, 0)))
 
         return sandAtRest.size
+    }
+
+    fun initialize() {
+        scan = getInputAsList()
+            .map { parseLine(it).getStraightLines() }
+        minX = scan.minOf { path -> path.minOf { line -> min(line.first.x, line.second.x) } }
+        maxX = scan.maxOf { path -> path.maxOf { line -> max(line.first.x, line.second.x) } }
+        maxY = scan.maxOf { path -> path.maxOf { line -> max(line.first.y, line.second.y) } }
+        lines = scan.flatten()
+        blockedPoints = (0..maxY).flatMap { y ->
+            (minX..maxX).map { x ->
+                Point(x, y)
+            }
+        }.filter { p ->
+            lines.any { lineContains(it, p) }
+        }.toSet()
     }
 
     private fun doStep(blockedPoints: Set<Point>, sandAtRest: MutableSet<Point>, currentSand: Point, maxY: Int): Point {
