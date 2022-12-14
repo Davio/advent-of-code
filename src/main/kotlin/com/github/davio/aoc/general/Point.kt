@@ -44,5 +44,3 @@ data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
 fun String.toPoint(): Point = this.split(",").let { Point(it[0].toInt(), it[1].toInt()) }
 
 typealias Vector = Point
-
-operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(first + other.first, second + other.second)
