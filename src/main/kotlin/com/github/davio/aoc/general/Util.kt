@@ -1,5 +1,8 @@
 package com.github.davio.aoc.general
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
 import kotlin.math.abs
 import kotlin.math.max
@@ -79,6 +82,10 @@ fun Any.getCallingClassResourceFile(): String {
 
 inline fun <T> T.call(block: (T) -> Unit) {
     block(this)
+}
+
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.awaitAll()
 }
 
 inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {

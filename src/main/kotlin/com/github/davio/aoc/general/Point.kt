@@ -1,6 +1,10 @@
 package com.github.davio.aoc.general
 
+import kotlin.math.abs
+
 data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
+
+    fun manhattanDistanceTo(other: Point): Int = abs(this.x - other.x) + abs(this.y - other.y)
 
     operator fun plus(other: Point) = Point(this.x + other.x, this.y + other.y)
     operator fun minus(other: Point) = Point(this.x - other.x, this.y - other.y)
@@ -35,6 +39,20 @@ data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
 
     override fun compareTo(other: Point): Int =
         Comparator.comparingInt(Point::x).thenComparingInt(Point::y).compare(this, other)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Point
+
+        if (x != other.x) return false
+        if (y != other.y) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = (x + y) * (x + y + 1) / 2 + y;
 
     companion object {
         val ZERO = Point(0, 0)
