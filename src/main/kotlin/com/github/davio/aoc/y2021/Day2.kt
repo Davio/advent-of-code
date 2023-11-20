@@ -48,15 +48,15 @@ What do you get if you multiply your final horizontal position by your final dep
      */
 
     fun getResultPart1() {
-        var position = Point(0, 0)
+        var position = Point.of(0, 0)
         getInputAsSequence().map {
             Instruction.parse(it)
         }.forEach {
             val distance = it.amount
             position += when (it.direction) {
-                Direction.FORWARD -> Point(distance, 0)
-                Direction.UP -> Point(0, -distance)
-                Direction.DOWN -> Point(0, distance)
+                Direction.FORWARD -> Point.of(distance, 0)
+                Direction.UP -> Point.of(0, -distance)
+                Direction.DOWN -> Point.of(0, distance)
             }
         }
         println(position.x * position.y)
@@ -118,13 +118,13 @@ Using this new interpretation of the commands, calculate the horizontal position
 
     private class Submarine {
 
-        var position = Point(0, 0)
+        var position = Point.of(0, 0)
         var aim = 0
 
         fun move(instruction: Instruction) {
             val (direction, amount) = instruction
             if (direction == Direction.FORWARD) {
-                position += Point(amount, aim * amount)
+                position += Point.of(amount, aim * amount)
             } else {
                 aim += if (direction == Direction.DOWN) {
                     amount

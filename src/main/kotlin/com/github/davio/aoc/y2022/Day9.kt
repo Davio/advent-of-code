@@ -23,13 +23,13 @@ fun main() {
 object Day9 {
 
     private enum class Direction(val char: Char, val vector: Vector) {
-        UP('U', Vector(0, 1)),
-        RIGHT('R', Vector(1, 0)),
-        DOWN('D', Vector(0, -1)),
-        LEFT('L', Vector(-1, 0));
+        UP('U', Point.of(0, 1)),
+        RIGHT('R', Point.of(1, 0)),
+        DOWN('D', Point.of(0, -1)),
+        LEFT('L', Point.of(-1, 0));
 
         companion object {
-            private val map = values().associateBy { it.char }
+            private val map = entries.associateBy { it.char }
             fun fromChar(c: Char) = map[c]!!
         }
     }
@@ -46,7 +46,7 @@ object Day9 {
                 val tailMovement = getKnotMovement(head, tail)
                 if (tailMovement != Vector.ZERO) {
                     tail += tailMovement
-                    acc.first.add(tail.copy())
+                    acc.first.add(tail)
                 }
             }
             Triple(acc.first, head, tail)
@@ -73,6 +73,6 @@ object Day9 {
 
     private fun getKnotMovement(knotInFront: Point, knot: Point): Vector {
         if (knotInFront == knot || (abs(knotInFront.x - knot.x) <= 1 && abs(knotInFront.y - knot.y) <= 1)) return Vector.ZERO
-        return Vector((knotInFront.x - knot.x).sign, (knotInFront.y - knot.y).sign)
+        return Point.of((knotInFront.x - knot.x).sign, (knotInFront.y - knot.y).sign)
     }
 }

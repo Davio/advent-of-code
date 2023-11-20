@@ -47,14 +47,14 @@ object Day15 {
     private val lineRegex = Regex("""Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)""")
     private fun parseLineAsSensor(line: String): Sensor {
         val (sX, sY, bX, bY) = lineRegex.matchEntire(line)!!.destructured
-        return Sensor(Point(sX.toInt(), sY.toInt()), Point(bX.toInt(), bY.toInt()))
+        return Sensor(Point.of(sX.toInt(), sY.toInt()), Point.of(bX.toInt(), bY.toInt()))
     }
 
     fun getResultPart1(): Int {
         val y = 2_000_000
         return (minX..maxX).count { x ->
             sensors.any { sensor ->
-                val point = Point(x, y)
+                val point = Point.of(x, y)
                 !sensorPoints.contains(point) && !beaconPoints.contains(point) && isInsideSensorToClosestBeaconRegion(sensor, point)
             }
         }
@@ -93,22 +93,22 @@ object Day15 {
             val maxY = sensorPoint.y + pointDistanceJustOutOfRange
             (minY..maxY).forEach { y ->
                 if (y == minY || y == maxY) {
-                    val point = Point(sensorPoint.x, y)
+                    val point = Point.of(sensorPoint.x, y)
                     if (isValidNonBeaconPoint(point, sensor, maxSearchIndex)) yield(point)
                 } else {
                     var yOffset = y - minY
                      val pointLeft: Point
                     val pointRight: Point
                     if (y < sensorPoint.y) {
-                        pointLeft = Point(sensorPoint.x - yOffset, y)
-                        pointRight = Point(sensorPoint.x + yOffset, y)
+                        pointLeft = Point.of(sensorPoint.x - yOffset, y)
+                        pointRight = Point.of(sensorPoint.x + yOffset, y)
                     } else if (y == sensorPoint.y) {
-                        pointLeft = Point(sensorPoint.x - pointDistanceJustOutOfRange, y)
-                        pointRight = Point(sensorPoint.x + pointDistanceJustOutOfRange, y)
+                        pointLeft = Point.of(sensorPoint.x - pointDistanceJustOutOfRange, y)
+                        pointRight = Point.of(sensorPoint.x + pointDistanceJustOutOfRange, y)
                     } else {
                         yOffset = maxY - y
-                        pointLeft = Point(sensorPoint.x - yOffset, y)
-                        pointRight = Point(sensorPoint.x + yOffset, y)
+                        pointLeft = Point.of(sensorPoint.x - yOffset, y)
+                        pointRight = Point.of(sensorPoint.x + yOffset, y)
                     }
                     if (isValidNonBeaconPoint(pointLeft, sensor, maxSearchIndex)) yield(pointLeft)
                     if (isValidNonBeaconPoint(pointRight, sensor, maxSearchIndex)) yield(pointRight)

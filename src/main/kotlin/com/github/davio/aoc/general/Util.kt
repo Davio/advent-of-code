@@ -8,24 +8,24 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-fun Any.getInputReader() =
+fun Day.getInputReader() =
     ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
 
-fun Any.getInputAsLine(): String = getInputReader().readLine()
+fun Day.getInputAsLine(): String = getInputReader().readLine()
 
-fun Any.getInputAsList() = getInputReader().readLines()
+fun Day.getInputAsList() = getInputReader().readLines()
 
-fun Any.getInputAsSequence() = getInputReader().lineSequence()
+fun Day.getInputAsSequence() = getInputReader().lineSequence()
 
-fun Any.getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
+fun Day.getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
 
-fun Any.getInputAsIntList() = getInputAsList().map { it.toInt() }
+fun Day.getInputAsIntList() = getInputAsList().map { it.toInt() }
 
-fun Any.getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
+fun Day.getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
 
-fun Any.getInputAsLongList() = getInputAsList().map { it.toLong() }
+fun Day.getInputAsLongList() = getInputAsList().map { it.toLong() }
 
-fun Any.getInputAsFlow() = getInputReader().lineSequence().asFlow()
+fun Day.getInputAsFlow() = getInputReader().lineSequence().asFlow()
 
 fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>> {
     val iterator = this.iterator()
@@ -71,13 +71,25 @@ fun <T : Comparable<T>> Iterable<T>.bottom(n: Int): Iterable<T> = this.sorted().
 fun <T : Comparable<T>> Sequence<T>.top(n: Int): Sequence<T> = this.sortedDescending().take(n)
 fun <T : Comparable<T>> Sequence<T>.bottom(n: Int): Sequence<T> = this.sorted().take(n)
 
-fun Any.getCallingClassResourceFile(): String {
-    val clazz = this::class
-    val classRegex = Regex("""Day(\d+)""")
-    return clazz.qualifiedName!!.split(".").run {
-        val (dayNumber) = classRegex.matchEntire(this.last())!!.destructured
-        "${this[this.lastIndex - 1]}/${dayNumber}.txt"
+fun Day.getCallingClassResourceFile(): String {
+    var callingClassName = ""
+    StackWalker.getInstance().walk { stream ->
+        callingClassName = stream.filter { stackFrame ->
+            stackFrame.className.contains("Day")
+        }.findFirst().map { it.className }.orElseThrow()
     }
+    var isTest = false
+    StackWalker.getInstance().walk { stream ->
+        isTest = stream.anyMatch { stackFrame ->
+            stackFrame.className.matches(Regex(".*Day\\d+Test.*"))
+        }
+    }
+    val classRegex = Regex("""Day(\d+)""")
+    val (dayNumber) = classRegex.matchEntire(callingClassName.substringAfterLast("."))!!.destructured
+    val folder = callingClassName.substringBeforeLast(".").replace('.', '/') + "/day$dayNumber"
+    val exampleNumberSuffix = exampleNumber?.let { "-$it"} ?: ""
+    val testExtension = if (isTest) "-example$exampleNumberSuffix" else ""
+    return "$folder/${dayNumber}$testExtension.txt"
 }
 
 inline fun <T> T.call(block: (T) -> Unit) {

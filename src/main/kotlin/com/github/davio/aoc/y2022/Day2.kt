@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2022
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.y2022.Day2.Outcome.*
@@ -16,7 +17,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 2](https://adventofcode.com/2022/day/2#part2])
  */
-object Day2 {
+object Day2 : Day() {
 
     enum class Outcome(val points: Int) {
         WIN(6),

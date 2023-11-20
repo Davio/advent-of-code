@@ -142,7 +142,7 @@ How many dots are visible after completing just the first fold instruction on yo
                     parsingDots = false
                 } else {
                     val (x, y) = dotPattern.matchEntire(line)!!.destructured
-                    val dot = Point(x.toInt(), y.toInt())
+                    val dot = Point.of(x.toInt(), y.toInt())
                     originalPaper.markPoint(dot)
                 }
             } else {
@@ -261,13 +261,13 @@ What code do you use to activate the infrared thermal imaging camera system?
             val foldedPaper = TransparentPaper()
             (0 until alongY).forEach { yToKeep ->
                 paper.grid[yToKeep].indices.forEach { xToKeep ->
-                    foldedPaper.markPoint(Point(xToKeep, yToKeep), paper.grid[yToKeep][xToKeep])
+                    foldedPaper.markPoint(Point.of(xToKeep, yToKeep), paper.grid[yToKeep][xToKeep])
                 }
             }
             (alongY + 1..paper.grid.lastIndex).forEachIndexed { index, yToCheck ->
                 paper.grid[yToCheck].indices.forEach { xToCheck ->
                     val newY = alongY - (index + 1)
-                    foldedPaper.markPoint(Point(xToCheck, newY), paper.grid[yToCheck][xToCheck] || paper.grid[newY][xToCheck])
+                    foldedPaper.markPoint(Point.of(xToCheck, newY), paper.grid[yToCheck][xToCheck] || paper.grid[newY][xToCheck])
                 }
             }
 
@@ -288,13 +288,13 @@ What code do you use to activate the infrared thermal imaging camera system?
             val foldedPaper = TransparentPaper()
             paper.grid.indices.forEach { yToKeep ->
                 (0 until alongX).forEach { xToKeep ->
-                    foldedPaper.markPoint(Point(xToKeep, yToKeep), paper.grid[yToKeep][xToKeep])
+                    foldedPaper.markPoint(Point.of(xToKeep, yToKeep), paper.grid[yToKeep][xToKeep])
                 }
             }
             paper.grid.indices.forEach { yToCheck ->
                 (alongX + 1 until rowSize).forEachIndexed { index, xToCheck ->
                     val newX = alongX - (index + 1)
-                    foldedPaper.markPoint(Point(newX, yToCheck), paper.grid[yToCheck][xToCheck] || paper.grid[yToCheck][newX])
+                    foldedPaper.markPoint(Point.of(newX, yToCheck), paper.grid[yToCheck][xToCheck] || paper.grid[yToCheck][newX])
                 }
             }
 

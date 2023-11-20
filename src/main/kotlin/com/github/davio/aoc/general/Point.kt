@@ -2,25 +2,39 @@ package com.github.davio.aoc.general
 
 import kotlin.math.abs
 
-data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
+@JvmInline
+value class Point(private val data: Pair<Int, Int> = 0 to 0) : Comparable<Point> {
 
-    fun manhattanDistanceTo(other: Point): Int = abs(this.x - other.x) + abs(this.y - other.y)
+    val x get() = data.first
+    val y get() = data.second
 
-    operator fun plus(other: Point) = Point(this.x + other.x, this.y + other.y)
-    operator fun minus(other: Point) = Point(this.x - other.x, this.y - other.y)
+    fun manhattanDistanceTo(other: Point): Int = abs(x - other.x) + abs(y - other.y)
+
+    operator fun plus(other: Point) = of(x + other.x, y + other.y)
+    operator fun minus(other: Point) = of(x - other.x, y - other.y)
+
+    fun up() = up(1)
+    fun down() = down(1)
+    fun left() = left(1)
+    fun right() = right(1)
+
+    infix fun up(amount: Int) = of(data.first, data.second + amount)
+    infix fun down(amount: Int) = of(data.first, data.second - amount)
+    infix fun left(amount: Int) = of(data.first - amount, data.second)
+    infix fun right(amount: Int) = of(data.first + amount, data.second)
 
     operator fun rangeTo(endInclusive: Point) = sequence {
         if (x == endInclusive.x) {
             val firstPair = if (y < endInclusive.y) this@Point else endInclusive
             val secondPair = if (firstPair == this@Point) endInclusive else this@Point
             (firstPair.y..secondPair.y).forEach { y ->
-                yield(Point(x, y))
+                yield(of(x, y))
             }
         } else if (y == endInclusive.y) {
             val firstPair = if (x < endInclusive.x) this@Point else endInclusive
             val secondPair = if (firstPair == this@Point) endInclusive else this@Point
             (firstPair.x..secondPair.x).forEach { x ->
-                yield(Point(x, y))
+                yield(of(x, y))
             }
         } else {
             val firstPair = if (x < endInclusive.x) this@Point else endInclusive
@@ -29,7 +43,7 @@ data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
             val yInc = if (firstPair.y < secondPair.y) 1 else -1
             var y = firstPair.y
             (firstPair.x..secondPair.x).forEach { x ->
-                yield(Point(x, y))
+                yield(of(x, y))
                 y += yInc
             }
         }
@@ -40,27 +54,13 @@ data class Point(val x: Int = 0, val y: Int = 0) : Comparable<Point> {
     override fun compareTo(other: Point): Int =
         Comparator.comparingInt(Point::x).thenComparingInt(Point::y).compare(this, other)
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Point
-
-        if (x != other.x) return false
-        if (y != other.y) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int = (x + y) * (x + y + 1) / 2 + y;
-
     companion object {
-        val ZERO = Point(0, 0)
+        fun of(x: Int, y: Int) = Point(x to y)
+
+        val ZERO = of(0, 0)
     }
 }
 
-fun String.toPoint(): Point = this.split(",").let { Point(it[0].toInt(), it[1].toInt()) }
+fun String.toPoint(): Point = this.trim().split(",").let { Point.of(it[0].toInt(), it[1].toInt()) }
 
 typealias Vector = Point
-
-operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(first + other.first, second + other.second)

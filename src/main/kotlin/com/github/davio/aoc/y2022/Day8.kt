@@ -22,16 +22,16 @@ object Day8 {
         val grid = parseGrid()
         val visibleTrees = sortedSetOf<Point>()
         (0..grid[0].lastIndex).forEach { x ->
-            visibleTrees.add(Point(x, 0))
-            visibleTrees.add(Point(x, grid[0].lastIndex))
+            visibleTrees.add(Point.of(x, 0))
+            visibleTrees.add(Point.of(x, grid[0].lastIndex))
         }
         (0..grid.lastIndex).forEach { y ->
-            visibleTrees.add(Point(0, y))
-            visibleTrees.add(Point(grid.lastIndex, y))
+            visibleTrees.add(Point.of(0, y))
+            visibleTrees.add(Point.of(grid.lastIndex, y))
         }
         (1 until grid.lastIndex).forEach { y ->
             (1 until grid[0].lastIndex).forEach { x ->
-                val treeCoords = Point(x, y)
+                val treeCoords = Point.of(x, y)
                 if (!visibleTrees.contains(treeCoords) && isVisible(grid, treeCoords)) {
                     visibleTrees.add(treeCoords)
                 }
@@ -66,7 +66,7 @@ object Day8 {
         val grid = parseGrid()
         return (1 until grid.lastIndex).maxOf { y ->
             (1 until grid[0].lastIndex).maxOf { x ->
-                getScenicScore(grid, Point(x, y))
+                getScenicScore(grid, Point.of(x, y))
             }
         }
     }

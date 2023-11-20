@@ -63,8 +63,8 @@ Consider only horizontal and vertical lines. At how many points do at least two 
 
         getInputAsSequence().forEach { line ->
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
-            val startCoordinate = Point(x1.toInt(), y1.toInt())
-            val endCoordinate = Point(x2.toInt(), y2.toInt())
+            val startCoordinate = Point.of(x1.toInt(), y1.toInt())
+            val endCoordinate = Point.of(x2.toInt(), y2.toInt())
             if (startCoordinate.x == endCoordinate.x || startCoordinate.y == endCoordinate.y) {
                 println("Adding $startCoordinate -> $endCoordinate")
                 grid.addLine(startCoordinate, endCoordinate)
@@ -112,8 +112,8 @@ Consider all of the lines. At how many points do at least two lines overlap?
 
         getInputAsSequence().forEach { line ->
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
-            val startCoordinate = Point(x1.toInt(), y1.toInt())
-            val endCoordinate = Point(x2.toInt(), y2.toInt())
+            val startCoordinate = Point.of(x1.toInt(), y1.toInt())
+            val endCoordinate = Point.of(x2.toInt(), y2.toInt())
             println("Adding $startCoordinate -> $endCoordinate")
             grid.addLine(startCoordinate, endCoordinate)
         }
@@ -147,7 +147,7 @@ Consider all of the lines. At how many points do at least two lines overlap?
             val sb = StringBuilder()
             (0..maxY).forEach { y ->
                 (0..maxX).forEach { x ->
-                    sb.append(lines[Point(x, y)]?.toString() ?: '.')
+                    sb.append(lines[Point.of(x, y)]?.toString() ?: '.')
                 }
                 sb.appendLine()
             }

@@ -33,11 +33,11 @@ object Day14 {
     private lateinit var lines: List<Pair<Point, Point>>
     private lateinit var blockedPoints: Set<Point>
     private lateinit var sandAtRest: MutableSet<Point>
-    private lateinit var currentSand: Point
+    private var currentSand: Point = Point.ZERO
 
     fun getResultPart1(): Int {
         sandAtRest = hashSetOf()
-        currentSand = Point(500, 0)
+        currentSand = Point.of(500, 0)
 
         do {
 //            printScan(blockedPoints, sandAtRest, currentSand, minX, maxX, maxY)
@@ -49,13 +49,13 @@ object Day14 {
 
     fun getResultPart2(): Int {
         sandAtRest = hashSetOf()
-        currentSand = Point(500, 0)
+        currentSand = Point.of(500, 0)
 
         do {
             currentSand = doStep(blockedPoints, sandAtRest, currentSand, maxY + 2)
             if (currentSand.x < minX) minX = currentSand.x
             if (currentSand.x > maxX) maxX = currentSand.x
-        } while(!sandAtRest.contains(Point(500, 0)))
+        } while(!sandAtRest.contains(Point.of(500, 0)))
 
         return sandAtRest.size
     }
@@ -69,7 +69,7 @@ object Day14 {
         lines = scan.flatten()
         blockedPoints = (0..maxY).flatMap { y ->
             (minX..maxX).map { x ->
-                Point(x, y)
+                Point.of(x, y)
             }
         }.filter { p ->
             lines.any { lineContains(it, p) }
@@ -77,25 +77,25 @@ object Day14 {
     }
 
     private fun doStep(blockedPoints: Set<Point>, sandAtRest: MutableSet<Point>, currentSand: Point, maxY: Int): Point {
-        val pointBelow = Point(currentSand.x, currentSand.y + 1)
+        val pointBelow = Point.of(currentSand.x, currentSand.y + 1)
         if (pointBelow.y == maxY) {
             sandAtRest.add(currentSand)
-            return Point(500, 0)
+            return Point.of(500, 0)
         }
 
         if (!blockedPoints.contains(pointBelow) && !sandAtRest.contains(pointBelow)) {
             return pointBelow
         } else {
-            val pointBelowAndLeft = Point(currentSand.x - 1, currentSand.y + 1)
+            val pointBelowAndLeft = Point.of(currentSand.x - 1, currentSand.y + 1)
             return if (!blockedPoints.contains(pointBelowAndLeft) && !sandAtRest.contains(pointBelowAndLeft)) {
                 pointBelowAndLeft
             } else {
-                val pointBelowAndRight = Point(currentSand.x + 1, currentSand.y + 1)
+                val pointBelowAndRight = Point.of(currentSand.x + 1, currentSand.y + 1)
                 if (!blockedPoints.contains(pointBelowAndRight) && !sandAtRest.contains(pointBelowAndRight)) {
                     pointBelowAndRight
                 } else {
                     sandAtRest.add(currentSand)
-                    Point(500, 0)
+                    Point.of(500, 0)
                 }
             }
         }
@@ -125,7 +125,7 @@ object Day14 {
         (0..maxY).forEach { y ->
             print("$y ")
             (minX..maxX).forEach { x ->
-                val point = Point(x, y)
+                val point = Point.of(x, y)
                 if (currentSand == point) {
                     print("+")
                 } else if (sandAtRest.contains(point)) {

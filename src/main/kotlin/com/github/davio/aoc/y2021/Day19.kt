@@ -122,7 +122,7 @@ Assemble the full map of beacons. How many beacons are there?
                 scanners.add(currentScanner)
             } else if (line.contains(',')) {
                 val pointParts = line.split(",")
-                val point = Point(pointParts[0].toInt(), pointParts[1].toInt())
+                val point = Point.of(pointParts[0].toInt(), pointParts[1].toInt())
                 currentScanner.addBeacon(point)
             }
         }
@@ -151,7 +151,7 @@ Assemble the full map of beacons. How many beacons are there?
             val sb = StringBuilder()
             (maxY downTo minY).forEach { y ->
                 (minX..maxX).forEach { x ->
-                    if (beacons.contains(Point(x, y))) {
+                    if (beacons.contains(Point.of(x, y))) {
                         sb.append('B')
                     } else {
                         sb.append('.')

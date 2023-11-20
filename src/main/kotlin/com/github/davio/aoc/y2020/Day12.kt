@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.getInputAsSequence
-import com.github.davio.aoc.general.plus
 import kotlin.math.*
 
 fun main() {
@@ -103,13 +103,13 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
             ship.performAction(movement)
         }
 
-        println(abs(ship.position.first) + abs(ship.position.second))
+        println(abs(ship.position.x) + abs(ship.position.y))
     }
 
     private class Ship {
 
-        var position = Pair(0, 0)
-        var waypointPosition = Pair(10, 1)
+        var position = Point.ZERO
+        var waypointPosition = Point.of(10, 1)
 
         private var headingInDegrees = 0.0
         private var headingInCoords = Pair(1, 0) // East
@@ -123,16 +123,16 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
         }
 
         fun rotateWaypoint(direction: Direction, degrees: Int) {
-            val normalizedWaypointX = waypointPosition.first - position.first
-            val normalizedWaypointY = waypointPosition.second - position.second
+            val normalizedWaypointX = waypointPosition.x - position.x
+            val normalizedWaypointY = waypointPosition.y - position.y
 
             val normalizedWaypointVector = if (degrees == 180) {
-                Pair(-normalizedWaypointX, -normalizedWaypointY)
+                Point.of(-normalizedWaypointX, -normalizedWaypointY)
             } else if ((degrees == 90 && direction == Direction.RIGHT)
                 || (degrees == 270 && direction == Direction.LEFT)) {
-                Pair(normalizedWaypointY, -normalizedWaypointX)
+                Point.of(normalizedWaypointY, -normalizedWaypointX)
             } else {
-                Pair(-normalizedWaypointY, normalizedWaypointX)
+                Point.of(-normalizedWaypointY, normalizedWaypointX)
             }
 
             waypointPosition = position + normalizedWaypointVector
@@ -144,19 +144,18 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
                 rotateWaypoint(movement.direction, movement.amount)
             } else if (movement.direction != Direction.FORWARD) {
                 println("Moving waypoint ${movement.amount} ${movement.direction}")
-                val waypointVector = when (movement.direction) {
-                    Direction.NORTH -> Pair(0, movement.amount)
-                    Direction.EAST -> Pair(movement.amount, 0)
-                    Direction.SOUTH -> Pair(0, -movement.amount)
-                    Direction.WEST -> Pair(-movement.amount, 0)
-                    else -> Pair(0, 0)
+                waypointPosition = when (movement.direction) {
+                    Direction.NORTH -> waypointPosition up movement.amount
+                    Direction.EAST -> waypointPosition right movement.amount
+                    Direction.SOUTH -> waypointPosition down movement.amount
+                    Direction.WEST -> waypointPosition left movement.amount
+                    else -> waypointPosition
                 }
-                waypointPosition += waypointVector
             } else {
                 println("Moving ship towards waypoint ${movement.amount} steps")
-                val forwardVector = Pair(
-                    movement.amount * (waypointPosition.first - position.first),
-                    movement.amount * (waypointPosition.second - position.second))
+                val forwardVector = Point.of(
+                    movement.amount * (waypointPosition.x - position.x),
+                    movement.amount * (waypointPosition.y - position.y))
                 position += forwardVector
                 waypointPosition += forwardVector
             }
@@ -180,7 +179,7 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
         LEFT('L');
 
         companion object {
-            fun fromChar(c: Char) = values().first { it.char == c }
+            fun fromChar(c: Char) = entries.first { it.char == c }
         }
     }
 }
