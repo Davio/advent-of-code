@@ -25,7 +25,7 @@
         <!-- Compiler plugins versions -->
         <kotlin.version>1.9.21</kotlin.version>
         <kotlinx-coroutines.version>1.7.3</kotlinx-coroutines.version>
-        <kotlinx-serialization.version>1.6.1</kotlinx-serialization.version>
+        <kotlinx-serialization.version>1.6.2</kotlinx-serialization.version>
         <!-- Dependency versions -->
         <jmh.version>1.37</jmh.version>
         <kotest.version>5.8.0</kotest.version>
