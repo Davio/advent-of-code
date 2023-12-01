@@ -6,9 +6,9 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.system.measureTimeMillis
 
-private const val YEAR = 2022
-private const val DAY = 6
-private const val RUN_PART_1 = true
+private const val YEAR = 2023
+private const val DAY = 1
+private const val RUN_PART_1 = false
 private const val RUN_PART_2 = true
 
 fun main() {

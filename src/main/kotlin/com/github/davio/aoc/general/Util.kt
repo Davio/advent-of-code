@@ -81,15 +81,14 @@ fun Day.getCallingClassResourceFile(): String {
     var isTest = false
     StackWalker.getInstance().walk { stream ->
         isTest = stream.anyMatch { stackFrame ->
-            stackFrame.className.matches(Regex(".*Day\\d+Test.*"))
+            stackFrame.className.matches(Regex(""".*Day\d+Test.*"""))
         }
     }
     val classRegex = Regex("""Day(\d+)""")
     val (dayNumber) = classRegex.matchEntire(callingClassName.substringAfterLast("."))!!.destructured
     val folder = callingClassName.substringBeforeLast(".").replace('.', '/') + "/day$dayNumber"
-    val exampleNumberSuffix = exampleNumber?.let { "-$it"} ?: ""
-    val testExtension = if (isTest) "-example$exampleNumberSuffix" else ""
-    return "$folder/${dayNumber}$testExtension.txt"
+    val fileName = if (!isTest) "input" else "example" + (exampleNumber?.let { "-$it" } ?: "")
+    return "$folder/$fileName.txt"
 }
 
 inline fun <T> T.call(block: (T) -> Unit) {
