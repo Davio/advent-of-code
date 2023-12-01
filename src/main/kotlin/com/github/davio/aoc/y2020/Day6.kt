@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
@@ -7,7 +8,7 @@ fun main() {
     Day6.getResult()
 }
 
-object Day6 {
+object Day6 : Day() {
 
     /*
      * --- Day 6: Custom Customs ---

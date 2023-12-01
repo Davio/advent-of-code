@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2022
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
 
@@ -13,7 +14,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 4](https://adventofcode.com/2022/day/4#part2])
  */
-object Day4 {
+object Day4 : Day() {
 
     private fun parseLine(line: String) = line.split(",").let { lineParts ->
         lineParts[0].toIntRange() to lineParts[1].toIntRange()

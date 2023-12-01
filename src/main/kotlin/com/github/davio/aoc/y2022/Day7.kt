@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2022
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
 
@@ -13,7 +14,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 7](https://adventofcode.com/2022/day/7#part2])
  */
-object Day7 {
+object Day7 : Day() {
 
     private sealed interface TerminalOutput
     private sealed interface Command : TerminalOutput

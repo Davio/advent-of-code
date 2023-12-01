@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 import com.github.davio.aoc.general.getInputAsSequence
@@ -9,7 +10,7 @@ fun main() {
     Day11.getResult()
 }
 
-object Day11 {
+object Day11 : Day() {
 
     /*
      * --- Day 10: Adapter Array ---

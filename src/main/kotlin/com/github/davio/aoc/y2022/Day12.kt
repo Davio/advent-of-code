@@ -14,7 +14,7 @@
 ///**
 // * See [Advent of Code 2022 Day 12](https://adventofcode.com/2022/day/12#part2])
 // */
-//object Day12 {
+//object Day12 : Day() {
 //
 //    fun getResultPart1(): Int {
 //        val lines = getInputAsList()

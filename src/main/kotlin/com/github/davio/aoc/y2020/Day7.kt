@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 
@@ -7,7 +8,7 @@ fun main() {
     Day7.getResult()
 }
 
-object Day7 {
+object Day7 : Day() {
 
     /*
      * --- Day 7: Handy Haversacks ---

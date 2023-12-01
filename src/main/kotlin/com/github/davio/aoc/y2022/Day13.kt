@@ -1,10 +1,6 @@
 package com.github.davio.aoc.y2022
 
-import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
-import com.github.davio.aoc.general.getInputAsSequence
-import com.github.davio.aoc.general.split
-import kotlinx.serialization.decodeFromString
+import com.github.davio.aoc.general.*
 import kotlinx.serialization.json.*
 import kotlin.system.measureTimeMillis
 
@@ -18,7 +14,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 13](https://adventofcode.com/2022/day/13#part2])
  */
-object Day13 {
+object Day13 : Day() {
 
     sealed interface Packet : Comparable<Packet>
 

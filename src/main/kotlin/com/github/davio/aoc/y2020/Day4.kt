@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
@@ -7,7 +8,7 @@ fun main() {
     Day4.getResult()
 }
 
-object Day4 {
+object Day4 : Day() {
 
     /*
      * --- Day 4: Passport Processing ---

@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 
@@ -8,7 +9,7 @@ fun main() {
     Day3.getResultPart2()
 }
 
-object Day3 {
+object Day3 : Day() {
 
     /*
      * --- Day 3: Toboggan Trajectory ---

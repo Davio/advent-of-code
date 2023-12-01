@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsList
 import kotlin.math.abs
 import kotlin.math.pow
@@ -13,7 +14,7 @@ fun main() {
     }.let { println("Took $it ms") }
 }
 
-object Day7 {
+object Day7 : Day() {
 
     /*
     --- Day 7: The Treachery of Whales ---

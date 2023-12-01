@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 import kotlin.system.measureTimeMillis
@@ -11,7 +12,7 @@ fun main() {
     }.call { println(it) }
 }
 
-object Day13 {
+object Day13 : Day() {
 
     /*
      * --- Day 13: Shuttle Search ---

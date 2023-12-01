@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
@@ -13,7 +14,7 @@ fun main() {
     }.call { println("Took $it ms") }
 }
 
-object Day17 {
+object Day17 : Day() {
 
     /*
 --- Day 17: Trick Shot ---

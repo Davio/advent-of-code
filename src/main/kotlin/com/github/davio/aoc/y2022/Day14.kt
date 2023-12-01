@@ -1,9 +1,6 @@
 package com.github.davio.aoc.y2022
 
-import com.github.davio.aoc.general.Point
-import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
-import com.github.davio.aoc.general.toPoint
+import com.github.davio.aoc.general.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.system.measureTimeMillis
@@ -19,7 +16,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 14](https://adventofcode.com/2022/day/14#part2])
  */
-object Day14 {
+object Day14 : Day() {
 
     @JvmInline
     value class Path(private val points: List<Point>) {

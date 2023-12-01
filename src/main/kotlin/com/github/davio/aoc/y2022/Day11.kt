@@ -13,7 +13,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 11](https://adventofcode.com/2022/day/11#part2])
  */
-object Day11 {
+object Day11 : Day() {
 
     data class Monkey(
         val number: Int,

@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 import kotlin.math.roundToLong
@@ -13,7 +14,7 @@ fun main() {
     }.call { println("Took $it ms") }
 }
 
-object Day14 {
+object Day14 : Day() {
 
     /*
 --- Day 14: Extended Polymerization ---

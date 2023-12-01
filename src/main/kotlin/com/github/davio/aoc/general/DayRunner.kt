@@ -21,11 +21,11 @@ fun main() {
     }
 }
 
-private fun runPart(kClass: KClass<out Any>, partFunction: (Day) -> String, partNumber: Int) {
+private fun runPart(kClass: KClass<out Any>, partFunction: (Day) -> Any, partNumber: Int) {
     val result: String
     measureTimeMillis {
         val day = (if (kClass.objectInstance != null) kClass.objectInstance else kClass.createInstance()) as Day
-        result = partFunction.invoke(day)
+        result = partFunction.invoke(day).toString()
         val contents = StringSelection(result)
         Toolkit.getDefaultToolkit().systemClipboard.setContents(contents, null)
     }.let {

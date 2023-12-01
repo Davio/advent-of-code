@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import java.lang.System.lineSeparator
@@ -12,7 +13,7 @@ fun main() {
     }.call { println("$it ms") }
 }
 
-object Day18 {
+object Day18 : Day() {
 
     /*
      * --- Day 18: Operation Order ---

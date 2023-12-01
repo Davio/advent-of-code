@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsLongList
 import com.github.davio.aoc.general.getInputAsLongSequence
@@ -8,7 +9,7 @@ fun main() {
     Day9.getResult()
 }
 
-object Day9 {
+object Day9 : Day() {
 
     /*
      * --- Day 9: Encoding Error ---

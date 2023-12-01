@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 import java.lang.System.lineSeparator
@@ -11,7 +12,7 @@ fun main() {
     }.call { println("$it ms") }
 }
 
-object Day17 {
+object Day17 : Day() {
 
     /*
      * --- Day 17: Conway Cubes ---

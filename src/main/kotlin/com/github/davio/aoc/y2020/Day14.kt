@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
@@ -11,7 +12,7 @@ fun main() {
     }.call { println(it) }
 }
 
-object Day14 {
+object Day14 : Day() {
 
     /*
      * --- Day 14: Docking Data ---

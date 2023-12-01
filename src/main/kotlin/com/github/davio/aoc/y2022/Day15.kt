@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2022
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
@@ -16,7 +17,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 15](https://adventofcode.com/2022/day/15#part2])
  */
-object Day15 {
+object Day15 : Day() {
 
     private lateinit var sensors: Set<Sensor>
     private lateinit var sensorPoints: Set<Point>

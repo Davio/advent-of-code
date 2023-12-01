@@ -14,7 +14,7 @@
 //    }.call { println("Took $it ms") }
 //}
 //
-//object Day15 {
+//object Day15 : Day() {
 //
 //    /*
 //    --- Day 15: Chiton ---

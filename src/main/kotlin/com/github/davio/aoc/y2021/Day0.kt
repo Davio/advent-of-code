@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import kotlin.system.measureTimeMillis
 
@@ -10,7 +11,7 @@ fun main() {
     }.call { println("Took $it ms") }
 }
 
-object Day0 {
+object Day0 : Day() {
 
     /*
     */

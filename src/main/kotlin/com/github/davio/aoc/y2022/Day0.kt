@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2022
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import kotlin.system.measureTimeMillis
 
@@ -13,7 +14,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day X](https://adventofcode.com/2022/day/X#part2])
  */
-object Day0 {
+object Day0 : Day() {
 
     fun getResultPart1() {
     }

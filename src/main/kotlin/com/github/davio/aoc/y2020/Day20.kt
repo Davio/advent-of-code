@@ -12,7 +12,7 @@
 //    }.call { println("$it ms") }
 //}
 //
-//object Day20 {
+//object Day20 : Day() {
 //
 //    /*
 //     * --- Day 20: Jurassic Jigsaw ---

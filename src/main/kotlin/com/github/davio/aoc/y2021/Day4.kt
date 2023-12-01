@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsList
 
 fun main() {
@@ -7,7 +8,7 @@ fun main() {
     Day4.getResultPart2()
 }
 
-object Day4 {
+object Day4 : Day() {
 
     /*
     --- Day 4: Giant Squid ---

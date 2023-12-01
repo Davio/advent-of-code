@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2016
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsList
 import com.github.davio.aoc.y2016.Day1.Orientation.*
 import kotlin.math.abs
@@ -8,7 +9,7 @@ fun main() {
     Day1.getResultPart1()
 }
 
-object Day1 {
+object Day1 : Day() {
 
     /*
      * --- Day 1: No Time for a Taxicab ---

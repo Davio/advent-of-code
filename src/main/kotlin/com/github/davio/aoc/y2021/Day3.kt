@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsList
 import java.util.function.BiPredicate
 import kotlin.math.pow
@@ -9,7 +10,7 @@ fun main() {
     Day3.getResultPart2()
 }
 
-object Day3 {
+object Day3 : Day() {
 
     /*
 --- Day 3: Binary Diagnostic ---

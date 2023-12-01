@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 import kotlin.system.measureTimeMillis
@@ -10,7 +11,7 @@ fun main() {
     }.call { println("$it ms") }
 }
 
-object Day15 {
+object Day15 : Day() {
 
     /*
      * --- Day 15: Rambunctious Recitation ---

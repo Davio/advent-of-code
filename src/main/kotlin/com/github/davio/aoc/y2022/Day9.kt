@@ -1,9 +1,6 @@
 package com.github.davio.aoc.y2022
 
-import com.github.davio.aoc.general.Point
-import com.github.davio.aoc.general.Vector
-import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.*
 import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.system.measureTimeMillis
@@ -20,7 +17,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 9](https://adventofcode.com/2022/day/9#part2])
  */
-object Day9 {
+object Day9 : Day() {
 
     private enum class Direction(val char: Char, val vector: Vector) {
         UP('U', Point.of(0, 1)),

@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.math.*
@@ -8,7 +9,7 @@ fun main() {
     Day12.getResult()
 }
 
-object Day12 {
+object Day12 : Day() {
 
     /*
      * --- Day 12: Rain Risk ---

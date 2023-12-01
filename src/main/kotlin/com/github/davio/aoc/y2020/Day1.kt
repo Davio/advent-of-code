@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsIntList
 
@@ -8,7 +9,7 @@ fun main() {
     Day1.getResultPart2()
 }
 
-object Day1 {
+object Day1 : Day() {
 
     /*
      * --- Day 1: Report Repair ---

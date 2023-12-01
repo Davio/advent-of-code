@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
@@ -11,7 +12,7 @@ fun main() {
     }.call { println("Took $it ms") }
 }
 
-object Day10 {
+object Day10 : Day() {
 
     /*
     --- Day 10: Syntax Scoring ---

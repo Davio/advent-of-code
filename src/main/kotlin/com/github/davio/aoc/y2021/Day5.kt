@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
@@ -10,7 +11,7 @@ fun main() {
     Day5.getResultPart2()
 }
 
-object Day5 {
+object Day5 : Day() {
 
     /*
 --- Day 5: Hydrothermal Venture ---

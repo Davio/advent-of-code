@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
@@ -11,7 +12,7 @@ fun main() {
     }.let { println("Took $it ms") }
 }
 
-object Day8 {
+object Day8 : Day() {
 
     /*
 --- Day 8: Seven Segment Search ---

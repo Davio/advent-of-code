@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2022
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsSequence
 import com.github.davio.aoc.general.split
 import kotlin.system.measureTimeMillis
@@ -14,7 +15,7 @@ fun main() {
 /**
  * See [Advent of Code 2022 Day 5](https://adventofcode.com/2022/day/5#part2])
  */
-object Day5 {
+object Day5 : Day() {
 
     private data class Move(val amount: Int, val from: Int, val to: Int)
 

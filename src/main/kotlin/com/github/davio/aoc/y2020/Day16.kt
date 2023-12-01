@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2020
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsSequence
 import kotlin.system.measureTimeMillis
@@ -10,7 +11,7 @@ fun main() {
     }.call { println("$it ms") }
 }
 
-object Day16 {
+object Day16 : Day() {
 
     /*
      * --- Day 16: Ticket Translation ---

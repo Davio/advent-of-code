@@ -10,6 +10,6 @@ open class Day6Benchmark {
 
     @Benchmark
     fun part2() {
-        Day6.getResultPart2()
+        Day6().part2()
     }
 }

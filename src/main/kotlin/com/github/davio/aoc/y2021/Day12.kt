@@ -1,5 +1,6 @@
 package com.github.davio.aoc.y2021
 
+import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
 import com.github.davio.aoc.general.getInputAsList
 import kotlin.system.measureTimeMillis
@@ -12,7 +13,7 @@ fun main() {
     }.call { println("Took $it ms") }
 }
 
-object Day12 {
+object Day12 : Day() {
 
     /*
     --- Day 12: Passage Pathing ---

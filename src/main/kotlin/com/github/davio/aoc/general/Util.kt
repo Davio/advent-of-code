@@ -13,9 +13,9 @@ fun Day.getInputReader() =
 
 fun Day.getInputAsLine(): String = getInputReader().readLine()
 
-fun Day.getInputAsList() = getInputReader().readLines()
+fun Day.getInputAsList(): List<String> = getInputReader().readLines()
 
-fun Day.getInputAsSequence() = getInputReader().lineSequence()
+fun Day.getInputAsSequence(): Sequence<String> = getInputReader().lineSequence()
 
 fun Day.getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
 
