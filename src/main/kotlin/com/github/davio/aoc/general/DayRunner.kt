@@ -7,16 +7,14 @@ import kotlin.reflect.full.createInstance
 import kotlin.system.measureTimeMillis
 
 private const val YEAR = 2023
-private const val DAY = 1
-private const val RUN_PART_1 = false
-private const val RUN_PART_2 = true
+private const val DAY = 2
+private const val RUN_PART = 2
 
 fun main() {
     val kClass = Class.forName("com.github.davio.aoc.y$YEAR.Day$DAY").kotlin
-    if (RUN_PART_1) {
+    if (RUN_PART == 1) {
         runPart(kClass, Day::part1, 1)
-    }
-    if (RUN_PART_2) {
+    } else  {
         runPart(kClass, Day::part2, 2)
     }
 }

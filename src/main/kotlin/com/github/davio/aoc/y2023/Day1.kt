@@ -22,10 +22,10 @@ class Day1(exampleNumber: Int? = null) : Day(exampleNumber) {
     )
     private val digitWordsReversed = digitWords.map { it.reversed() }
 
-    private fun getFirstDigit(line: String): Int = getNthDigit(line, digitWords)
-    private fun getLastDigit(line: String): Int = getNthDigit(line.reversed(), digitWordsReversed)
+    private fun getFirstDigit(line: String): Int = getDigit(line, digitWords)
+    private fun getLastDigit(line: String): Int = getDigit(line.reversed(), digitWordsReversed)
 
-    private fun getNthDigit(line: String, words: List<String>): Int {
+    private fun getDigit(line: String, words: List<String>): Int {
         var buffer = ""
         var expectedChars = words.map { it.first() }.toSet()
 
