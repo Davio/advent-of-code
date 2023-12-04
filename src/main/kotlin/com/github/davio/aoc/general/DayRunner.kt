@@ -4,7 +4,7 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
-import kotlin.system.measureNanoTime
+import kotlin.time.measureTime
 
 private const val YEAR = 2023
 private const val DAY = 4
@@ -22,19 +22,18 @@ fun main() {
 private fun runPart(kClass: KClass<out Any>, partFunction: (Day) -> Any, partNumber: Int) {
     val result: Any
     val day = (if (kClass.objectInstance != null) kClass.objectInstance else kClass.createInstance()) as Day
-    partFunction.invoke(day)
 
-    measureNanoTime {
+    val time = measureTime {
         result = partFunction.invoke(day)
-    }.let {
-        println("Part $partNumber answer")
-        println("---------------")
-        println(result)
-        println("---------------")
-        println("Took ${it / 1000}us")
-        println()
     }
 
     val contents = StringSelection(result.toString())
     Toolkit.getDefaultToolkit().systemClipboard.setContents(contents, null)
+
+    println("Part $partNumber answer")
+    println("---------------")
+    println(result)
+    println("---------------")
+    println("Took ${time.inWholeMicroseconds}us")
+    println()
 }
