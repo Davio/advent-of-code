@@ -3,9 +3,6 @@ package com.github.davio.aoc.y2023
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-/**
- * See [Advent of Code 2022 Day 1](https://adventofcode.com/2022/day/1#part2])
- */
 class Day2Test : StringSpec({
 
     "part 1" {

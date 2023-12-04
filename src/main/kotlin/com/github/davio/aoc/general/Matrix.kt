@@ -14,6 +14,7 @@ data class Matrix<T>(val data: List<List<T>>) {
         }
 
     operator fun get(x: Int, y: Int) : T = data[y][x]
+    operator fun get(p: Point) : T = data[p.y][p.x]
 
     fun getAdjacentPoints(p: Point): Sequence<Point> {
         if (data.isEmpty()) return emptySequence()

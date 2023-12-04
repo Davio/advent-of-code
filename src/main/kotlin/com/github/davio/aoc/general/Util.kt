@@ -27,6 +27,8 @@ fun Day.getInputAsLongList() = getInputAsList().map { it.toLong() }
 
 fun Day.getInputAsFlow() = getInputReader().lineSequence().asFlow()
 
+fun Day.getInputAsMatrix() = Matrix(getInputAsList().map { it.toList() })
+
 fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>> {
     val iterator = this.iterator()
     val buffer = mutableListOf<T>()
