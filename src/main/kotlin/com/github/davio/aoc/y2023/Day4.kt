@@ -2,7 +2,6 @@ package com.github.davio.aoc.y2023
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.getInputAsList
-import kotlin.math.pow
 
 /**
  * See [Advent of Code 2023 Day 4](https://adventofcode.com/2023/day/4#part2])
@@ -33,12 +32,12 @@ object Day4 : Day() {
         var winningNumbers: Set<Int> = emptySet()
         var myNumbers: Set<Int> = emptySet()
 
-        fun getScore(): Int = 2.0.pow(getMatches() - 1).toInt()
+        fun getScore(): Int = if (getMatches() == 0) 0 else 1 shl (getMatches() - 1)
 
         fun getMatches(): Int = myNumbers.intersect(winningNumbers).size
 
-        fun getIdsOfCopies(): List<Int> = (1..getMatches()).map { offset ->
-            id + offset
+        fun getIdsOfCopies(): List<Int> = MutableList(getMatches()) { offset ->
+            id + offset + 1
         }
 
         companion object {
