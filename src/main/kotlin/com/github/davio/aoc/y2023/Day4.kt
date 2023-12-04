@@ -12,21 +12,19 @@ object Day4 : Day() {
     private val cards = getInputAsList()
         .map { Card.parse(it) }
 
-    override fun part1(): Int {
-        return cards.sumOf {
-            it.getScore()
-        }
+    override fun part1(): Int = cards.sumOf {
+        it.getScore()
     }
 
     override fun part2(): Int {
         val totalCopies = cards.associateWith { 1 }.toMutableMap()
-        totalCopies.forEach { (card, total) ->
+        return totalCopies.entries.sumOf { (card, total) ->
             card.getIdsOfCopies().forEach { id ->
                 val copy = Card(id)
                 totalCopies[copy] = totalCopies.getValue(copy) + total
             }
+            total
         }
-        return totalCopies.values.sum()
     }
 
     private data class Card(
