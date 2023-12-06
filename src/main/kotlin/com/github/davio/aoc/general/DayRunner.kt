@@ -14,7 +14,7 @@ fun main() {
     val kClass = Class.forName("com.github.davio.aoc.y$YEAR.Day$DAY").kotlin
     if (RUN_PART == 1) {
         runPart(kClass, Day::part1, 1)
-    } else  {
+    } else {
         runPart(kClass, Day::part2, 2)
     }
 }
