@@ -32,7 +32,7 @@ object Day6 : Day() {
         val d = timeInMs * timeInMs - 4 * -1 * c
         val root = sqrt(d.toDouble())
         val x1 = ceil((-timeInMs + root) / -2).toLong()
-        val x2 = ((-timeInMs - root) / -2).toLong()
+        val x2 = timeInMs - x1
         return (x2 - x1) + 1
     }
 }
