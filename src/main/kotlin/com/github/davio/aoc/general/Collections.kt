@@ -1,6 +1,6 @@
 package com.github.davio.aoc.general
 
-inline fun <T> Iterable<T>.multiplicationOf(selector: (T) -> Long): Long {
+inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long {
     var mul = 1.toLong()
     for (element in this) {
         mul *= selector(element)
