@@ -19,8 +19,9 @@ object Day6 : Day() {
     }
 
     override fun part2(): Long {
-        val time = timePart.replace(" ", "").toLong()
-        val distance = distancePart.replace(" ", "").toLong()
+        fun String.parseLong() = replace(" ", "").toLong()
+        val time = timePart.parseLong()
+        val distance = distancePart.parseLong()
         return getNumberOfWins(time, distance)
     }
 
