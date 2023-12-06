@@ -7,7 +7,7 @@ import kotlin.reflect.full.createInstance
 import kotlin.time.measureTime
 
 private const val YEAR = 2023
-private const val DAY = 4
+private const val DAY = 6
 private const val RUN_PART = 2
 
 fun main() {
