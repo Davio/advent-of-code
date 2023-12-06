@@ -1,9 +1,6 @@
 package com.github.davio.aoc.y2023
 
-import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
-import kotlin.math.ceil
-import kotlin.math.sqrt
+import com.github.davio.aoc.general.*
 
 /**
  * See [Advent of Code 2023 Day 6](https://adventofcode.com/2023/day/6#part2])
@@ -28,10 +25,8 @@ object Day6 : Day() {
     }
 
     private fun getNumberOfWins(timeInMs: Long, distanceInMm: Long): Long {
-        val d = timeInMs * timeInMs - 4 * -1 * -(distanceInMm + 1)
-        val root = sqrt(d.toDouble())
-        val x1 = ceil((-timeInMs + root) / -2).toLong()
-        val x2 = timeInMs - x1
-        return (x2 - x1) + 1
+        val discriminant = timeInMs.squared + 4 * (-distanceInMm - 1)
+        val min = ((-timeInMs + discriminant.sqrt) / -2).roundUp()
+        return (timeInMs - 2 * min) + 1
     }
 }

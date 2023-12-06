@@ -4,9 +4,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 fun Day.getInputReader() =
     ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
@@ -111,70 +108,4 @@ inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
         list.add(item)
     }
     return list
-}
-
-fun gcd(n1: Int, n2: Int): Int {
-    return when {
-        n1 == 0 -> n2
-        n2 == 0 -> n1
-        else -> {
-            val absNumber1 = abs(n1)
-            val absNumber2 = abs(n2)
-            val smallerValue = min(absNumber1, absNumber2)
-            gcd(max(absNumber1, absNumber2) % smallerValue, smallerValue)
-        }
-    }
-}
-
-fun gcd(n1: Long, n2: Long):Long {
-    return when {
-        n1 == 0L -> n2
-        n2 == 0L -> n1
-        else -> {
-            val absNumber1 = abs(n1)
-            val absNumber2 = abs(n2)
-            val smallerValue = min(absNumber1, absNumber2)
-            gcd(max(absNumber1, absNumber2) % smallerValue, smallerValue)
-        }
-    }
-}
-
-fun lcm(n1: Int, n2: Int): Int {
-    return if (n1 == 0 || n2 == 0) 0 else {
-        val gcd = gcd(n1, n2)
-        abs(n1 * n2) / gcd
-    }
-}
-
-fun lcm(n1: Long, n2: Long): Long {
-    return if (n1 == 0L || n2 == 0L) 0L else {
-        val gcd = gcd(n1, n2)
-        abs(n1 * n2) / gcd
-    }
-}
-
-fun <T> List<T>.permutations(k: Int = size): Sequence<List<T>> {
-    val newList = ArrayList<T>(this)
-
-    if (k == 1) {
-        return sequenceOf(newList)
-    }
-
-    fun <T> swap(list: MutableList<T>, index1: Int, index2: Int) {
-        val temp = list[index1]
-        list[index1] = list[index2]
-        list[index2] = temp
-    }
-
-    return sequence {
-        for (i in (0 until k)) {
-            yieldAll(newList.permutations(k - 1))
-
-            if ((k - 1) % 2 == 0) {
-                swap(newList, i, k - 1)
-            } else {
-                swap(newList, 0, k - 1)
-            }
-        }
-    }
 }
