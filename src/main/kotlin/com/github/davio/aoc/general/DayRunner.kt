@@ -9,6 +9,7 @@ import kotlin.time.measureTime
 private const val YEAR = 2023
 private const val DAY = 6
 private const val RUN_PART = 2
+private const val COPY_TO_CLIPBOARD = false
 
 fun main() {
     val kClass = Class.forName("com.github.davio.aoc.y$YEAR.Day$DAY").kotlin
@@ -27,8 +28,10 @@ private fun runPart(kClass: KClass<out Any>, partFunction: (Day) -> Any, partNum
         result = partFunction.invoke(day)
     }
 
-    val contents = StringSelection(result.toString())
-    Toolkit.getDefaultToolkit().systemClipboard.setContents(contents, null)
+    if (COPY_TO_CLIPBOARD) {
+        val contents = StringSelection(result.toString())
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(contents, null)
+    }
 
     println("Part $partNumber answer")
     println("---------------")
