@@ -35,9 +35,4 @@ object Day6 : Day() {
         val x2 = ((-timeInMs - root) / -2).toLong()
         return (x2 - x1) + 1
     }
-
-    private data class RacePart1(
-        val timeInMs: Int,
-        val distanceInMm: Long
-    )
 }
