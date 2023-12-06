@@ -28,8 +28,7 @@ object Day6 : Day() {
     }
 
     private fun getNumberOfWins(timeInMs: Long, distanceInMm: Long): Long {
-        val c = -(distanceInMm + 1)
-        val d = timeInMs * timeInMs - 4 * -1 * c
+        val d = timeInMs * timeInMs - 4 * -1 * -(distanceInMm + 1)
         val root = sqrt(d.toDouble())
         val x1 = ceil((-timeInMs + root) / -2).toLong()
         val x2 = timeInMs - x1
