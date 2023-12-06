@@ -15,25 +15,25 @@ object Day6 : Day() {
     private val timePart = input[0].substringAfter("Time:").trim()
     private val distancePart = input[1].substringAfter("Distance:").trim()
 
-    override fun part1(): Int {
+    override fun part1(): Long {
         val times = timePart.split(whitespaceRegex).map { it.toLong() }
         val distances = distancePart.split(whitespaceRegex).map { it.toLong() }
         return times.foldIndexed(1) { index, acc, time -> acc * getNumberOfWins(time, distances[index]) }
     }
 
-    override fun part2(): Int {
+    override fun part2(): Long {
         val time = timePart.replace(" ", "").toLong()
         val distance = distancePart.replace(" ", "").toLong()
         return getNumberOfWins(time, distance)
     }
 
-    private fun getNumberOfWins(timeInMs: Long, distanceInMm: Long): Int {
+    private fun getNumberOfWins(timeInMs: Long, distanceInMm: Long): Long {
         val c = -(distanceInMm + 1)
         val d = timeInMs * timeInMs - 4 * -1 * c
         val root = sqrt(d.toDouble())
         val x1 = ceil((-timeInMs + root) / -2).toLong()
         val x2 = ((-timeInMs - root) / -2).toLong()
-        return (x2 - x1).toInt() + 1
+        return (x2 - x1) + 1
     }
 
     private data class RacePart1(
