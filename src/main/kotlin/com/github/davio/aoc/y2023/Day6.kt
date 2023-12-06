@@ -15,7 +15,7 @@ object Day6 : Day() {
     override fun part1(): Long {
         val times = timePart.split(whitespaceRegex).map { it.toLong() }
         val distances = distancePart.split(whitespaceRegex).map { it.toLong() }
-        return times.foldIndexed(1) { index, acc, time -> acc * getNumberOfWins(time, distances[index]) }
+        return times.zip(distances).multiplicationOf { (t, d) -> getNumberOfWins(t, d) }
     }
 
     override fun part2(): Long {

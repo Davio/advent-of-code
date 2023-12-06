@@ -1,5 +1,13 @@
 package com.github.davio.aoc.general
 
+inline fun <T> Iterable<T>.multiplicationOf(selector: (T) -> Long): Long {
+    var mul = 1.toLong()
+    for (element in this) {
+        mul *= selector(element)
+    }
+    return mul
+}
+
 fun <T> Iterable<T>.permutations(k: Int = count()): Sequence<List<T>> {
     val newList = ArrayList<T>(this.toList())
 
