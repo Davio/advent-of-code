@@ -13,8 +13,9 @@ object Day6 : Day() {
     private val distancePart = input[1].substringAfter("Distance:").trim()
 
     override fun part1(): Long {
-        val times = timePart.split(whitespaceRegex).map { it.toLong() }
-        val distances = distancePart.split(whitespaceRegex).map { it.toLong() }
+        fun String.parseLongList() = split(whitespaceRegex).map { it.toLong() }
+        val times = timePart.parseLongList()
+        val distances = distancePart.parseLongList()
         return times.zip(distances).productOf { (t, d) -> getNumberOfWins(t, d) }
     }
 
