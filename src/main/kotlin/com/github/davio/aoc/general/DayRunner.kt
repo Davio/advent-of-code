@@ -7,9 +7,9 @@ import kotlin.reflect.full.createInstance
 import kotlin.time.measureTime
 
 private const val YEAR = 2023
-private const val DAY = 6
-private const val RUN_PART = 2
-private const val COPY_TO_CLIPBOARD = false
+private const val DAY = 7
+private const val RUN_PART = 1
+private const val COPY_TO_CLIPBOARD = true
 
 fun main() {
     val kClass = Class.forName("com.github.davio.aoc.y$YEAR.Day$DAY").kotlin
