@@ -19,8 +19,27 @@ class Day7(exampleNumber: Int? = null) : Day(exampleNumber) {
 
     override fun part1(): Long {
         return hands.sortedBy { it.hand }.withIndex().sumOf { (index, handWithBid) ->
-            println("${handWithBid.hand} ${handWithBid.hand.handRank}")
-            println("${handWithBid.bid} * ${index + 1} = ${handWithBid.bid * index + 1}")
+            handWithBid.bid.toLong() * (index + 1)
+        }
+    }
+
+    override fun part2(): Long {
+        return hands.sortedWith(Comparator { h1, h2 ->
+            var comparison = Comparator.naturalOrder<Rank>().compare(h1.hand.handRankPart2, h2.hand.handRankPart2)
+            if (comparison != 0) return@Comparator comparison
+
+            val cardComparator = Comparator.naturalOrder<Card>()
+
+            h1.hand.cards.zip(h2.hand.cards).forEach { (myCard, otherCard) ->
+                if (myCard == Card.JACK && otherCard != Card.JACK) return@Comparator -1
+                if (otherCard == Card.JACK && myCard != Card.JACK) return@Comparator 1
+                comparison = cardComparator.compare(myCard, otherCard)
+                if (comparison != 0) return@Comparator comparison
+            }
+
+            0
+        }).withIndex().sumOf { (index, handWithBid) ->
+            println("${handWithBid.hand} ${handWithBid.hand.handRankPart2}")
             handWithBid.bid.toLong() * (index + 1)
         }
     }
@@ -45,8 +64,8 @@ class Day7(exampleNumber: Int? = null) : Day(exampleNumber) {
         EIGHT('8'),
         NINE('9'),
         TEN('T'),
-        JACK('J'),
         QUEEN('Q'),
+        JACK('J'),
         KING('K'),
         ACE('A');
 
@@ -56,13 +75,14 @@ class Day7(exampleNumber: Int? = null) : Day(exampleNumber) {
     }
 
     private data class Hand(val cards: MutableList<Card>) : Comparable<Hand> {
-        val handRank = determineHandRank()
+        val handRankPart1 = determineHandRankPart1()
+        val handRankPart2 = determineHandRankPart2()
 
-        fun determineHandRank(): Rank {
+        fun determineHandRankPart1(): Rank {
             val cardsInOrder = cards.sorted()
             return when {
                 cardsInOrder.drop(1).all { it == cardsInOrder.first() } -> Rank.FIVE_OF_A_KIND
-                cardsInOrder[0] == cardsInOrder[3] || cardsInOrder[1] == cardsInOrder[4] -> Rank.FOUR_OF_A_KIND
+                cardsInOrder[0] == cardsInOrder[3]|| cardsInOrder[1] == cardsInOrder[4] -> Rank.FOUR_OF_A_KIND
                 (cardsInOrder[0] == cardsInOrder[2] && cardsInOrder[3] == cardsInOrder[4])
                         || (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[2] == cardsInOrder[4]) -> Rank.FULL_HOUSE
 
@@ -71,6 +91,7 @@ class Day7(exampleNumber: Int? = null) : Day(exampleNumber) {
                         || cardsInOrder[2] == cardsInOrder[4] -> Rank.THREE_OF_A_KIND
 
                 (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[2] == cardsInOrder[3])
+                        || (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[3] == cardsInOrder[4])
                         || (cardsInOrder[1] == cardsInOrder[2] && cardsInOrder[3] == cardsInOrder[4]) -> Rank.TWO_PAIR
 
                 (0..<cardsInOrder.lastIndex).any { cardsInOrder[it] == cardsInOrder[it + 1] } -> Rank.ONE_PAIR
@@ -78,8 +99,36 @@ class Day7(exampleNumber: Int? = null) : Day(exampleNumber) {
             }
         }
 
+        fun determineHandRankPart2(): Rank {
+            return Card.entries.reversed().maxOf { replacedCard ->
+                val cardsWithWildCardReplaced = cards.map { if (it == Card.JACK) replacedCard else it }
+                val cardsInOrder = cardsWithWildCardReplaced.sorted()
+
+                when {
+                    cardsInOrder.drop(1).all { it == cardsInOrder.first() } -> Rank.FIVE_OF_A_KIND
+                    cardsInOrder[0] == cardsInOrder[3] || cardsInOrder[1] == cardsInOrder[4] -> Rank.FOUR_OF_A_KIND
+                    (cardsInOrder[0] == cardsInOrder[2] && cardsInOrder[3] == cardsInOrder[4])
+                            || (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[2] == cardsInOrder[4]) -> Rank.FULL_HOUSE
+
+                    cardsInOrder[0] == cardsInOrder[2]
+                            || cardsInOrder[1] == cardsInOrder[3]
+                            || cardsInOrder[2] == cardsInOrder[4] -> Rank.THREE_OF_A_KIND
+
+                    (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[2] == cardsInOrder[3])
+                            || (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[3] == cardsInOrder[4])
+                            || (cardsInOrder[1] == cardsInOrder[2] && cardsInOrder[3] == cardsInOrder[4]) -> Rank.TWO_PAIR
+
+                    (0..<cardsInOrder.lastIndex).any { cardsInOrder[it] == cardsInOrder[it + 1] } -> Rank.ONE_PAIR
+                    else -> Rank.HIGH_CARD
+                }
+            }
+        }
+
+
+        infix fun Card.matches(other: Card) = this == other || this == Card.JACK || other == Card.JACK
+
         override fun compareTo(other: Hand): Int {
-            var comparison = Comparator.naturalOrder<Rank>().compare(handRank, other.handRank)
+            var comparison = Comparator.naturalOrder<Rank>().compare(handRankPart1, other.handRankPart1)
             if (comparison != 0) return comparison
 
             val cardComparator = Comparator.naturalOrder<Card>()
