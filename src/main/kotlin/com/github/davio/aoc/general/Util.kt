@@ -94,10 +94,6 @@ inline fun <T> T.call(block: (T) -> Unit) {
     block(this)
 }
 
-suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.awaitAll()
-}
-
 inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
     val list = ArrayList<T>()
     for (item in this) {

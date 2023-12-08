@@ -1,11 +1,19 @@
 package com.github.davio.aoc.general
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+
 inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long {
     var mul = 1.toLong()
     for (element in this) {
         mul *= selector(element)
     }
     return mul
+}
+
+suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.awaitAll()
 }
 
 fun <T> Iterable<T>.permutations(k: Int = count()): Sequence<List<T>> {

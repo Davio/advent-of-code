@@ -81,8 +81,8 @@ class Day7(exampleNumber: Int? = null) : Day(exampleNumber) {
         fun determineHandRankPart1(): Rank {
             val cardsInOrder = cards.sorted()
             return when {
-                cardsInOrder.drop(1).all { it == cardsInOrder.first() } -> Rank.FIVE_OF_A_KIND
-                cardsInOrder[0] == cardsInOrder[3]|| cardsInOrder[1] == cardsInOrder[4] -> Rank.FOUR_OF_A_KIND
+                cardsInOrder.first() == cardsInOrder.last() -> Rank.FIVE_OF_A_KIND
+                cardsInOrder[0] == cardsInOrder[3] || cardsInOrder[1] == cardsInOrder[4] -> Rank.FOUR_OF_A_KIND
                 (cardsInOrder[0] == cardsInOrder[2] && cardsInOrder[3] == cardsInOrder[4])
                         || (cardsInOrder[0] == cardsInOrder[1] && cardsInOrder[2] == cardsInOrder[4]) -> Rank.FULL_HOUSE
 
