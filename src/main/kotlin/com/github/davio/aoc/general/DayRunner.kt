@@ -7,7 +7,7 @@ import kotlin.reflect.full.createInstance
 import kotlin.time.measureTime
 
 private const val YEAR = 2023
-private const val DAY = 8
+private const val DAY = 9
 private const val RUN_PART = 2
 private const val COPY_TO_CLIPBOARD = true
 
@@ -37,6 +37,6 @@ private fun runPart(kClass: KClass<out Any>, partFunction: (Day) -> Any, partNum
     println("---------------")
     println(result)
     println("---------------")
-    println("Took ${time.inWholeMicroseconds}us")
+    println("Took $time")
     println()
 }

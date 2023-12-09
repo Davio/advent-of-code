@@ -5,7 +5,7 @@ import com.github.davio.aoc.general.getInputAsList
 import com.github.davio.aoc.general.lcm
 
 /**
- * See [Advent of Code 2023 Day X](https://adventofcode.com/2023/day/X#part2])
+ * See [Advent of Code 2023 Day 8](https://adventofcode.com/2023/day/8#part2])
  */
 class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
 
@@ -39,9 +39,6 @@ class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
             if (currentElement.id == "ZZZ") {
                 return steps
             }
-
-            println(direction)
-            println(currentElement)
         }
 
         return -1
@@ -65,8 +62,6 @@ class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
                 if (d) acc.left else acc.right
             }
         }
-
-        println("Found end element after $stepsToEnd steps")
 
         return stepsToEnd
     }
