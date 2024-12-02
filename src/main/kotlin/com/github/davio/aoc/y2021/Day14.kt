@@ -15,7 +15,6 @@ fun main() {
 }
 
 object Day14 : Day() {
-
     /*
 --- Day 14: Extended Polymerization ---
 
@@ -69,29 +68,31 @@ After step 4: NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB
 This polymer grows quickly. After step 5, it has length 97; After step 10, it has length 3073. After step 10, B occurs 1749 times, C occurs 298 times, H occurs 161 times, and N occurs 865 times; taking the quantity of the most common element (B, 1749) and subtracting the quantity of the least common element (H, 161) produces 1749 - 161 = 1588.
 
 Apply 10 steps of pair insertion to the polymer template and find the most and least common elements in the result. What do you get if you take the quantity of the most common element and subtract the quantity of the least common element?
-    */
+     */
 
     private lateinit var startTemplate: String
     private lateinit var pairInsertionRules: Map<String, Char>
     private var elementPairCountsMap: MutableMap<String, Long> = mutableMapOf()
 
-    fun parseInput() {
+    override fun parseInput() {
         val inputList = getInputAsList()
         val pairInsertionRulePattern = Regex("([A-Z]+) -> ([A-Z])")
 
         startTemplate = inputList[0]
-        pairInsertionRules = inputList.drop(2).associate { line ->
-            val (adjacentElements, elementToInsert) = pairInsertionRulePattern.matchEntire(line)!!.destructured
-            adjacentElements to elementToInsert.first()
-        }
+        pairInsertionRules =
+            inputList.drop(2).associate { line ->
+                val (adjacentElements, elementToInsert) = pairInsertionRulePattern.matchEntire(line)!!.destructured
+                adjacentElements to elementToInsert.first()
+            }
     }
 
     private fun initialize() {
         elementPairCountsMap.clear()
 
-        startTemplate.zipWithNext { first, second ->
-            charArrayOf(first, second).concatToString()
-        }.associateWithTo(elementPairCountsMap) { 1 }
+        startTemplate
+            .zipWithNext { first, second ->
+                charArrayOf(first, second).concatToString()
+            }.associateWithTo(elementPairCountsMap) { 1 }
 
         println(elementPairCountsMap)
     }
@@ -111,7 +112,7 @@ Apply 10 steps of pair insertion to the polymer template and find the most and l
         val newElementPairCountsMap = mutableMapOf<String, Long>()
 
         elementPairCountsMap.forEach { (elementPair, count) ->
-           if (pairInsertionRules.containsKey(elementPair)) {
+            if (pairInsertionRules.containsKey(elementPair)) {
                 val insertionChar = pairInsertionRules[elementPair]!!
                 val newPairKey1 = charArrayOf(elementPair.first(), insertionChar).concatToString()
                 val newPairKey2 = charArrayOf(insertionChar, elementPair.last()).concatToString()
@@ -146,7 +147,7 @@ The resulting polymer isn't nearly strong enough to reinforce the submarine. You
 In the above example, the most common element is B (occurring 2192039569602 times) and the least common element is H (occurring 3849876073 times); subtracting these produces 2188189693529.
 
 Apply 40 steps of pair insertion to the polymer template and find the most and least common elements in the result. What do you get if you take the quantity of the most common element and subtract the quantity of the least common element?
-    */
+     */
 
     fun getResultPart2() {
         initialize()

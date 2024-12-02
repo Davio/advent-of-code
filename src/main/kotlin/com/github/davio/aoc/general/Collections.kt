@@ -12,9 +12,14 @@ inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long {
     return mul
 }
 
-suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.awaitAll()
-}
+fun <T> List<T>.skip(i: Int): List<T> = subList(0, i) + subList(i + 1, size)
+
+fun CharSequence.splitToLongByWhitespace(): List<Long> = split(Regex("\\s+")).map(String::toLong)
+
+suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> =
+    coroutineScope {
+        map { async { f(it) } }.awaitAll()
+    }
 
 fun <T> Iterable<T>.permutations(k: Int = count()): Sequence<List<T>> {
     val newList = ArrayList<T>(this.toList())
@@ -23,7 +28,11 @@ fun <T> Iterable<T>.permutations(k: Int = count()): Sequence<List<T>> {
         return sequenceOf(newList)
     }
 
-    fun <T> swap(list: MutableList<T>, index1: Int, index2: Int) {
+    fun <T> swap(
+        list: MutableList<T>,
+        index1: Int,
+        index2: Int,
+    ) {
         val temp = list[index1]
         list[index1] = list[index2]
         list[index2] = temp

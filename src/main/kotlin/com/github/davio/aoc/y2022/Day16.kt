@@ -7,13 +7,13 @@ import com.github.davio.aoc.general.getInputAsList
  * See [Advent of Code 2022 Day 16](https://adventofcode.com/2022/day/16)
  */
 object Day16 : Day() {
-
-    private const val LINE_PATTERN = """Valve ([A-Z]{2}) has flow rate=(\d+); tunnel(?:s?) lead(?:s?) to valve(?:s?) (.+)"""
+    private const val LINE_PATTERN =
+        """Valve ([A-Z]{2}) has flow rate=(\d+); tunnel(?:s?) lead(?:s?) to valve(?:s?) (.+)"""
     private val LINE_REGEX = Regex(LINE_PATTERN)
 
     private val valveMap: HashMap<String, Valve> = hashMapOf()
 
-    override fun part1(): String {
+    override fun part1(): Long {
         getInputAsList()
             .map { parseLine(it) }
             .onEach { println(it) }
@@ -21,7 +21,7 @@ object Day16 : Day() {
         val route = Route()
         val result = getBestRoute(route)
         println(result)
-        return result.pressureReleased.toString()
+        return result.pressureReleased
     }
 
     private fun parseLine(line: String): Valve {
@@ -35,7 +35,10 @@ object Day16 : Day() {
         return valve
     }
 
-    data class Valve(val label: String, var flowRate: Int = 0) {
+    data class Valve(
+        val label: String,
+        var flowRate: Int = 0,
+    ) {
         val tunnels: MutableList<Valve> = mutableListOf()
 
         fun addTunnel(label: String) {
@@ -64,34 +67,40 @@ object Day16 : Day() {
         var combinedResultWithClosedValve: RouteResult? = null
 
         if (!route.openedValves.contains(route.currentValve) && route.currentValve.flowRate > 0) {
-            val resultWithClosedValve = RouteResult(listOf(openThisValveAction), openThisValveAction.getPressureReleased())
-            val resultAfterClosingValve = getBestRoute(
-                Route(
-                    route.currentValve,
-                    timeRemainingAfterAction,
-                    route.openedValves.toMutableSet() + route.currentValve
+            val resultWithClosedValve =
+                RouteResult(listOf(openThisValveAction), openThisValveAction.getPressureReleased())
+            val resultAfterClosingValve =
+                getBestRoute(
+                    Route(
+                        route.currentValve,
+                        timeRemainingAfterAction,
+                        route.openedValves.toMutableSet() + route.currentValve,
+                    ),
                 )
-            )
-            combinedResultWithClosedValve = RouteResult(
-                resultWithClosedValve.actions.toMutableList() + resultAfterClosingValve.actions,
-                resultWithClosedValve.pressureReleased + resultAfterClosingValve.pressureReleased
-            )
+            combinedResultWithClosedValve =
+                RouteResult(
+                    resultWithClosedValve.actions.toMutableList() + resultAfterClosingValve.actions,
+                    resultWithClosedValve.pressureReleased + resultAfterClosingValve.pressureReleased,
+                )
         }
 
-        val bestCombinedResultAfterMoving = route.currentValve.tunnels.map { valveMovedTo ->
-            val moveAction = Action.MoveToValve(valveMovedTo, timeRemainingAfterAction)
-            val bestRouteAfterMoving = getBestRoute(
-                Route(
-                    valveMovedTo,
-                    timeRemainingAfterAction,
-                    route.openedValves.toMutableSet()
-                )
-            )
-            RouteResult(
-                listOf(moveAction) + bestRouteAfterMoving.actions,
-                bestRouteAfterMoving.pressureReleased
-            )
-        }.maxBy { it.pressureReleased }
+        val bestCombinedResultAfterMoving =
+            route.currentValve.tunnels
+                .map { valveMovedTo ->
+                    val moveAction = Action.MoveToValve(valveMovedTo, timeRemainingAfterAction)
+                    val bestRouteAfterMoving =
+                        getBestRoute(
+                            Route(
+                                valveMovedTo,
+                                timeRemainingAfterAction,
+                                route.openedValves.toMutableSet(),
+                            ),
+                        )
+                    RouteResult(
+                        listOf(moveAction) + bestRouteAfterMoving.actions,
+                        bestRouteAfterMoving.pressureReleased,
+                    )
+                }.maxBy { it.pressureReleased }
 
         return listOfNotNull(combinedResultWithClosedValve, bestCombinedResultAfterMoving)
             .maxBy { it.pressureReleased }
@@ -101,18 +110,17 @@ object Day16 : Day() {
     data class Route(
         var currentValve: Valve = valveMap.getValue("AA"),
         var timeRemaining: Int = 30,
-        val openedValves: Set<Valve> = setOf()
+        val openedValves: Set<Valve> = setOf(),
     )
 
     data class RouteResult(
         val actions: List<Action> = mutableListOf(),
-        val pressureReleased: Int = 0
+        val pressureReleased: Long = 0,
     ) {
-        override fun toString(): String {
-            return actions.joinToString(separator = System.lineSeparator()) {
+        override fun toString(): String =
+            actions.joinToString(separator = System.lineSeparator()) {
                 "${it.timeRemainingAfterAction + 1} $it"
             } + ", pressure released: $pressureReleased"
-        }
 
         companion object {
             val EMPTY = RouteResult(emptyList(), 0)
@@ -123,14 +131,21 @@ object Day16 : Day() {
         val valve: Valve
         val timeRemainingAfterAction: Int
 
-        data class OpenValve(override val valve: Valve, override val timeRemainingAfterAction: Int) : Action {
-            fun getPressureReleased(): Int = valve.flowRate * timeRemainingAfterAction
+        data class OpenValve(
+            override val valve: Valve,
+            override val timeRemainingAfterAction: Int,
+        ) : Action {
+            fun getPressureReleased(): Long = valve.flowRate * timeRemainingAfterAction.toLong()
 
-            override fun toString(): String = "open valve ${valve.label} with flowRate ${valve.flowRate} " +
+            override fun toString(): String =
+                "open valve ${valve.label} with flowRate ${valve.flowRate} " +
                     "for ${valve.flowRate * timeRemainingAfterAction} pressure released"
         }
 
-        data class MoveToValve(override val valve: Valve, override val timeRemainingAfterAction: Int) : Action {
+        data class MoveToValve(
+            override val valve: Valve,
+            override val timeRemainingAfterAction: Int,
+        ) : Action {
             override fun toString(): String = "move to valve ${valve.label}"
         }
     }

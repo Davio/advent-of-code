@@ -1,12 +1,8 @@
 package com.github.davio.aoc.general
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
 
-fun Day.getInputReader() =
-    ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
+fun Day.getInputReader() = ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
 
 fun Day.getInputAsLine(): String = getInputReader().readLine()
 
@@ -24,7 +20,19 @@ fun Day.getInputAsLongList() = getInputAsList().map { it.toLong() }
 
 fun Day.getInputAsFlow() = getInputReader().lineSequence().asFlow()
 
-fun Day.getInputAsMatrix() = Matrix(getInputAsList().map { it.toList() })
+fun <T> Day.getInputAsMatrix(transformer: (Char) -> T): Matrix<T> =
+    Matrix(
+        getInputAsList().map {
+            it.toList().map(transformer)
+        },
+    )
+
+fun Day.getInputAsMatrix(): Matrix<Char> =
+    Matrix(
+        getInputAsList().map {
+            it.toList()
+        },
+    )
 
 fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>> {
     val iterator = this.iterator()
@@ -49,15 +57,16 @@ fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>>
 
 fun <T> List<T>.split(separatorPredicate: (T) -> Boolean): List<List<T>> {
     val buffer = mutableListOf<T>()
-    val mutableList = this.fold(mutableListOf<List<T>>()) { acc, element ->
-        if(separatorPredicate.invoke(element)) {
-            acc.add(buffer.toList())
-            buffer.clear()
-        } else {
-            buffer.add(element)
+    val mutableList =
+        this.fold(mutableListOf<List<T>>()) { acc, element ->
+            if (separatorPredicate(element)) {
+                acc.add(buffer.toList())
+                buffer.clear()
+            } else {
+                buffer.add(element)
+            }
+            acc
         }
-        acc
-    }
     if (buffer.isNotEmpty()) {
         mutableList.add(buffer.toList())
         buffer.clear()
@@ -66,22 +75,31 @@ fun <T> List<T>.split(separatorPredicate: (T) -> Boolean): List<List<T>> {
 }
 
 fun <T : Comparable<T>> Iterable<T>.top(n: Int): Iterable<T> = this.sortedDescending().take(n)
+
 fun <T : Comparable<T>> Iterable<T>.bottom(n: Int): Iterable<T> = this.sorted().take(n)
+
 fun <T : Comparable<T>> Sequence<T>.top(n: Int): Sequence<T> = this.sortedDescending().take(n)
+
 fun <T : Comparable<T>> Sequence<T>.bottom(n: Int): Sequence<T> = this.sorted().take(n)
 
 fun Day.getCallingClassResourceFile(): String {
     var callingClassName = ""
     StackWalker.getInstance().walk { stream ->
-        callingClassName = stream.filter { stackFrame ->
-            stackFrame.className.contains("Day")
-        }.findFirst().map { it.className }.orElseThrow()
+        callingClassName =
+            stream
+                .filter { stackFrame ->
+                    stackFrame.className.contains("Day")
+                }.findFirst()
+                .map {
+                    it.className
+                }.orElseThrow()
     }
     var isTest = false
     StackWalker.getInstance().walk { stream ->
-        isTest = stream.anyMatch { stackFrame ->
-            stackFrame.className.matches(Regex(""".*Day\d+Test.*"""))
-        }
+        isTest =
+            stream.anyMatch { stackFrame ->
+                stackFrame.className.matches(Regex(""".*Day\d+Test.*"""))
+            }
     }
     val classRegex = Regex("""Day(\d+)""")
     val (dayNumber) = classRegex.matchEntire(callingClassName.substringAfterLast("."))!!.destructured

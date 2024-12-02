@@ -8,7 +8,6 @@ import com.github.davio.aoc.general.getInputAsMatrix
  * See [Advent of Code 2023 Day 3](https://adventofcode.com/2023/day/3#part2])
  */
 object Day3 : Day() {
-
     private val matrix = getInputAsMatrix()
     private val numbers: MutableList<Number> = mutableListOf()
 
@@ -24,7 +23,7 @@ object Day3 : Day() {
                     }
                     sb.append(c)
                 } else if (sb.isNotEmpty()) {
-                    val number = Number(sb.toString().toInt(), start!!, Point.of(x - 1, y))
+                    val number = Number(sb.toString().toLong(), start!!, Point.of(x - 1, y))
                     numbers.add(number)
                     start = null
                     sb.clear()
@@ -32,7 +31,7 @@ object Day3 : Day() {
             }
 
             if (sb.isNotEmpty()) {
-                val number = Number(sb.toString().toInt(), start!!, Point.of(row.lastIndex, y))
+                val number = Number(sb.toString().toLong(), start!!, Point.of(row.lastIndex, y))
                 numbers.add(number)
                 start = null
                 sb.clear()
@@ -40,35 +39,42 @@ object Day3 : Day() {
         }
     }
 
-    override fun part1(): Int {
-        return numbers.filter {
-            val range = (it.start..it.end)
-            range.any { p ->
-                matrix.getAdjacentPoints(p).any { adjacent ->
-                    val c = matrix[adjacent]
-                    !c.isDigit() && c != '.'
+    override fun part1(): Long =
+        numbers
+            .filter {
+                val range = (it.start..it.end)
+                range.any { p ->
+                    matrix.getAdjacentPoints(p).any { adjacent ->
+                        val c = matrix[adjacent]
+                        !c.isDigit() && c != '.'
+                    }
                 }
-            }
-        }.sumOf { it.value }
-    }
+            }.sumOf { it.value }
 
-    override fun part2(): Int {
-        return matrix.getPoints().mapNotNull { p ->
-            if (matrix[p] != '*') null
-            else {
-                val adjacentPartNumbers = matrix.getAdjacentPoints(p).flatMap { adjacentP ->
-                    numbers.filter { adjacentP in (it.start..it.end) }
-                }.toSet()
-                if (adjacentPartNumbers.size == 2) {
-                    adjacentPartNumbers.map { it.value }.reduce { a, b  -> a * b }
-                } else null
-            }
-        }.sum()
-    }
+    override fun part2(): Long =
+        matrix
+            .getPoints()
+            .mapNotNull { p ->
+                if (matrix[p] != '*') {
+                    null
+                } else {
+                    val adjacentPartNumbers =
+                        matrix
+                            .getAdjacentPoints(p)
+                            .flatMap { adjacentP ->
+                                numbers.filter { adjacentP in (it.start..it.end) }
+                            }.toSet()
+                    if (adjacentPartNumbers.size == 2) {
+                        adjacentPartNumbers.map { it.value }.reduce { a, b -> a * b }
+                    } else {
+                        null
+                    }
+                }
+            }.sum()
 
     private data class Number(
-        val value: Int,
+        val value: Long,
         val start: Point,
-        val end: Point
+        val end: Point,
     )
 }

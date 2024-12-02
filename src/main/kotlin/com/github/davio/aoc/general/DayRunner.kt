@@ -4,10 +4,11 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
+import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-private const val YEAR = 2023
-private const val DAY = 9
+private const val YEAR = 2024
+private const val DAY = 2
 private const val RUN_PART = 2
 private const val COPY_TO_CLIPBOARD = true
 
@@ -20,13 +21,19 @@ fun main() {
     }
 }
 
-private fun runPart(kClass: KClass<out Any>, partFunction: (Day) -> Any, partNumber: Int) {
+@OptIn(ExperimentalTime::class)
+private fun runPart(
+    kClass: KClass<out Any>,
+    partFunction: (Day) -> Any,
+    partNumber: Int,
+) {
     val result: Any
     val day = (if (kClass.objectInstance != null) kClass.objectInstance else kClass.createInstance()) as Day
 
-    val time = measureTime {
-        result = partFunction.invoke(day)
-    }
+    val time =
+        measureTime {
+            result = partFunction.invoke(day)
+        }
 
     if (COPY_TO_CLIPBOARD) {
         val contents = StringSelection(result.toString())

@@ -1,9 +1,9 @@
-package com.github.davio.aoc.y2023
+package com.github.davio.aoc.y2024
 
 import com.github.davio.aoc.general.Day
 
 /**
- * See [Advent of Code 2023 Day X](https://adventofcode.com/2023/day/0)
+ * See [Advent of Code 2024 Day X](https://adventofcode.com/2024/day/0)
  */
 class Day0(
     exampleNumber: Int? = null,

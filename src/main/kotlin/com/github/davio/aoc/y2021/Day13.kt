@@ -15,7 +15,6 @@ fun main() {
 }
 
 object Day13 : Day() {
-
     /*
     --- Day 13: Transparent Origami ---
 
@@ -127,14 +126,14 @@ The instructions made a square!
 The transparent paper is pretty big, so for now, focus on just completing the first fold. After the first fold in the example above, 17 dots are visible - dots that end up overlapping after the fold is completed count as a single dot.
 
 How many dots are visible after completing just the first fold instruction on your transparent paper?
-    */
+     */
 
     private val originalPaper = TransparentPaper()
     private val foldInstructions = mutableListOf<FoldInstruction>()
     private val dotPattern = Regex("(\\d+),(\\d+)")
     private val foldInstructionPattern = Regex("fold along ([yx])=(\\d+)")
 
-    fun parseInput() {
+    override fun parseInput() {
         var parsingDots = true
 
         getInputAsList().forEach { line ->
@@ -149,14 +148,14 @@ How many dots are visible after completing just the first fold instruction on yo
             } else {
                 val (axis, indexStr) = foldInstructionPattern.matchEntire(line)!!.destructured
                 val index = indexStr.toInt()
-                val foldInstruction: FoldInstruction = if (axis == "y") {
-                    FoldInstruction(alongY = index)
-                } else {
-                    FoldInstruction(alongX = index)
-                }
+                val foldInstruction: FoldInstruction =
+                    if (axis == "y") {
+                        FoldInstruction(alongY = index)
+                    } else {
+                        FoldInstruction(alongX = index)
+                    }
                 foldInstructions.add(foldInstruction)
             }
-
         }
 
         println(originalPaper)
@@ -177,7 +176,7 @@ How many dots are visible after completing just the first fold instruction on yo
 Finish folding the transparent paper according to the instructions. The manual says the code is always eight capital letters.
 
 What code do you use to activate the infrared thermal imaging camera system?
-    */
+     */
 
     fun getResultPart2() {
         var paper = originalPaper
@@ -189,10 +188,12 @@ What code do you use to activate the infrared thermal imaging camera system?
     }
 
     private class TransparentPaper {
-
         val grid: MutableList<MutableList<Boolean>> = mutableListOf(mutableListOf(false))
 
-        fun markPoint(dot: Point, isDot: Boolean = true) {
+        fun markPoint(
+            dot: Point,
+            isDot: Boolean = true,
+        ) {
             val x = dot.x
             val y = dot.y
             val maxX = getMaxX()
@@ -225,6 +226,7 @@ What code do you use to activate the infrared thermal imaging camera system?
         }
 
         private fun getMaxX() = grid.firstOrNull()?.lastIndex ?: -1
+
         private fun getMaxY() = grid.lastIndex
 
         override fun toString(): String {
@@ -239,15 +241,17 @@ What code do you use to activate the infrared thermal imaging camera system?
         }
     }
 
-    private data class FoldInstruction(val alongY: Int = 0, val alongX: Int = 0) {
-
+    private data class FoldInstruction(
+        val alongY: Int = 0,
+        val alongX: Int = 0,
+    ) {
         fun fold(paper: TransparentPaper): TransparentPaper {
-
-            val foldedPaper = if (alongY != 0) {
-                foldPaperAlongY(paper)
-            } else {
-                foldPaperAlongX(paper)
-            }
+            val foldedPaper =
+                if (alongY != 0) {
+                    foldPaperAlongY(paper)
+                } else {
+                    foldPaperAlongX(paper)
+                }
 
             return foldedPaper
         }

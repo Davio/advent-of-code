@@ -14,7 +14,6 @@ fun main() {
 }
 
 object Day16 : Day() {
-
     /*
 --- Day 16: Packet Decoder ---
 
@@ -109,18 +108,20 @@ Here are a few more examples of hexadecimal-encoded transmissions:
     A0016C880162017C3686B18A3D4780 is an operator packet that contains an operator packet that contains an operator packet that contains five literal values; it has a version sum of 31.
 
 Decode the structure of your hexadecimal-encoded BITS transmission; what do you get if you add up the version numbers in all packets?
-    */
+     */
     private const val boldRedColor = "\u001B[31m\u001B[1m"
     private const val boldGreenColor = "\u001B[32m\u001B[1m"
     private const val ansiReset = "\u001B[0m"
 
     private lateinit var packet: Packet
 
-    fun parseInput() {
-        val binaryString = getInputAsList()[0].map { hexChar ->
-            val intVal = hexChar.digitToInt(16)
-            intVal.toString(2).padStart(4, '0')
-        }.joinToString("")
+    override fun parseInput() {
+        val binaryString =
+            getInputAsList()[0]
+                .map { hexChar ->
+                    val intVal = hexChar.digitToInt(16)
+                    intVal.toString(2).padStart(4, '0')
+                }.joinToString("")
         println(binaryString)
 
         packet = Packet.parse(binaryString)
@@ -160,18 +161,23 @@ For example:
     9C0141080250320F1802104A08 produces 1, because 1 + 3 = 2 * 2.
 
 What do you get if you evaluate the expression represented by your hexadecimal-encoded BITS transmission?
-    */
+     */
 
     fun getResultPart2() {
         println(packet.getValueTotal())
     }
 
-    private sealed class Packet(val version: Int, val size: Int = 0) {
-
+    private sealed class Packet(
+        val version: Int,
+        val size: Int = 0,
+    ) {
         companion object {
-
             fun parse(binaryString: String): Packet {
-                println("Parsing $boldRedColor${binaryString.take(3)}$boldGreenColor${binaryString.drop(3).take(3)}$ansiReset${binaryString.drop(6)} as Packet")
+                println(
+                    "Parsing $boldRedColor${binaryString.take(
+                        3,
+                    )}$boldGreenColor${binaryString.drop(3).take(3)}$ansiReset${binaryString.drop(6)} as Packet",
+                )
 
                 val packetVersion = binaryString.take(3).toInt(2)
                 val packetTypeId = binaryString.drop(3).take(3).toInt(2)
@@ -187,24 +193,31 @@ What do you get if you evaluate the expression represented by your hexadecimal-e
         }
 
         abstract fun getVersionTotal(): Int
+
         abstract fun getValueTotal(): Long
     }
 
-    private class Constant(version: Int, val value: Long, size: Int) : Packet(version, size) {
-
+    private class Constant(
+        version: Int,
+        val value: Long,
+        size: Int,
+    ) : Packet(version, size) {
         companion object {
-
-            fun parseConstant(version: Int, remainingPacket: String): Constant {
+            fun parseConstant(
+                version: Int,
+                remainingPacket: String,
+            ): Constant {
                 println("Parsing $remainingPacket as Constant")
 
                 var canTakeWindow = true
-                val constantValueBinarySegments = remainingPacket
-                    .windowed(5, 5)
-                    .takeWhile {
-                        val couldTakeWindow = canTakeWindow
-                        canTakeWindow = it[0] == '1'
-                        couldTakeWindow
-                    }
+                val constantValueBinarySegments =
+                    remainingPacket
+                        .windowed(5, 5)
+                        .takeWhile {
+                            val couldTakeWindow = canTakeWindow
+                            canTakeWindow = it[0] == '1'
+                            couldTakeWindow
+                        }
 
                 println("Constant bits ${constantValueBinarySegments.joinToString("")}")
                 val valueString = constantValueBinarySegments.joinToString("") { it.drop(1) }
@@ -214,30 +227,34 @@ What do you get if you evaluate the expression represented by your hexadecimal-e
             }
         }
 
-        override fun getVersionTotal(): Int {
-            return version
-        }
+        override fun getVersionTotal(): Int = version
 
-        override fun getValueTotal(): Long {
-            return value
-        }
+        override fun getValueTotal(): Long = value
 
-        override fun toString(): String {
-            return this.value.toString()
-        }
+        override fun toString(): String = this.value.toString()
     }
 
-    private sealed class Operator(version: Int, size: Int, val subPackets: List<Packet>) : Packet(version, size) {
-
+    private sealed class Operator(
+        version: Int,
+        size: Int,
+        val subPackets: List<Packet>,
+    ) : Packet(version, size) {
         companion object {
-
-            fun parseOperator(version: Int, remainingPacket: String, typeId: Int): Operator {
+            fun parseOperator(
+                version: Int,
+                remainingPacket: String,
+                typeId: Int,
+            ): Operator {
                 val lengthTypeId = remainingPacket[0]
                 println("Length type ID $lengthTypeId")
                 val size: Int
                 val subPackets: List<Packet>
                 if (lengthTypeId == '0') {
-                    println("Parsing $boldRedColor${remainingPacket.take(1)}$boldGreenColor${remainingPacket.drop(1).take(15)}$ansiReset${remainingPacket.drop(16)} as Operator")
+                    println(
+                        "Parsing $boldRedColor${remainingPacket.take(
+                            1,
+                        )}$boldGreenColor${remainingPacket.drop(1).take(15)}$ansiReset${remainingPacket.drop(16)} as Operator",
+                    )
                     val totalLengthInBits = remainingPacket.drop(1).take(15).toInt(2)
                     println("Length bits = ${remainingPacket.drop(1).take(15)}")
                     println("Total length = $totalLengthInBits")
@@ -245,14 +262,18 @@ What do you get if you evaluate the expression represented by your hexadecimal-e
                     subPackets = parseSubpacketsString(subPacketsString, totalLengthInBits)
                     size = 22 + totalLengthInBits
                 } else {
-                    println("Parsing $boldRedColor${remainingPacket.take(1)}$boldRedColor${remainingPacket.drop(1).take(11)}$ansiReset${remainingPacket.drop(12)} as Operator")
+                    println(
+                        "Parsing $boldRedColor${remainingPacket.take(
+                            1,
+                        )}$boldRedColor${remainingPacket.drop(1).take(11)}$ansiReset${remainingPacket.drop(12)} as Operator",
+                    )
                     val numberOfSubPackets = remainingPacket.drop(1).take(11).toInt(2)
                     val subPacketsString = remainingPacket.drop(12)
                     subPackets = parseRemainingSubpackets(subPacketsString, numberOfSubPackets)
                     size = 18 + subPackets.sumOf { it.size }
                 }
 
-                return when(typeId) {
+                return when (typeId) {
                     0 -> Sum(version, size, subPackets)
                     1 -> Product(version, size, subPackets)
                     2 -> Min(version, size, subPackets)
@@ -264,7 +285,10 @@ What do you get if you evaluate the expression represented by your hexadecimal-e
                 }
             }
 
-            private fun parseSubpacketsString(subPacketsString: String, totalLengthInBits: Int): List<Packet> {
+            private fun parseSubpacketsString(
+                subPacketsString: String,
+                totalLengthInBits: Int,
+            ): List<Packet> {
                 println("Parsing $totalLengthInBits bits as subpackets from $subPacketsString")
                 val subpackets = mutableListOf<Packet>()
                 var subpacketsSize = 0
@@ -277,11 +301,14 @@ What do you get if you evaluate the expression represented by your hexadecimal-e
                 return subpackets
             }
 
-            private fun parseRemainingSubpackets(subPacketsString: String, totalNumberOfSubPackets: Int): List<Packet> {
+            private fun parseRemainingSubpackets(
+                subPacketsString: String,
+                totalNumberOfSubPackets: Int,
+            ): List<Packet> {
                 println("Parsing $totalNumberOfSubPackets subpackets from $subPacketsString")
                 val subpackets = mutableListOf<Packet>()
                 var subpacketsSize = 0
-                repeat (totalNumberOfSubPackets) {
+                repeat(totalNumberOfSubPackets) {
                     val subpacket = parse(subPacketsString.substring(subpacketsSize))
                     println("Subpacket size = ${subpacket.size}")
                     subpackets.add(subpacket)
@@ -292,63 +319,67 @@ What do you get if you evaluate the expression represented by your hexadecimal-e
             }
         }
 
-        override fun getVersionTotal(): Int {
-            return version + subPackets.sumOf { it.getVersionTotal() }
-        }
+        override fun getVersionTotal(): Int = version + subPackets.sumOf { it.getVersionTotal() }
 
-        override fun toString(): String {
-            return version.toString() + ": " + subPackets.size
-        }
+        override fun toString(): String = version.toString() + ": " + subPackets.size
     }
 
-    private class Sum(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return subPackets.sumOf { it.getValueTotal() }
-        }
+    private class Sum(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long = subPackets.sumOf { it.getValueTotal() }
     }
 
-    private class Product(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return subPackets.fold(1) { acc, packet ->
+    private class Product(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long =
+            subPackets.fold(1) { acc, packet ->
                 acc * packet.getValueTotal()
             }
-        }
     }
 
-    private class Min(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return subPackets.minOf { it.getValueTotal() }
-        }
+    private class Min(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long = subPackets.minOf { it.getValueTotal() }
     }
 
-    private class Max(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return subPackets.maxOf { it.getValueTotal() }
-        }
+    private class Max(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long = subPackets.maxOf { it.getValueTotal() }
     }
 
-    private class GreaterThan(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return if (subPackets[0].getValueTotal() > subPackets[1].getValueTotal()) 1 else 0
-        }
+    private class GreaterThan(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long = if (subPackets[0].getValueTotal() > subPackets[1].getValueTotal()) 1 else 0
     }
 
-    private class LessThan(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return if (subPackets[0].getValueTotal() < subPackets[1].getValueTotal()) 1 else 0
-        }
+    private class LessThan(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long = if (subPackets[0].getValueTotal() < subPackets[1].getValueTotal()) 1 else 0
     }
 
-    private class Equal(version: Int, size: Int, subPackets: List<Packet>): Operator(version, size, subPackets) {
-
-        override fun getValueTotal(): Long {
-            return if (subPackets[0].getValueTotal() == subPackets[1].getValueTotal()) 1 else 0
-        }
+    private class Equal(
+        version: Int,
+        size: Int,
+        subPackets: List<Packet>,
+    ) : Operator(version, size, subPackets) {
+        override fun getValueTotal(): Long = if (subPackets[0].getValueTotal() == subPackets[1].getValueTotal()) 1 else 0
     }
 }

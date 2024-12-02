@@ -14,7 +14,6 @@ fun main() {
 }
 
 object Day12 : Day() {
-
     /*
     --- Day 12: Passage Pathing ---
 
@@ -116,18 +115,19 @@ pj-fs
 start-RW
 
 How many paths through this cave system are there that visit small caves at most once?
-    */
+     */
 
     private val startCave = Cave("start")
     private val endCave = Cave("end")
     private var numberOfRoutes = 0
 
-    private val caveMap: MutableMap<String, Cave> = mutableMapOf(
-        "start" to startCave,
-        "end" to endCave
-    )
+    private val caveMap: MutableMap<String, Cave> =
+        mutableMapOf(
+            "start" to startCave,
+            "end" to endCave,
+        )
 
-    fun parseInput() {
+    override fun parseInput() {
         getInputAsList().forEach { line ->
             val lineParts = line.split("-")
             val leftCaveName = lineParts[0]
@@ -145,16 +145,20 @@ How many paths through this cave system are there that visit small caves at most
         println(numberOfRoutes)
     }
 
-    private fun getRoutesPart1(originalCave: Cave = startCave, currentRoute: MutableList<Cave> = mutableListOf(startCave)) {
+    private fun getRoutesPart1(
+        originalCave: Cave = startCave,
+        currentRoute: MutableList<Cave> = mutableListOf(startCave),
+    ) {
         if (originalCave == endCave) {
             println(currentRoute.joinToString(",") { it.name })
             numberOfRoutes++
             return
         }
 
-        val cavesToVisit = originalCave.connectedCaves.filter { potentialCave ->
-            (potentialCave.isBig || !currentRoute.contains(potentialCave))
-        }
+        val cavesToVisit =
+            originalCave.connectedCaves.filter { potentialCave ->
+                (potentialCave.isBig || !currentRoute.contains(potentialCave))
+            }
 
         if (cavesToVisit.isEmpty()) {
             return
@@ -214,7 +218,7 @@ start,b,end
 The slightly larger example above now has 103 paths through it, and the even larger example now has 3509 paths through it.
 
 Given these new rules, how many paths through this cave system are there?
-    */
+     */
 
     fun getResultPart2() {
         numberOfRoutes = 0
@@ -223,15 +227,19 @@ Given these new rules, how many paths through this cave system are there?
         println(numberOfRoutes)
     }
 
-    private fun getRoutesPart2(originalCave: Cave = startCave, currentRoute: MutableList<Cave> = mutableListOf(startCave)) {
+    private fun getRoutesPart2(
+        originalCave: Cave = startCave,
+        currentRoute: MutableList<Cave> = mutableListOf(startCave),
+    ) {
         if (originalCave == endCave) {
             numberOfRoutes++
             return
         }
 
-        val cavesToVisit = originalCave.connectedCaves.filter { potentialCave ->
-            potentialCave != startCave && (potentialCave.isBig || canVisitSmallCave(potentialCave, currentRoute))
-        }
+        val cavesToVisit =
+            originalCave.connectedCaves.filter { potentialCave ->
+                potentialCave != startCave && (potentialCave.isBig || canVisitSmallCave(potentialCave, currentRoute))
+            }
 
         if (cavesToVisit.isEmpty()) {
             return
@@ -244,7 +252,10 @@ Given these new rules, how many paths through this cave system are there?
         }
     }
 
-    private fun canVisitSmallCave(potentialCave: Cave, currentRoute: List<Cave>): Boolean {
+    private fun canVisitSmallCave(
+        potentialCave: Cave,
+        currentRoute: List<Cave>,
+    ): Boolean {
         if (!currentRoute.contains(potentialCave)) {
             return true
         }
@@ -252,8 +263,10 @@ Given these new rules, how many paths through this cave system are there?
         return !currentRoute.filter { cave -> !cave.isBig }.groupBy { it.name }.any { entry -> entry.value.size == 2 }
     }
 
-    data class Cave(val name: String, val isBig: Boolean = name.all { it.isUpperCase() }) {
-
+    data class Cave(
+        val name: String,
+        val isBig: Boolean = name.all { it.isUpperCase() },
+    ) {
         val connectedCaves: MutableList<Cave> = mutableListOf()
 
         fun connectToCave(other: Cave) {

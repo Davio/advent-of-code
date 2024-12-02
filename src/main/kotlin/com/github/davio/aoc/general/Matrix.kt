@@ -1,20 +1,27 @@
 package com.github.davio.aoc.general
 
-data class Matrix<T>(val data: List<List<T>>) {
-
+data class Matrix<T>(
+    val data: List<List<T>>,
+) {
     val maxX: Int = data.lastIndex
     val maxY: Int = data[0].lastIndex
 
     val rows: List<List<T>> get() = data.toList()
     val columns: List<List<T>>
-        get() = data[0].indices.map { x ->
-            data.indices.map { y ->
-                data[y][x]
-            }.toList()
-        }
+        get() =
+            data[0].indices.map { x ->
+                data.indices
+                    .map { y ->
+                        data[y][x]
+                    }.toList()
+            }
 
-    operator fun get(x: Int, y: Int) : T = data[y][x]
-    operator fun get(p: Point) : T = data[p.y][p.x]
+    operator fun get(
+        x: Int,
+        y: Int,
+    ): T = data[ y][x]
+
+    operator fun get(p: Point): T = data[p.y][p.x]
 
     fun getAdjacentPoints(p: Point): Sequence<Point> {
         if (data.isEmpty()) return emptySequence()
@@ -59,5 +66,5 @@ data class Matrix<T>(val data: List<List<T>>) {
         }
     }
 
-    override fun toString(): String = data.joinToString(separator = System.lineSeparator()) { it.joinToString(separator = " ")}
+    override fun toString(): String = data.joinToString(separator = System.lineSeparator()) { it.joinToString(separator = " ") }
 }

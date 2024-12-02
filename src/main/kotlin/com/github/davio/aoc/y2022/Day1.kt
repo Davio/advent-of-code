@@ -9,19 +9,16 @@ import com.github.davio.aoc.general.top
  * See [Advent of Code 2022 Day 1](https://adventofcode.com/2022/day/1#part2])
  */
 object Day1 : Day() {
-
     override fun part1() =
         getInputAsSequence()
             .split(String::isBlank)
-            .map { it.sumOf(String::toInt) }
+            .map { it.sumOf(String::toLong) }
             .max()
-            .toString()
 
     override fun part2() =
         getInputAsSequence()
             .split(String::isBlank)
-            .map { it.sumOf(String::toInt) }
+            .map { it.sumOf(String::toLong) }
             .top(3)
             .sum()
-            .toString()
 }

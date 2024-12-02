@@ -16,19 +16,32 @@ fun main() {
  * See [Advent of Code 2022 Day 5](https://adventofcode.com/2022/day/5#part2])
  */
 object Day5 : Day() {
+    private lateinit var input: Pair<List<MutableList<String>>, List<Move>>
 
-    private data class Move(val amount: Int, val from: Int, val to: Int)
+    private data class Move(
+        val amount: Int,
+        val from: Int,
+        val to: Int,
+    )
 
-    private fun parseInput(): Pair<List<MutableList<String>>, List<Move>> {
-        val parts = getInputAsSequence()
-            .split(String::isBlank)
-            .toList()
+    override fun parseInput() {
+        val parts =
+            getInputAsSequence()
+                .split(String::isBlank)
+                .toList()
         val stackLines = parts.first()
-        val noOfColumns = stackLines.last().split(" ").last().toInt()
+        val noOfColumns =
+            stackLines
+                .last()
+                .split(" ")
+                .last()
+                .toInt()
 
-        val stacks = (0 until noOfColumns).map {
-            mutableListOf<String>()
-        }.toList()
+        val stacks =
+            (0 until noOfColumns)
+                .map {
+                    mutableListOf<String>()
+                }.toList()
 
         stackLines.take(stackLines.size - 1).forEach { line ->
             repeat(noOfColumns) { columnNo ->
@@ -44,16 +57,17 @@ object Day5 : Day() {
         }
 
         val moveRegex = Regex("""move (\d+) from (\d+) to (\d+)""")
-        val moves = parts.last().map { line ->
-            val (amount, from, to) = moveRegex.matchEntire(line)!!.destructured
-            Move(amount.toInt(), from.toInt(), to.toInt())
-        }
+        val moves =
+            parts.last().map { line ->
+                val (amount, from, to) = moveRegex.matchEntire(line)!!.destructured
+                Move(amount.toInt(), from.toInt(), to.toInt())
+            }
 
-        return stacks to moves
+        input = stacks to moves
     }
 
     fun getResultPart1(): String {
-        val (stacks, moves) = parseInput()
+        val (stacks, moves) = input
 
         fun moveCrates(move: Move) {
             repeat(move.amount) {
@@ -66,7 +80,7 @@ object Day5 : Day() {
     }
 
     fun getResultPart2(): String {
-        val (stacks, moves) = parseInput()
+        val (stacks, moves) = input
 
         fun moveCrates(move: Move) {
             val fromStack = stacks[move.from - 1]

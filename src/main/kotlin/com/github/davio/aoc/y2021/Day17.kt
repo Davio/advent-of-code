@@ -15,7 +15,6 @@ fun main() {
 }
 
 object Day17 : Day() {
-
     /*
 --- Day 17: Trick Shot ---
 
@@ -124,14 +123,14 @@ If you're going to fire a highly scientific probe out of a super cool probe laun
 In the above example, using an initial velocity of 6,9 is the best you can do, causing the probe to reach a maximum y position of 45. (Any higher initial y velocity causes the probe to overshoot the target area entirely.)
 
 Find the initial velocity that causes the probe to reach the highest y position and still eventually be within the target area after any step. What is the highest y position it reaches on this trajectory?
-    */
+     */
 
-    private const val numberPattern = "(-?\\d+)"
-    private val inputPattern = Regex("target area: x=$numberPattern..$numberPattern, y=$numberPattern..$numberPattern")
+    private const val NUMBER_PATTERN = "(-?\\d+)"
+    private val inputPattern = Regex("target area: x=$NUMBER_PATTERN..$NUMBER_PATTERN, y=$NUMBER_PATTERN..$NUMBER_PATTERN")
     private lateinit var xRange: IntRange
     private lateinit var yRange: IntRange
 
-    fun parseInput() {
+    override fun parseInput() {
         val line = getInputAsList()[0]
         val (x1, x2, y1, y2) = inputPattern.matchEntire(line)!!.destructured
         xRange = (x1.toInt()..x2.toInt())
@@ -187,7 +186,7 @@ In the above example, there are 112 different initial velocity values that meet 
 8,-2    27,-8   30,-5   24,-7
 
 How many distinct initial velocity values cause the probe to be within the target area after any step?
-    */
+     */
 
     fun getResultPart2() {
         var numberOfVelocities = 0
@@ -208,8 +207,9 @@ How many distinct initial velocity values cause the probe to be within the targe
         println(numberOfVelocities)
     }
 
-    private data class Probe(var velocity: Point) {
-
+    private data class Probe(
+        var velocity: Point,
+    ) {
         var point = Point.of(0, 0)
 
         fun doStep(): Probe {
@@ -222,9 +222,7 @@ How many distinct initial velocity values cause the probe to be within the targe
             return Probe(Point.of(0, velocity.y - 1))
         }
 
-        fun isInTargetArea(): Boolean {
-            return xRange.contains(point.x) && yRange.contains(point.y)
-        }
+        fun isInTargetArea(): Boolean = xRange.contains(point.x) && yRange.contains(point.y)
 
         fun hasOvershotOrReachedTargetArea(): Boolean {
             if (isInTargetArea()) {

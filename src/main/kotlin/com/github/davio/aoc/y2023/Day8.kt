@@ -7,8 +7,9 @@ import com.github.davio.aoc.general.lcm
 /**
  * See [Advent of Code 2023 Day 8](https://adventofcode.com/2023/day/8#part2])
  */
-class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
-
+class Day8(
+    exampleNumber: Int? = null,
+) : Day(exampleNumber) {
     private val input = getInputAsList()
     private val directions = input[0].map { it == 'L' }
     private var elementsMap = mutableMapOf<String, Element>()
@@ -28,8 +29,8 @@ class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
         elements = elementsMap.values.filterNot { it == it.left && it.left == it.right }.toList()
     }
 
-    override fun part1(): Int {
-        var steps = 0
+    override fun part1(): Long {
+        var steps = 0L
         var currentElement = elements.first { it.id == ("AAA") }
 
         directions.forEach { direction ->
@@ -44,13 +45,14 @@ class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
         return -1
     }
 
-    override fun part2(): Long {
-        return elements.filter { it.isStartElement }.map {
-            getCycleLength(it)
-        }.reduce { acc, l ->
-            lcm(acc, l)
-        }
-    }
+    override fun part2(): Long =
+        elements
+            .filter { it.isStartElement }
+            .map {
+                getCycleLength(it)
+            }.reduce { acc, l ->
+                lcm(acc, l)
+            }
 
     private fun getCycleLength(element: Element): Long {
         var stepsToEnd = 0L
@@ -58,15 +60,18 @@ class Day8(exampleNumber: Int? = null) : Day(exampleNumber) {
 
         while (!currentElement.isEndElement) {
             stepsToEnd += directions.size
-            currentElement = directions.fold(currentElement) { acc, d ->
-                if (d) acc.left else acc.right
-            }
+            currentElement =
+                directions.fold(currentElement) { acc, d ->
+                    if (d) acc.left else acc.right
+                }
         }
 
         return stepsToEnd
     }
 
-    private data class Element(val id: String) {
+    private data class Element(
+        val id: String,
+    ) {
         val isStartElement = id.endsWith('A')
         val isEndElement = id.endsWith('Z')
 

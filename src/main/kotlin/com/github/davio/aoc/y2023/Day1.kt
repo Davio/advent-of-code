@@ -6,26 +6,38 @@ import com.github.davio.aoc.general.getInputAsList
 /**
  * See [Advent of Code 2023 Day 1](https://adventofcode.com/2023/day/1#part2])
  */
-class Day1(exampleNumber: Int? = null) : Day(exampleNumber) {
-
+class Day1(
+    exampleNumber: Int? = null,
+) : Day(exampleNumber) {
     override fun part1() =
         getInputAsList().sumOf { line ->
-            line.filter { c -> c.isDigit() }.let { 10 * it.first().digitToInt() + it.last().digitToInt() }
+            line.filter { c -> c.isDigit() }.let { 10L * it.first().digitToInt() + it.last().digitToInt() }
         }
 
-    override fun part2() =
-        getInputAsList().sumOf { line -> 10 * getFirstDigit(line) + getLastDigit(line) }
+    override fun part2() = getInputAsList().sumOf { line -> 10L * getFirstDigit(line) + getLastDigit(line) }
 
-    private val digitWords = listOf(
-        "one", "two", "three", "four", "five",
-        "six", "seven", "eight", "nine"
-    )
+    private val digitWords =
+        listOf(
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+        )
     private val digitWordsReversed = digitWords.map { it.reversed() }
 
     private fun getFirstDigit(line: String): Int = getDigit(line, digitWords)
+
     private fun getLastDigit(line: String): Int = getDigit(line.reversed(), digitWordsReversed)
 
-    private fun getDigit(line: String, words: List<String>): Int {
+    private fun getDigit(
+        line: String,
+        words: List<String>,
+    ): Int {
         var buffer = ""
         var expectedChars = words.map { it.first() }.toSet()
 
@@ -38,7 +50,8 @@ class Day1(exampleNumber: Int? = null) : Day(exampleNumber) {
             }
 
             buffer += c
-            expectedChars = words.filter { it.startsWith(buffer) }.mapNotNull { it.drop(buffer.length).firstOrNull() }.toSet()
+            expectedChars =
+                words.filter { it.startsWith(buffer) }.mapNotNull { it.drop(buffer.length).firstOrNull() }.toSet()
             if (expectedChars.isEmpty()) {
                 return words.indexOf(buffer) + 1
             }
