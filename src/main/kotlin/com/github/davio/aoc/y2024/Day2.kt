@@ -50,7 +50,7 @@ class Day2(
         return levels
             .zipWithNext()
             .all { (l, r) ->
-                val diff = if (increasing) (r - l) else (l - r)
+                val diff = if (increasing) r - l else l - r
                 diff in (1..3)
             }
     }
