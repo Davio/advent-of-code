@@ -26,7 +26,7 @@ class Day4(
 
     //region part 1
     private fun findXmases(point: Point): Int =
-        sequenceOf(
+        arrayOf(
             isXmasHorizontal(point),
             isXmasHorizontalBackwards(point),
             isXmasVertical(point),
