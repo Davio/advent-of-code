@@ -8,7 +8,11 @@ import com.github.davio.aoc.general.Day
 class Day0(
     exampleNumber: Int? = null,
 ) : Day(exampleNumber) {
-    override fun part1() = 0L
+    override fun part1(): Long {
+        return 0L
+    }
 
-    override fun part2() = 0L
+    override fun part2(): Long {
+        return 0L
+    }
 }

@@ -8,7 +8,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 private const val YEAR = 2024
-private const val DAY = 3
+private const val DAY = 4
 private const val RUN_PART = 2
 private const val COPY_TO_CLIPBOARD = true
 

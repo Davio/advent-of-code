@@ -15,6 +15,8 @@ value class Point(
 
     operator fun minus(other: Point) = of(x - other.x, y - other.y)
 
+    operator fun times(n: Int) = of(x * n, y * n)
+
     fun up() = up(1)
 
     fun down() = down(1)
@@ -66,9 +68,18 @@ value class Point(
         fun of(
             x: Int,
             y: Int,
-        ) = Point(x to y)
+        ) = if (x == 0 && y == 0) ZERO else Point(x to y)
 
-        val ZERO = of(0, 0)
+        val RIGHT = Vector.of(1, 0)
+        val LEFT = Vector.of(-1, 0)
+        val UP = Vector.of(0, -1)
+        val DOWN = Vector.of(0, 1)
+        val RIGHT_DOWN = Vector.of(1, 1)
+        val RIGHT_UP = Vector.of(1, -1)
+        val LEFT_DOWN = Vector.of(-1, 1)
+        val LEFT_UP = Vector.of(-1, -1)
+
+        val ZERO = Point(0 to 0)
     }
 }
 
