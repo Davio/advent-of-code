@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2024
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import com.github.davio.aoc.general.splitToLongByWhitespace
 
 private typealias Levels = List<Long>
@@ -57,7 +57,7 @@ class Day2(
 
     override fun parseInput() {
         reports =
-            getInputAsList().map {
+            getInputAsLines().map {
                 it.splitToLongByWhitespace()
             }
     }

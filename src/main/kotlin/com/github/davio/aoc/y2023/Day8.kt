@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2023
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import com.github.davio.aoc.general.lcm
 
 /**
@@ -10,7 +10,7 @@ import com.github.davio.aoc.general.lcm
 class Day8(
     exampleNumber: Int? = null,
 ) : Day(exampleNumber) {
-    private val input = getInputAsList()
+    private val input = getInputAsLines()
     private val directions = input[0].map { it == 'L' }
     private var elementsMap = mutableMapOf<String, Element>()
     private val elements: List<Element>

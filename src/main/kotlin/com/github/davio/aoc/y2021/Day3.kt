@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import java.util.function.BiPredicate
 import kotlin.math.pow
 
@@ -11,7 +11,6 @@ fun main() {
 }
 
 object Day3 : Day() {
-
     /*
 --- Day 3: Binary Diagnostic ---
 
@@ -50,7 +49,7 @@ Use the binary numbers in your diagnostic report to calculate the gamma rate and
      */
 
     fun getResultPart1() {
-        val input = getInputAsList()
+        val input = getInputAsLines()
         val lineLength = input[0].length
         val numberOfOnes = IntArray(lineLength)
         input.forEach {
@@ -62,9 +61,13 @@ Use the binary numbers in your diagnostic report to calculate the gamma rate and
         }
 
         val halfSize = input.size / 2
-        val gamma = numberOfOnes.map {
-            if (it >= halfSize) '1' else '0'
-        }.toCharArray().concatToString().toInt(2)
+        val gamma =
+            numberOfOnes
+                .map {
+                    if (it >= halfSize) '1' else '0'
+                }.toCharArray()
+                .concatToString()
+                .toInt(2)
         val epsilon = gamma.inv() and 2.0.pow(lineLength).toInt() - 1
 
         println("Gamma $gamma Epsilon $epsilon")
@@ -106,9 +109,9 @@ Then, to determine the CO2 scrubber rating value from the same example above:
 Finally, to find the life support rating, multiply the oxygen generator rating (23) by the CO2 scrubber rating (10) to get 230.
 
 Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
-    */
+     */
     fun getResultPart2() {
-        val input = getInputAsList()
+        val input = getInputAsLines()
         var bitIndex = 0
         var oxygenCandidates = input
         var co2Candidates = input

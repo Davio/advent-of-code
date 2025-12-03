@@ -3,7 +3,7 @@ package com.github.davio.aoc.y2021
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import com.github.davio.aoc.y2021.Day19.getResultPart1
 import com.github.davio.aoc.y2021.Day19.getResultPart2
 import kotlin.math.min
@@ -17,7 +17,6 @@ fun main() {
 }
 
 object Day19 : Day() {
-
     /*
     --- Day 19: Beacon Scanner ---
 
@@ -109,14 +108,14 @@ For example, here is an arrangement of beacons as seen from a scanner in the sam
 
 By finding pairs of scanners that both see at least 12 of the same beacons, you can assemble the entire map.
 Assemble the full map of beacons. How many beacons are there?
-    */
+     */
 
     private val scanners: MutableList<Scanner> = mutableListOf()
     private val scannerRegex = Regex("--- scanner (\\d+) ---")
 
     fun getResultPart1() {
         var currentScanner = Scanner(-1)
-        getInputAsSequence().forEach { line ->
+        getInputAsLineSequence().forEach { line ->
             val matchResult = scannerRegex.matchEntire(line)
             if (matchResult != null) {
                 currentScanner = Scanner(matchResult.groups[1]!!.value.toInt())
@@ -133,8 +132,9 @@ Assemble the full map of beacons. How many beacons are there?
         }
     }
 
-    private data class Scanner(val number: Int) {
-
+    private data class Scanner(
+        val number: Int,
+    ) {
         private val beacons: MutableList<Point> = mutableListOf()
 
         fun addBeacon(point: Point) {
@@ -179,7 +179,7 @@ Assemble the full map of beacons. How many beacons are there?
     }
 
     /*
-    */
+     */
 
     fun getResultPart2() {
     }

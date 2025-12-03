@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.math.roundToLong
 import kotlin.system.measureTimeMillis
 
@@ -75,7 +75,7 @@ Apply 10 steps of pair insertion to the polymer template and find the most and l
     private var elementPairCountsMap: MutableMap<String, Long> = mutableMapOf()
 
     override fun parseInput() {
-        val inputList = getInputAsList()
+        val inputList = getInputAsLines()
         val pairInsertionRulePattern = Regex("([A-Z]+) -> ([A-Z])")
 
         startTemplate = inputList[0]

@@ -18,39 +18,47 @@ fun main() {
  * See [Advent of Code 2022 Day 9](https://adventofcode.com/2022/day/9#part2])
  */
 object Day9 : Day() {
-
-    private enum class Direction(val char: Char, val vector: Vector) {
+    private enum class Direction(
+        val char: Char,
+        val vector: Vector,
+    ) {
         UP('U', Point.of(0, 1)),
         RIGHT('R', Point.of(1, 0)),
         DOWN('D', Point.of(0, -1)),
-        LEFT('L', Point.of(-1, 0));
+        LEFT('L', Point.of(-1, 0)),
+        ;
 
         companion object {
             private val map = entries.associateBy { it.char }
+
             fun fromChar(c: Char) = map[c]!!
         }
     }
 
-    private data class Move(val direction: Direction, val amount: Int)
+    private data class Move(
+        val direction: Direction,
+        val amount: Int,
+    )
 
-    fun getResultPart1() = getInputAsSequence()
-        .map { parseMove(it) }
-        .fold(Triple(mutableSetOf(Point.ZERO), Point.ZERO, Point.ZERO)) { acc, move ->
-            var head = acc.second
-            var tail = acc.third
-            repeat(move.amount) {
-                head += move.direction.vector
-                val tailMovement = getKnotMovement(head, tail)
-                if (tailMovement != Vector.ZERO) {
-                    tail += tailMovement
-                    acc.first.add(tail)
+    fun getResultPart1() =
+        getInputAsLineSequence()
+            .map { parseMove(it) }
+            .fold(Triple(mutableSetOf(Point.ZERO), Point.ZERO, Point.ZERO)) { acc, move ->
+                var head = acc.second
+                var tail = acc.third
+                repeat(move.amount) {
+                    head += move.direction.vector
+                    val tailMovement = getKnotMovement(head, tail)
+                    if (tailMovement != Vector.ZERO) {
+                        tail += tailMovement
+                        acc.first.add(tail)
+                    }
                 }
-            }
-            Triple(acc.first, head, tail)
-        }.first.size
+                Triple(acc.first, head, tail)
+            }.first.size
 
     fun getResultPart2() =
-        getInputAsSequence()
+        getInputAsLineSequence()
             .map { parseMove(it) }
             .fold(Pair(mutableSetOf(Point.ZERO), MutableList(10) { Point.ZERO })) { acc, move ->
                 val knots = acc.second
@@ -68,7 +76,10 @@ object Day9 : Day() {
 
     private fun parseMove(line: String) = line.split(" ").let { Move(Direction.fromChar(it[0][0]), it[1].toInt()) }
 
-    private fun getKnotMovement(knotInFront: Point, knot: Point): Vector {
+    private fun getKnotMovement(
+        knotInFront: Point,
+        knot: Point,
+    ): Vector {
         if (knotInFront == knot || (abs(knotInFront.x - knot.x) <= 1 && abs(knotInFront.y - knot.y) <= 1)) return Vector.ZERO
         return Point.of((knotInFront.x - knot.x).sign, (knotInFront.y - knot.y).sign)
     }

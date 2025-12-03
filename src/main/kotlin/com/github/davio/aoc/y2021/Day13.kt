@@ -3,7 +3,7 @@ package com.github.davio.aoc.y2021
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -136,7 +136,7 @@ How many dots are visible after completing just the first fold instruction on yo
     override fun parseInput() {
         var parsingDots = true
 
-        getInputAsList().forEach { line ->
+        getInputAsLines().forEach { line ->
             if (parsingDots) {
                 if (line.isBlank()) {
                     parsingDots = false

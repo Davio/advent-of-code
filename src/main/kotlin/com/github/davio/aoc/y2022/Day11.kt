@@ -14,14 +14,13 @@ fun main() {
  * See [Advent of Code 2022 Day 11](https://adventofcode.com/2022/day/11#part2])
  */
 object Day11 : Day() {
-
     data class Monkey(
         val number: Int,
         val items: ArrayDeque<Long>,
         val operation: (Long) -> Long,
         val testNumber: Long,
         val trueMonkeyNumber: Int,
-        val falseMonkeyNumber: Int
+        val falseMonkeyNumber: Int,
     ) : Comparable<Monkey> {
         var numberOfInspections: Int = 0
 
@@ -29,10 +28,11 @@ object Day11 : Day() {
     }
 
     fun getResultPart1(): Long {
-        val monkeyMap = getInputAsSequence()
-            .split { it.isBlank() }
-            .map { parseMonkey(it) }
-            .associateBy { it.number }
+        val monkeyMap =
+            getInputAsLineSequence()
+                .split { it.isBlank() }
+                .map { parseMonkey(it) }
+                .associateBy { it.number }
 
         val numberOfRounds = 20
         repeat(numberOfRounds) {
@@ -42,21 +42,27 @@ object Day11 : Day() {
                     monkey.numberOfInspections++
                     val newWorryLevel = (monkey.operation.invoke(worryLevel)) / 3L
                     val newMonkeyNumber =
-                        if (newWorryLevel % monkey.testNumber == 0L)
+                        if (newWorryLevel % monkey.testNumber == 0L) {
                             monkey.trueMonkeyNumber
-                        else monkey.falseMonkeyNumber
+                        } else {
+                            monkey.falseMonkeyNumber
+                        }
                     monkeyMap[newMonkeyNumber]!!.items.addLast(newWorryLevel)
                 } while (true)
             }
         }
-        return monkeyMap.values.top(2).map { it.numberOfInspections.toLong() }.reduce(Long::times)
+        return monkeyMap.values
+            .top(2)
+            .map { it.numberOfInspections.toLong() }
+            .reduce(Long::times)
     }
 
     fun getResultPart2(): Long {
-        val monkeyMap = getInputAsSequence()
-            .split { it.isBlank() }
-            .map { parseMonkey(it) }
-            .associateBy { it.number }
+        val monkeyMap =
+            getInputAsLineSequence()
+                .split { it.isBlank() }
+                .map { parseMonkey(it) }
+                .associateBy { it.number }
 
         val lcm = monkeyMap.values.map { it.testNumber }.reduce { acc, n -> lcm(acc, n) }
         val numberOfRounds = 10000
@@ -71,7 +77,10 @@ object Day11 : Day() {
                 } while (true)
             }
         }
-        return monkeyMap.values.top(2).map { it.numberOfInspections.toLong() }.reduce(Long::times)
+        return monkeyMap.values
+            .top(2)
+            .map { it.numberOfInspections.toLong() }
+            .reduce(Long::times)
     }
 
     private val monkeyLine1Regex = Regex("Monkey (\\d+):")
@@ -85,18 +94,20 @@ object Day11 : Day() {
         val number = findFirstGroup(monkeyLine1Regex, lines[0]).toInt()
         val startingItems =
             ArrayDeque(findFirstGroup(monkeyLine2Regex, lines[1]).split(", ").map { it.toLong() })
-        val operation = monkeyLine3Regex.find(lines[2])!!.destructured.let { (operatorStr, operand) ->
-            val operator: (Long, Long) -> Long = when (operatorStr) {
-                "+" -> Long::plus
-                "*" -> Long::times
-                else -> throw IllegalArgumentException()
+        val operation =
+            monkeyLine3Regex.find(lines[2])!!.destructured.let { (operatorStr, operand) ->
+                val operator: (Long, Long) -> Long =
+                    when (operatorStr) {
+                        "+" -> Long::plus
+                        "*" -> Long::times
+                        else -> throw IllegalArgumentException()
+                    }
+                if (operand == "old") {
+                    { n1: Long -> operator.invoke(n1, n1) }
+                } else {
+                    { n1: Long -> operator.invoke(n1, operand.toLong()) }
+                }
             }
-            if (operand == "old") {
-                { n1: Long -> operator.invoke(n1, n1) }
-            } else {
-                { n1: Long -> operator.invoke(n1, operand.toLong()) }
-            }
-        }
         val testNumber = findFirstGroup(monkeyLine4Regex, lines[3]).toLong()
         val trueAction = findFirstGroup(monkeyLine5Regex, lines[4]).toInt()
         val falseAction = findFirstGroup(monkeyLine6Regex, lines[5]).toInt()
@@ -104,5 +115,8 @@ object Day11 : Day() {
         return Monkey(number, startingItems, operation, testNumber, trueAction, falseAction)
     }
 
-    private fun findFirstGroup(regex: Regex, s: String) = regex.find(s)!!.groupValues[1]
+    private fun findFirstGroup(
+        regex: Regex,
+        s: String,
+    ) = regex.find(s)!!.groupValues[1]
 }

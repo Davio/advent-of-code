@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2024
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import com.github.davio.aoc.general.splitToLongByWhitespace
 import kotlin.math.abs
 
@@ -46,9 +46,9 @@ class Day1(
 
     override fun parseInput() {
         val pairs =
-            getInputAsList().map {
+            getInputAsLines().map {
                 val (l, r) = it.splitToLongByWhitespace()
-                l.toLong() to r.toLong()
+                l to r
             }
         left = LongArray(pairs.size)
         right = LongArray(pairs.size)

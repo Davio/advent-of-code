@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day10 : Day() {
-
     /*
     --- Day 10: Syntax Scoring ---
 
@@ -74,37 +73,41 @@ was found once (1197 points), and an illegal > was found once (25137 points).
 So, the total syntax error score for this file is 6+57+1197+25137 = 26397 points!
 
 Find the first illegal character in each corrupted line of the navigation subsystem. What is the total syntax error score for those errors?
-    */
+     */
 
     private val openingChars = listOf('(', '[', '{', '<')
     private val closingChars = listOf(')', ']', '}', '>')
-    private val illegalCharPoints = mapOf(
-        ')' to 3,
-        ']' to 57,
-        '}' to 1197,
-        '>' to 25137
-    )
+    private val illegalCharPoints =
+        mapOf(
+            ')' to 3,
+            ']' to 57,
+            '}' to 1197,
+            '>' to 25137,
+        )
 
     fun getResultPart1() {
-        getInputAsSequence().map { line ->
-            val stack = ArrayDeque<Char>()
+        getInputAsLineSequence()
+            .map { line ->
+                val stack = ArrayDeque<Char>()
 
-            line.firstOrNull { c ->
-                if (openingChars.contains(c)) {
-                    stack.addLast(c)
-                    false
-                } else {
-                    val previousOpeningChar = stack.removeLast()
-                    val expectedClosingChar = closingChars[openingChars.indexOf(previousOpeningChar)]
-                    if (expectedClosingChar != c) {
-                        println("$line - Expected $expectedClosingChar, but found $c instead.")
-                        true
-                    } else {
-                        false
-                    }
-                }
-            }?.let { illegalCharPoints[it] } ?: 0
-        }.sum().call { println(it) }
+                line
+                    .firstOrNull { c ->
+                        if (openingChars.contains(c)) {
+                            stack.addLast(c)
+                            false
+                        } else {
+                            val previousOpeningChar = stack.removeLast()
+                            val expectedClosingChar = closingChars[openingChars.indexOf(previousOpeningChar)]
+                            if (expectedClosingChar != c) {
+                                println("$line - Expected $expectedClosingChar, but found $c instead.")
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                    }?.let { illegalCharPoints[it] } ?: 0
+            }.sum()
+            .call { println(it) }
     }
 
     /*
@@ -150,47 +153,57 @@ The five lines' completion strings have total scores as follows:
 Autocomplete tools are an odd bunch: the winner is found by sorting all of the scores and then taking the middle score. (There will always be an odd number of scores to consider.) In this example, the middle score is 288957 because there are the same number of scores smaller and larger than it.
 
 Find the completion string for each incomplete line, score the completion strings, and sort the scores. What is the middle score?
-    */
+     */
 
-    private val syntaxCompletionCharPoints = mapOf(
-        ')' to 1L,
-        ']' to 2L,
-        '}' to 3L,
-        '>' to 4L
-    )
+    private val syntaxCompletionCharPoints =
+        mapOf(
+            ')' to 1L,
+            ']' to 2L,
+            '}' to 3L,
+            '>' to 4L,
+        )
 
     fun getResultPart2() {
-        val scores = getInputAsSequence().map { line ->
-            val stack = ArrayDeque<Char>()
+        val scores =
+            getInputAsLineSequence()
+                .map { line ->
+                    val stack = ArrayDeque<Char>()
 
-            val hasIllegalChar = line.any { c ->
-                if (openingChars.contains(c)) {
-                    stack.addLast(c)
-                    false
-                } else {
-                    val previousOpeningChar = stack.removeLast()
-                    val expectedClosingChar = closingChars[openingChars.indexOf(previousOpeningChar)]
-                    expectedClosingChar != c
-                }
-            }
+                    val hasIllegalChar =
+                        line.any { c ->
+                            if (openingChars.contains(c)) {
+                                stack.addLast(c)
+                                false
+                            } else {
+                                val previousOpeningChar = stack.removeLast()
+                                val expectedClosingChar = closingChars[openingChars.indexOf(previousOpeningChar)]
+                                expectedClosingChar != c
+                            }
+                        }
 
-            Syntax(line, hasIllegalChar, if (hasIllegalChar) ArrayDeque() else stack)
-        }.filter { syntax ->
-            !syntax.hasIllegalChar && syntax.stack.isNotEmpty()
-        }.map { syntax ->
-            val stack = syntax.stack
-            val points = stack.reversed().fold(0L) { acc, c ->
-                val closingChar = closingChars[openingChars.indexOf(c)]
-                print(closingChar)
-                val completionCharPoints = syntaxCompletionCharPoints[closingChar]!!
-                acc * 5L + completionCharPoints
-            }
-            println(" - $points total points.")
-            points
-        }.sorted().toList()
+                    Syntax(line, hasIllegalChar, if (hasIllegalChar) ArrayDeque() else stack)
+                }.filter { syntax ->
+                    !syntax.hasIllegalChar && syntax.stack.isNotEmpty()
+                }.map { syntax ->
+                    val stack = syntax.stack
+                    val points =
+                        stack.reversed().fold(0L) { acc, c ->
+                            val closingChar = closingChars[openingChars.indexOf(c)]
+                            print(closingChar)
+                            val completionCharPoints = syntaxCompletionCharPoints[closingChar]!!
+                            acc * 5L + completionCharPoints
+                        }
+                    println(" - $points total points.")
+                    points
+                }.sorted()
+                .toList()
 
         println(scores[scores.size / 2])
     }
 
-    private data class Syntax(val line: String, val hasIllegalChar: Boolean, val stack: ArrayDeque<Char>)
+    private data class Syntax(
+        val line: String,
+        val hasIllegalChar: Boolean,
+        val stack: ArrayDeque<Char>,
+    )
 }

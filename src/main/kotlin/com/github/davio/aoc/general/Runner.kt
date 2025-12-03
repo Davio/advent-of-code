@@ -2,19 +2,23 @@ package com.github.davio.aoc.general
 
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.time.temporal.ChronoUnit
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
+import kotlin.time.toJavaDuration
+import kotlin.time.toKotlinDuration
 
-private const val YEAR = 2024
-private const val DAY = 4
-private const val RUN_PART = 2
+private const val TYPE = "y2025"
+private const val PREFIX = "Day"
+private const val INSTANCE = 3
+private const val PART = 2
 private const val COPY_TO_CLIPBOARD = true
 
 fun main() {
-    val kClass = Class.forName("com.github.davio.aoc.y$YEAR.Day$DAY").kotlin
-    if (RUN_PART == 1) {
+    val kClass = Class.forName("com.github.davio.aoc.$TYPE.$PREFIX$INSTANCE").kotlin
+    if (PART == 1) {
         runPart(kClass, Day::part1, 1)
     } else {
         runPart(kClass, Day::part2, 2)
@@ -33,7 +37,7 @@ private fun runPart(
     val time =
         measureTime {
             result = partFunction.invoke(day)
-        }
+        }.toJavaDuration().truncatedTo(ChronoUnit.MILLIS).toKotlinDuration()
 
     if (COPY_TO_CLIPBOARD) {
         val contents = StringSelection(result.toString())

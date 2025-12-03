@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import com.github.davio.aoc.general.split
 import com.github.davio.aoc.general.top
 
@@ -10,13 +10,13 @@ import com.github.davio.aoc.general.top
  */
 object Day1 : Day() {
     override fun part1() =
-        getInputAsSequence()
+        getInputAsLineSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toLong) }
             .max()
 
     override fun part2() =
-        getInputAsSequence()
+        getInputAsLineSequence()
             .split(String::isBlank)
             .map { it.sumOf(String::toLong) }
             .top(3)

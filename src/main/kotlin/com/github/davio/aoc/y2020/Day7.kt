@@ -2,14 +2,13 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 fun main() {
     Day7.getResult()
 }
 
 object Day7 : Day() {
-
     /*
      * --- Day 7: Handy Haversacks ---
 
@@ -83,7 +82,7 @@ How many individual bags are required inside your single shiny gold bag?
      */
 
     fun getResult() {
-        val lines = getInputAsList()
+        val lines = getInputAsLines()
         val bags = HashMap<String, Bag>(lines.size)
 
         lines.forEach { line ->
@@ -95,8 +94,9 @@ How many individual bags are required inside your single shiny gold bag?
         bags[myColor]!!.getNumberOfIndividualBags().call { println(it) }
     }
 
-    data class Bag(private val color: String) {
-
+    data class Bag(
+        private val color: String,
+    ) {
         private val otherBags: MutableMap<Bag, Int> = hashMapOf()
 
         fun addOtherBag(otherBag: Pair<Bag, Int>) {
@@ -127,12 +127,14 @@ How many individual bags are required inside your single shiny gold bag?
         }
 
         companion object {
-
             private val noOtherBagsRegex = Regex("(.+) bags contain no other bags\\.")
             private val otherBagsRegex = Regex("(.+) bags contain .+\\.")
             private val otherBagsPerBagRegex = Regex("(\\d+) ([a-z ]+) bags?")
 
-            fun parse(rule: String, currentBags: MutableMap<String, Bag>) {
+            fun parse(
+                rule: String,
+                currentBags: MutableMap<String, Bag>,
+            ) {
                 val color: String
                 val noOtherBagsMatcher = noOtherBagsRegex.matchEntire(rule)
 
@@ -145,7 +147,8 @@ How many individual bags are required inside your single shiny gold bag?
                 val otherBagsMatcher = otherBagsRegex.matchEntire(rule)!!
                 color = otherBagsMatcher.groups[1]!!.value
                 val bag = getOrCreateBag(currentBags, color)
-                otherBagsPerBagRegex.findAll(rule)
+                otherBagsPerBagRegex
+                    .findAll(rule)
                     .forEach {
                         val otherBag = getOrCreateBag(currentBags, it.groupValues[2])
                         bag.addOtherBag(Pair(otherBag, it.groupValues[1].toInt()))
@@ -153,10 +156,12 @@ How many individual bags are required inside your single shiny gold bag?
                 currentBags[color] = bag
             }
 
-            private fun getOrCreateBag(currentBags: MutableMap<String, Bag>, otherBagColor: String) =
-                currentBags.computeIfAbsent(otherBagColor) {
-                    Bag(otherBagColor)
-                }
+            private fun getOrCreateBag(
+                currentBags: MutableMap<String, Bag>,
+                otherBagColor: String,
+            ) = currentBags.computeIfAbsent(otherBagColor) {
+                Bag(otherBagColor)
+            }
         }
     }
 }

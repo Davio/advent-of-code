@@ -6,30 +6,33 @@ fun Day.getInputReader() = ClassLoader.getSystemResourceAsStream(getCallingClass
 
 fun Day.getInputAsLine(): String = getInputReader().readLine()
 
-fun Day.getInputAsList(): List<String> = getInputReader().readLines()
+fun Day.getInputAsLines(): List<String> = getInputReader().readLines()
 
-fun Day.getInputAsSequence(): Sequence<String> = getInputReader().lineSequence()
+fun Day.getInputAsLineSequence(): Sequence<String> = getInputReader().lineSequence()
 
-fun Day.getInputAsIntSequence() = getInputAsSequence().map { it.toInt() }
+fun Day.getInputAsIntSequence() = getInputAsLineSequence().map { it.toInt() }
 
-fun Day.getInputAsIntList() = getInputAsList().map { it.toInt() }
+fun Day.getInputAsIntList() = getInputAsLines().map { it.toInt() }
 
-fun Day.getInputAsLongSequence() = getInputAsSequence().map { it.toLong() }
+fun Day.getInputAsLongSequence() = getInputAsLineSequence().map { it.toLong() }
 
-fun Day.getInputAsLongList() = getInputAsList().map { it.toLong() }
+fun Day.getInputAsLongList() = getInputAsLines().map { it.toLong() }
+
+fun Day.getInputAsChunks(delimiter: String = System.lineSeparator() + System.lineSeparator()) =
+    getInputReader().readAllAsString().split(delimiter)
 
 fun Day.getInputAsFlow() = getInputReader().lineSequence().asFlow()
 
 fun <T> Day.getInputAsMatrix(transformer: (Char) -> T): Matrix<T> =
     Matrix(
-        getInputAsList().map {
+        getInputAsLines().map {
             it.toList().map(transformer)
         },
     )
 
 fun Day.getInputAsMatrix(): Matrix<Char> =
     Matrix(
-        getInputAsList().map {
+        getInputAsLines().map {
             it.toList()
         },
     )
@@ -55,7 +58,7 @@ fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>>
     }
 }
 
-fun <T> List<T>.split(separatorPredicate: (T) -> Boolean): List<List<T>> {
+fun <T> List<T>.split(separatorPredicate: (T) -> Boolean = { true }): List<List<T>> {
     val buffer = mutableListOf<T>()
     val mutableList =
         this.fold(mutableListOf<List<T>>()) { acc, element ->
@@ -88,7 +91,7 @@ fun Day.getCallingClassResourceFile(): String {
         callingClassName =
             stream
                 .filter { stackFrame ->
-                    stackFrame.className.contains("Day")
+                    stackFrame.className.contains("Day") || stackFrame.className.contains("P")
                 }.findFirst()
                 .map {
                     it.className
@@ -98,12 +101,12 @@ fun Day.getCallingClassResourceFile(): String {
     StackWalker.getInstance().walk { stream ->
         isTest =
             stream.anyMatch { stackFrame ->
-                stackFrame.className.matches(Regex(""".*Day\d+Test.*"""))
+                stackFrame.className.matches(Regex(""".*(Day|P)\d+Test.*"""))
             }
     }
-    val classRegex = Regex("""Day(\d+)""")
-    val (dayNumber) = classRegex.matchEntire(callingClassName.substringAfterLast("."))!!.destructured
-    val folder = callingClassName.substringBeforeLast(".").replace('.', '/') + "/day$dayNumber"
+    val classRegex = Regex("""(Day|P)(\d+)""")
+    val (name, dayNumber) = classRegex.matchEntire(callingClassName.substringAfterLast("."))!!.destructured
+    val folder = callingClassName.substringBeforeLast(".").replace('.', '/') + "/${name.lowercase()}$dayNumber"
     val fileName = if (!isTest) "input" else "example" + (exampleNumber?.let { "-$it" } ?: "")
     return "$folder/$fileName.txt"
 }

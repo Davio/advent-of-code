@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 
 fun main() {
     Day3.getResultPart1()
@@ -10,7 +10,6 @@ fun main() {
 }
 
 object Day3 : Day() {
-
     /*
      * --- Day 3: Toboggan Trajectory ---
 
@@ -73,8 +72,8 @@ object Day3 : Day() {
     In this example, traversing the map using this slope would cause you to encounter 7 trees.
 
     Starting at the top-left corner of your map and following a slope of right 3 and down 1, how many trees would you encounter?
-    *
-    * --- Part Two ---
+     *
+     * --- Part Two ---
 
     Time to check the rest of the slopes - you need to minimize the probability of a sudden arboreal stop, after all.
 
@@ -95,28 +94,40 @@ object Day3 : Day() {
     fun getResultPart1() {
         var index = 0
 
-        getInputAsSequence()
+        getInputAsLineSequence()
             .count {
                 val hasTree = hasTreeAtIndex(it, index)
                 index = calculateNewIndex(it, index)
                 hasTree
-            }
-            .call { println(it) }
+            }.call { println(it) }
     }
 
-    private fun calculateNewIndex(line: String, index: Int, slopeMovementRight: Int = 3): Int {
+    private fun calculateNewIndex(
+        line: String,
+        index: Int,
+        slopeMovementRight: Int = 3,
+    ): Int {
         val length = line.length
         return (index + slopeMovementRight) % length
     }
 
-    private fun hasTreeAtIndex(line: String, index: Int) = line[index] == '#'
+    private fun hasTreeAtIndex(
+        line: String,
+        index: Int,
+    ) = line[index] == '#'
 
-    private val slopes = sequenceOf(
-        Pair(1, 1), Pair(3, 1), Pair(5, 1), Pair(7, 1), Pair(1, 2)
-    )
+    private val slopes =
+        sequenceOf(
+            Pair(1, 1),
+            Pair(3, 1),
+            Pair(5, 1),
+            Pair(7, 1),
+            Pair(1, 2),
+        )
 
     fun getResultPart2() {
-        slopes.map { slope -> getTreesForSlope(slope).toLong() }
+        slopes
+            .map { slope -> getTreesForSlope(slope).toLong() }
             .reduce { acc, i -> acc * i }
             .call { println(it) }
     }
@@ -125,13 +136,12 @@ object Day3 : Day() {
         var index = 0
         var linePos = 0
 
-        return getInputAsSequence()
+        return getInputAsLineSequence()
             .filter {
                 val shouldProcess = linePos % slope.second == 0
                 linePos++
                 shouldProcess
-            }
-            .count {
+            }.count {
                 val hasTree = hasTreeAtIndex(it, index)
                 index = calculateNewIndex(it, index, slope.first)
                 hasTree

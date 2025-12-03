@@ -2,8 +2,8 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
+import com.github.davio.aoc.general.getInputAsLines
 import java.lang.System.lineSeparator
 
 fun main() {
@@ -11,7 +11,6 @@ fun main() {
 }
 
 object Day11 : Day() {
-
     /*
      * --- Day 10: Adapter Array ---
 
@@ -239,11 +238,11 @@ Again, at this point, people stop shifting around and the seating area reaches e
 Given the new visibility method and the rule change for occupied seats becoming empty, once equilibrium is reached, how many seats end up occupied?
      */
 
-    private val inputList = getInputAsList()
+    private val inputList = getInputAsLines()
     private val seatingLayout = SeatingLayout(inputList.size)
 
     fun getResult() {
-        getInputAsSequence().forEach {
+        getInputAsLineSequence().forEach {
             seatingLayout.parseLine(it)
         }
         seatingLayout.processSeating()
@@ -251,8 +250,9 @@ Given the new visibility method and the rule change for occupied seats becoming 
         println(seatingLayout.getNumberOfOccupiedSeats())
     }
 
-    private class SeatingLayout(listSize: Int) {
-
+    private class SeatingLayout(
+        listSize: Int,
+    ) {
         private val layout: MutableList<MutableList<PositionType>> = ArrayList(listSize)
         private val positionsToChange = hashMapOf<PositionType, MutableList<Pair<Int, Int>>>()
 
@@ -301,44 +301,67 @@ Given the new visibility method and the rule change for occupied seats becoming 
             processSeating()
         }
 
-        private fun shouldBeOccupied(row: Int, col: Int, positionType: PositionType): Boolean {
-            return positionType == PositionType.EMPTY && getVisibleSeats(row, col).all { it == PositionType.EMPTY }
-        }
+        private fun shouldBeOccupied(
+            row: Int,
+            col: Int,
+            positionType: PositionType,
+        ): Boolean =
+            positionType == PositionType.EMPTY &&
+                getVisibleSeats(row, col).all {
+                    it == PositionType.EMPTY
+                }
 
-        private fun shouldBeEmptied(row: Int, col: Int, positionType: PositionType): Boolean {
-            return positionType == PositionType.OCCUPIED && getVisibleSeats(row, col).count { it == PositionType.OCCUPIED } >= 5
-        }
+        private fun shouldBeEmptied(
+            row: Int,
+            col: Int,
+            positionType: PositionType,
+        ): Boolean =
+            positionType == PositionType.OCCUPIED && getVisibleSeats(row, col).count {
+                it == PositionType.OCCUPIED
+            } >= 5
 
         @Suppress("unused")
-        private fun getAdjacentSeats(myRow: Int, myCol: Int): List<PositionType> {
+        private fun getAdjacentSeats(
+            myRow: Int,
+            myCol: Int,
+        ): List<PositionType> {
             val startRow = myRow - 1
             val endRow = myRow + 1
             val startCol = myCol - 1
             val endCol = myCol + 1
 
             return (startRow..endRow).flatMap { rowIndex ->
-                (startCol..endCol).filter { colIndex ->
-                    rowIndex in (0..layout.lastIndex)
-                            && colIndex in (0..layout[0].lastIndex)
-                            && !(rowIndex == myRow && colIndex == myCol)
-                            && layout[rowIndex][colIndex] != PositionType.FLOOR
-                }.map { col ->
-                    layout[rowIndex][col]
-                }
+                (startCol..endCol)
+                    .filter { colIndex ->
+                        rowIndex in (0..layout.lastIndex) &&
+                            colIndex in (0..layout[0].lastIndex) &&
+                            !(rowIndex == myRow && colIndex == myCol) &&
+                            layout[rowIndex][colIndex] != PositionType.FLOOR
+                    }.map { col ->
+                        layout[rowIndex][col]
+                    }
             }
         }
 
-        private fun getVisibleSeats(myRow: Int, myCol: Int): List<PositionType> {
-            return (-1..1).flatMap { rowDirection ->
-                (-1..1).filter { colDirection ->
-                    !(rowDirection == 0 && colDirection == 0)
-                }.mapNotNull { colDirection ->
-                    getFirstVisibleSeat(myRow, myCol, rowDirection, colDirection)
-                }
+        private fun getVisibleSeats(
+            myRow: Int,
+            myCol: Int,
+        ): List<PositionType> =
+            (-1..1).flatMap { rowDirection ->
+                (-1..1)
+                    .filter { colDirection ->
+                        !(rowDirection == 0 && colDirection == 0)
+                    }.mapNotNull { colDirection ->
+                        getFirstVisibleSeat(myRow, myCol, rowDirection, colDirection)
+                    }
             }
-        }
 
-        private fun getFirstVisibleSeat(myRow: Int, myCol: Int, rowDirection: Int, colDirection: Int): PositionType? {
+        private fun getFirstVisibleSeat(
+            myRow: Int,
+            myCol: Int,
+            rowDirection: Int,
+            colDirection: Int,
+        ): PositionType? {
             var row = myRow + rowDirection
             var col = myCol + colDirection
 
@@ -355,26 +378,31 @@ Given the new visibility method and the rule change for occupied seats becoming 
             return null
         }
 
-        fun getNumberOfOccupiedSeats() = layout.fold(0) { acc, row ->
-            acc + row.count { positionType -> positionType == PositionType.OCCUPIED }
-        }
+        fun getNumberOfOccupiedSeats() =
+            layout.fold(0) { acc, row ->
+                acc + row.count { positionType -> positionType == PositionType.OCCUPIED }
+            }
 
-        override fun toString(): String {
-            return layout.fold("") { acc, row ->
+        override fun toString(): String =
+            layout.fold("") { acc, row ->
                 acc + getRowString(row)
             }
-        }
 
-        private fun getRowString(row: MutableList<PositionType>) = row.joinToString(
-            separator = "",
-            postfix = lineSeparator(),
-            transform = { positionType -> positionType.char.toString() })
+        private fun getRowString(row: MutableList<PositionType>) =
+            row.joinToString(
+                separator = "",
+                postfix = lineSeparator(),
+                transform = { positionType -> positionType.char.toString() },
+            )
     }
 
-    private enum class PositionType(val char: Char) {
+    private enum class PositionType(
+        val char: Char,
+    ) {
         EMPTY('L'),
         OCCUPIED('#'),
-        FLOOR('.');
+        FLOOR('.'),
+        ;
 
         companion object {
             fun fromChar(c: Char) = values().first { it.char == c }

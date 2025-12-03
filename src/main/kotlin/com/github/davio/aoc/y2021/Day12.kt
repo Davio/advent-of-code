@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -128,7 +128,7 @@ How many paths through this cave system are there that visit small caves at most
         )
 
     override fun parseInput() {
-        getInputAsList().forEach { line ->
+        getInputAsLines().forEach { line ->
             val lineParts = line.split("-")
             val leftCaveName = lineParts[0]
             val rightCaveName = lineParts[1]

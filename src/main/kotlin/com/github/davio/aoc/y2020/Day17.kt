@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import java.lang.System.lineSeparator
 import kotlin.system.measureTimeMillis
 
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day17 : Day() {
-
     /*
      * --- Day 17: Conway Cubes ---
 
@@ -431,7 +430,7 @@ Starting with your given initial configuration, simulate six cycles in a 4-dimen
 * How many cubes are left in the active state after the sixth cycle?
      */
 
-    private val input = getInputAsList()
+    private val input = getInputAsLines()
 
     private val cubes = hashMapOf<Point4D, Boolean>()
     private val cubesToChange = hashMapOf<Point4D, Boolean>()
@@ -473,52 +472,57 @@ Starting with your given initial configuration, simulate six cycles in a 4-dimen
         minW--
         maxW++
 
-        (--minX..++maxX).flatMap { x ->
-            (minY..maxY).flatMap { y ->
-                (minZ..maxZ).flatMap { z ->
-                    (minY..maxY).map { w ->
-                        Point4D(x, y, z, w)
+        (--minX..++maxX)
+            .flatMap { x ->
+                (minY..maxY).flatMap { y ->
+                    (minZ..maxZ).flatMap { z ->
+                        (minY..maxY).map { w ->
+                            Point4D(x, y, z, w)
+                        }
                     }
                 }
-            }
-        }.forEach {
-            if (!cubes.containsKey(it)) {
-                cubes[it] = false
-            }
+            }.forEach {
+                if (!cubes.containsKey(it)) {
+                    cubes[it] = false
+                }
 
-            val numberOfActiveNeighbors = getNumberOfActiveNeighbors(it)
-            if (cubes[it]!! && numberOfActiveNeighbors !in (2..3)) {
-                cubesToChange[it] = false
-            } else if (!cubes[it]!! && numberOfActiveNeighbors == 3) {
-                cubesToChange[it] = true
+                val numberOfActiveNeighbors = getNumberOfActiveNeighbors(it)
+                if (cubes[it]!! && numberOfActiveNeighbors !in (2..3)) {
+                    cubesToChange[it] = false
+                } else if (!cubes[it]!! && numberOfActiveNeighbors == 3) {
+                    cubesToChange[it] = true
+                }
             }
-        }
 
         cubesToChange.forEach { cubes[it.key] = it.value }
     }
 
-    private fun getNeighbors(point: Point4D): List<Point4D> {
-        return ((point.x - 1)..(point.x + 1)).flatMap { x ->
+    private fun getNeighbors(point: Point4D): List<Point4D> =
+        ((point.x - 1)..(point.x + 1)).flatMap { x ->
             ((point.y - 1)..(point.y + 1)).flatMap { y ->
                 ((point.z - 1)..(point.z + 1)).flatMap { z ->
-                    ((point.w - 1)..(point.w + 1)).filterNot { w ->
-                        x == point.x && y == point.y && z == point.z && w == point.w
-                    }.map { w ->
-                        val neighbor = Point4D(x, y, z, w)
-                        neighbor
-                    }
+                    ((point.w - 1)..(point.w + 1))
+                        .filterNot { w ->
+                            x == point.x && y == point.y && z == point.z && w == point.w
+                        }.map { w ->
+                            val neighbor = Point4D(x, y, z, w)
+                            neighbor
+                        }
                 }
             }
         }
-    }
 
-    private fun getNumberOfActiveNeighbors(point: Point4D): Int {
-        return getNeighbors(point).count {
+    private fun getNumberOfActiveNeighbors(point: Point4D): Int =
+        getNeighbors(point).count {
             cubes.getOrDefault(it, false)
         }
-    }
 
-    private data class Point4D(val x: Int, val y: Int, val z: Int, val w: Int)
+    private data class Point4D(
+        val x: Int,
+        val y: Int,
+        val z: Int,
+        val w: Int,
+    )
 
     override fun toString(): String {
         var result = ""

@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2024
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 /**
  * See [Advent of Code 2024 Day 3](https://adventofcode.com/2024/day/3)
@@ -12,7 +12,7 @@ class Day3(
     private val doDontMulPattern = Regex("""(do\(\))|(don't\(\))|(mul\((\d+),(\d+)\))""")
 
     override fun part1(): Long =
-        getInputAsList().sumOf { line ->
+        getInputAsLines().sumOf { line ->
             doDontMulPattern.findAll(line).sumOf { result ->
                 multiplication(result)
             }
@@ -21,7 +21,7 @@ class Day3(
     override fun part2(): Long {
         var enabled = true
 
-        return getInputAsList().sumOf { line ->
+        return getInputAsLines().sumOf { line ->
             val matches = doDontMulPattern.findAll(line)
 
             matches.sumOf { result ->

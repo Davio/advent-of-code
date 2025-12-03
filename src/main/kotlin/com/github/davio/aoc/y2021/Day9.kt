@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day9 : Day() {
-
     /*
     --- Day 9: Smoke Basin ---
 
@@ -38,7 +37,7 @@ In the above example, there are four low points, all highlighted: two are in the
 The risk level of a low point is 1 plus its height. In the above example, the risk levels of the low points are 2, 1, 6, and 6. The sum of the risk levels of all low points in the heightmap is therefore 15.
 
 Find all of the low points on your heightmap. What is the sum of the risk levels of all low points on your heightmap?
-    */
+     */
 
     private var cave: Array<IntArray> = arrayOf()
 
@@ -47,43 +46,52 @@ Find all of the low points on your heightmap. What is the sum of the risk levels
 
     fun getResultPart1() {
         cave = getCave()
-        val lowPoints = (cave.indices).flatMap { y ->
-            val result = (cave[0].indices).filter { x ->
-                val row = cave[y]
-                val height = row[x]
-                if (height == 9 || !isMinimumHeight(height, x, y)) {
-                    print("$ansiReset$height")
-                    false
-                } else {
-                    print("$boldRedColor$height")
-                    true
-                }
-            }.map { x ->
-                cave[y][x]
+        val lowPoints =
+            (cave.indices).flatMap { y ->
+                val result =
+                    (cave[0].indices)
+                        .filter { x ->
+                            val row = cave[y]
+                            val height = row[x]
+                            if (height == 9 || !isMinimumHeight(height, x, y)) {
+                                print("$ansiReset$height")
+                                false
+                            } else {
+                                print("$boldRedColor$height")
+                                true
+                            }
+                        }.map { x ->
+                            cave[y][x]
+                        }
+                println()
+                result
             }
-            println()
-            result
-        }
         println(lowPoints)
         println(lowPoints.sum() + lowPoints.count())
     }
 
-    private fun isMinimumHeight(height: Int, x: Int, y: Int): Boolean {
-        return getNeighborHeights(x, y).all { height < it }
-    }
+    private fun isMinimumHeight(
+        height: Int,
+        x: Int,
+        y: Int,
+    ): Boolean = getNeighborHeights(x, y).all { height < it }
 
-    private fun getNeighborHeights(x: Int, y: Int): Sequence<Int> {
-        return (y - 1..y + 1).flatMap { yNeighbor ->
-            (x - 1..x + 1).filter { xNeighbor ->
-                (yNeighbor == y || xNeighbor == x)
-                        && !(yNeighbor == y && xNeighbor == x)
-                        && yNeighbor in (cave.indices)
-                        && xNeighbor in (cave[0].indices)
-            }.map { xNeighbor ->
-                cave[yNeighbor][xNeighbor]
-            }
-        }.asSequence()
-    }
+    private fun getNeighborHeights(
+        x: Int,
+        y: Int,
+    ): Sequence<Int> =
+        (y - 1..y + 1)
+            .flatMap { yNeighbor ->
+                (x - 1..x + 1)
+                    .filter { xNeighbor ->
+                        (yNeighbor == y || xNeighbor == x) &&
+                            !(yNeighbor == y && xNeighbor == x) &&
+                            yNeighbor in (cave.indices) &&
+                            xNeighbor in (cave[0].indices)
+                    }.map { xNeighbor ->
+                        cave[yNeighbor][xNeighbor]
+                    }
+            }.asSequence()
 
     /*
     --- Part Two ---
@@ -129,7 +137,7 @@ The bottom-right basin, size 9:
 Find the three largest basins and multiply their sizes together. In the above example, this is 9 * 14 * 9 = 1134.
 
 What do you get if you multiply together the sizes of the three largest basins?
-    */
+     */
 
     private var basinIndex = -1
     private val basinSizes: MutableList<Int> = mutableListOf()
@@ -138,46 +146,58 @@ What do you get if you multiply together the sizes of the three largest basins?
     fun getResultPart2() {
         cave = getCave()
         (cave.indices).forEach { y ->
-            (cave[0].indices).asSequence().filter { x ->
-                cave[y][x] != 9 && !pointsInBasins.contains(Pair(x, y))
-            }.forEach { x ->
-                addBasin(x, y)
-            }
+            (cave[0].indices)
+                .asSequence()
+                .filter { x ->
+                    cave[y][x] != 9 && !pointsInBasins.contains(Pair(x, y))
+                }.forEach { x ->
+                    addBasin(x, y)
+                }
         }
-        val largestThreeBasinSizesMultiplied = basinSizes.sortedDescending()
-            .take(3)
-            .also { println(it) }
-            .reduce { left, right -> left * right }
+        val largestThreeBasinSizesMultiplied =
+            basinSizes
+                .sortedDescending()
+                .take(3)
+                .also { println(it) }
+                .reduce { left, right -> left * right }
         println(largestThreeBasinSizesMultiplied)
     }
 
-    private fun addBasin(x: Int, y: Int) {
+    private fun addBasin(
+        x: Int,
+        y: Int,
+    ) {
         basinSizes.add(1)
         basinIndex++
         pointsInBasins.add(Pair(x, y))
         addBasinNeighbors(x, y)
     }
 
-    private fun addBasinNeighbors(x: Int, y: Int) {
+    private fun addBasinNeighbors(
+        x: Int,
+        y: Int,
+    ) {
         (y - 1..y + 1).forEach { yNeighbor ->
-            (x - 1..x + 1).asSequence().filter { xNeighbor ->
-                (yNeighbor == y || xNeighbor == x)
-                        && !(yNeighbor == y && xNeighbor == x)
-                        && yNeighbor in (cave.indices)
-                        && xNeighbor in (cave[0].indices)
-                        && cave[yNeighbor][xNeighbor] != 9
-                        && !pointsInBasins.contains(Pair(xNeighbor, yNeighbor))
-            }.forEach { xNeighbor ->
-                pointsInBasins.add(Pair(xNeighbor, yNeighbor))
-                addBasinNeighbors(xNeighbor, yNeighbor)
-                basinSizes[basinIndex]++
-            }
+            (x - 1..x + 1)
+                .asSequence()
+                .filter { xNeighbor ->
+                    (yNeighbor == y || xNeighbor == x) &&
+                        !(yNeighbor == y && xNeighbor == x) &&
+                        yNeighbor in (cave.indices) &&
+                        xNeighbor in (cave[0].indices) &&
+                        cave[yNeighbor][xNeighbor] != 9 &&
+                        !pointsInBasins.contains(Pair(xNeighbor, yNeighbor))
+                }.forEach { xNeighbor ->
+                    pointsInBasins.add(Pair(xNeighbor, yNeighbor))
+                    addBasinNeighbors(xNeighbor, yNeighbor)
+                    basinSizes[basinIndex]++
+                }
         }
     }
 
-    private fun getCave(): Array<IntArray> {
-        return getInputAsList().map { line ->
-            line.toCharArray().map { it.digitToInt() }.toIntArray()
-        }.toTypedArray()
-    }
+    private fun getCave(): Array<IntArray> =
+        getInputAsLines()
+            .map { line ->
+                line.toCharArray().map { it.digitToInt() }.toIntArray()
+            }.toTypedArray()
 }

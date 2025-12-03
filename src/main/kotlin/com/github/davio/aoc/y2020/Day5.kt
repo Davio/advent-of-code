@@ -2,8 +2,8 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
+import com.github.davio.aoc.general.getInputAsLines
 
 fun main() {
     Day5.getResultPart1()
@@ -11,7 +11,6 @@ fun main() {
 }
 
 object Day5 : Day() {
-
     /*
      * --- Day 5: Binary Boarding ---
 
@@ -77,37 +76,45 @@ What is the ID of your seat?
      */
 
     fun getResultPart1() {
-        getInputAsSequence().map {
-            BoardingPass.parse(it).getId()
-        }.maxOrNull().call {
-            println(it)
-        }
+        getInputAsLineSequence()
+            .map {
+                BoardingPass.parse(it).getId()
+            }.maxOrNull()
+            .call {
+                println(it)
+            }
     }
 
     fun getResultPart2() {
-        val possibleBoardingPassIds = (1..126)
-            .flatMap { col ->
-                (0..7)
-                    .map { row ->
-                        BoardingPass(col, row).getId()
-                    }
-            }.toMutableSet()
+        val possibleBoardingPassIds =
+            (1..126)
+                .flatMap { col ->
+                    (0..7)
+                        .map { row ->
+                            BoardingPass(col, row).getId()
+                        }
+                }.toMutableSet()
 
-        val existingBoardingPassIds = getInputAsList().map {
-            BoardingPass.parse(it).getId()
-        }.toList()
+        val existingBoardingPassIds =
+            getInputAsLines()
+                .map {
+                    BoardingPass.parse(it).getId()
+                }.toList()
 
         possibleBoardingPassIds.removeAll(existingBoardingPassIds.toSet())
 
-        possibleBoardingPassIds.first {
-            existingBoardingPassIds.contains(it + 1) && existingBoardingPassIds.contains(it - 1)
-        }.call {
-            println(it)
-        }
+        possibleBoardingPassIds
+            .first {
+                existingBoardingPassIds.contains(it + 1) && existingBoardingPassIds.contains(it - 1)
+            }.call {
+                println(it)
+            }
     }
 
-    data class BoardingPass constructor(val row: Int, val column: Int) {
-
+    data class BoardingPass constructor(
+        val row: Int,
+        val column: Int,
+    ) {
         fun getId() = row * 8 + column
 
         companion object {
@@ -117,16 +124,23 @@ What is the ID of your seat?
                 return BoardingPass(row, column)
             }
 
-            private fun getIndex(seat: String, charIndexRange: IntRange, initialRange: IntRange, charLower: Char, charUpper: Char): Int {
-                return seat.subSequence(charIndexRange).fold(initialRange) { acc, c ->
-                    val pivot = (acc.first + acc.last + 1) / 2
-                    when (c) {
-                        charLower -> acc.first until pivot
-                        charUpper -> pivot..acc.last
-                        else -> throw IllegalStateException()
-                    }
-                }.first
-            }
+            private fun getIndex(
+                seat: String,
+                charIndexRange: IntRange,
+                initialRange: IntRange,
+                charLower: Char,
+                charUpper: Char,
+            ): Int =
+                seat
+                    .subSequence(charIndexRange)
+                    .fold(initialRange) { acc, c ->
+                        val pivot = (acc.first + acc.last + 1) / 2
+                        when (c) {
+                            charLower -> acc.first until pivot
+                            charUpper -> pivot..acc.last
+                            else -> throw IllegalStateException()
+                        }
+                    }.first
         }
     }
 }

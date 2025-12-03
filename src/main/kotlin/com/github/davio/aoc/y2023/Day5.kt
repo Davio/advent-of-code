@@ -1,14 +1,13 @@
 package com.github.davio.aoc.y2023
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 /**
  * See [Advent of Code 2023 Day 5](https://adventofcode.com/2023/day/5#part2])
  */
 object Day5 : Day() {
-
-    private val input = getInputAsList()
+    private val input = getInputAsLines()
     private val seedToSoilMap: MutableList<DestinationSourceRange> = mutableListOf()
     private val soilToFertilizerMap: MutableList<DestinationSourceRange> = mutableListOf()
     private val fertilizerToWaterMap: MutableList<DestinationSourceRange> = mutableListOf()
@@ -50,16 +49,27 @@ object Day5 : Day() {
     }
 
     override fun part1(): Long {
-        val seeds = input.first().substringAfter(": ").split(' ').map { it.toLong() }
+        val seeds =
+            input
+                .first()
+                .substringAfter(": ")
+                .split(' ')
+                .map { it.toLong() }
         return seeds.minOf { getLocation(it) }
     }
 
     override fun part2(): Long {
-        val seedRanges = input.first().substringAfter(": ").split(' ').windowed(2, 2).map {
-            val rangeStart = it[0].toLong()
-            val rangeSize = it[1].toLong()
-            SeedRange(rangeStart, rangeSize)
-        }.sortedBy { it.rangeStart }
+        val seedRanges =
+            input
+                .first()
+                .substringAfter(": ")
+                .split(' ')
+                .windowed(2, 2)
+                .map {
+                    val rangeStart = it[0].toLong()
+                    val rangeSize = it[1].toLong()
+                    SeedRange(rangeStart, rangeSize)
+                }.sortedBy { it.rangeStart }
 
 //        return runBlocking(Dispatchers.Default) {
 //            seedRanges.asFlow().map { range ->
@@ -98,24 +108,31 @@ object Day5 : Day() {
         return getReverseMapping(soil, seedToSoilMap)
     }
 
-    private fun getMapping(source: Long, map: List<DestinationSourceRange>): Long {
-        return map.firstNotNullOfOrNull {
+    private fun getMapping(
+        source: Long,
+        map: List<DestinationSourceRange>,
+    ): Long =
+        map.firstNotNullOfOrNull {
             getDestinationNumber(source, it)
         } ?: source
-    }
 
-    private fun getReverseMapping(destination: Long, map: List<DestinationSourceRange>): Long {
-        return map.firstNotNullOfOrNull {
+    private fun getReverseMapping(
+        destination: Long,
+        map: List<DestinationSourceRange>,
+    ): Long =
+        map.firstNotNullOfOrNull {
             getSourceNumber(destination, it)
         } ?: destination
-    }
 
-    private fun collapseMaps(sourceMap: List<DestinationSourceRange>, destinationMap: List<DestinationSourceRange>): List<DestinationSourceRange> {
+    private fun collapseMaps(
+        sourceMap: List<DestinationSourceRange>,
+        destinationMap: List<DestinationSourceRange>,
+    ): List<DestinationSourceRange> = emptyList()
 
-        return emptyList()
-    }
-
-    private fun getDestinationNumber(source: Long, destinationSourceRange: DestinationSourceRange): Long? {
+    private fun getDestinationNumber(
+        source: Long,
+        destinationSourceRange: DestinationSourceRange,
+    ): Long? {
         if (source < destinationSourceRange.sourceRangeStart || source > destinationSourceRange.sourceRangeEnd) {
             return null
         }
@@ -124,7 +141,10 @@ object Day5 : Day() {
         return destinationSourceRange.destinationRangeStart + diff
     }
 
-    private fun getSourceNumber(destination: Long, destinationSourceRange: DestinationSourceRange): Long? {
+    private fun getSourceNumber(
+        destination: Long,
+        destinationSourceRange: DestinationSourceRange,
+    ): Long? {
         if (destination < destinationSourceRange.destinationRangeStart || destination > destinationSourceRange.destinationRangeEnd) {
             return null
         }
@@ -136,19 +156,20 @@ object Day5 : Day() {
     private data class DestinationSourceRange(
         val destinationRangeStart: Long,
         val sourceRangeStart: Long,
-        val rangeSize: Long
+        val rangeSize: Long,
     ) : Comparable<DestinationSourceRange> {
         val destinationRangeEnd = destinationRangeStart + rangeSize - 1
         val sourceRangeEnd = sourceRangeStart + rangeSize - 1
 
         override fun compareTo(other: DestinationSourceRange): Int =
-            Comparator.comparingLong<DestinationSourceRange> { it.sourceRangeStart }
+            Comparator
+                .comparingLong<DestinationSourceRange> { it.sourceRangeStart }
                 .compare(this, other)
     }
 
     private data class SeedRange(
         val rangeStart: Long,
-        val rangeSize: Long
+        val rangeSize: Long,
     ) {
         val rangeEnd = rangeStart + rangeSize - 1
 

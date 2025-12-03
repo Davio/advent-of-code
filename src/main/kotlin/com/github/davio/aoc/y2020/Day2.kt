@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 
 fun main() {
     Day2.getResultPart1()
@@ -10,7 +10,6 @@ fun main() {
 }
 
 object Day2 : Day() {
-
     /*
      * --- Day 2: Password Philosophy ---
 
@@ -40,8 +39,8 @@ object Day2 : Day() {
     The first and third passwords are valid: they contain one a or nine c, both within the limits of their respective policies.
 
     How many passwords are valid according to their policies?
-    *
-    * --- Part Two ---
+     *
+     * --- Part Two ---
 
     While it appears you validated the passwords correctly, they don't seem to be what the
     Official Toboggan Corporate Authentication System is expecting.
@@ -64,7 +63,7 @@ object Day2 : Day() {
      */
 
     fun getResultPart1() {
-        getInputAsSequence()
+        getInputAsLineSequence()
             .map { getLineParts(it) }
             .count { isResultPart1Valid(it) }
             .call { println(it) }
@@ -79,32 +78,27 @@ object Day2 : Day() {
 
     private fun splitLine(line: String) = line.split(":")
 
-    private fun isResultPart1Valid(parts: Pair<String, String>): Boolean {
-        return PasswordPolicy.parse(parts.first).checkPart1(parts.second)
-    }
+    private fun isResultPart1Valid(parts: Pair<String, String>): Boolean = PasswordPolicy.parse(parts.first).checkPart1(parts.second)
 
     fun getResultPart2() {
-        getInputAsSequence()
+        getInputAsLineSequence()
             .map { getLineParts(it) }
             .count { isResultPart2Valid(it) }
             .call { println(it) }
     }
 
-    private fun isResultPart2Valid(parts: Pair<String, String>): Boolean {
-        return PasswordPolicy.parse(parts.first).checkPart2(parts.second)
-    }
+    private fun isResultPart2Valid(parts: Pair<String, String>): Boolean = PasswordPolicy.parse(parts.first).checkPart2(parts.second)
 
     class PasswordPolicy private constructor(
         private val n1: Int,
         private val n2: Int,
-        private val char: Char
+        private val char: Char,
     ) {
         fun checkPart1(password: String) = password.count { it == char } in n1..n2
 
         fun checkPart2(password: String) = (password[n1 - 1] == char) xor (password[n2 - 1] == char)
 
         companion object {
-
             fun parse(policy: String): PasswordPolicy {
                 val policyParts = policy.split(" ")
                 val numberParts = policyParts[0].split("-")
@@ -112,7 +106,7 @@ object Day2 : Day() {
                 return PasswordPolicy(
                     numberParts[0].toInt(),
                     numberParts[1].toInt(),
-                    policyParts[1][0]
+                    policyParts[1][0],
                 )
             }
         }

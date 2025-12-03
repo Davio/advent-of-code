@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day14 : Day() {
-
     /*
      * --- Day 14: Docking Data ---
 
@@ -134,31 +133,35 @@ The entire 36-bit address space still begins initialized to the value 0 at every
 Execute the initialization program using an emulator for a version 2 decoder chip. What is the sum of all values left in memory after it completes?
      */
 
-    private val input = getInputAsSequence()
+    private val input = getInputAsLineSequence()
     private val memory = hashMapOf<String, Long>()
     private var mask: String = ""
     private val memoryPattern = Regex("""mem\[(\d+)]""")
 
     fun getResultPart1() {
-        input.map {
-            val parts = it.split(" = ")
-            Pair(parts[0], parts[1])
-        }.forEach { lineParts ->
-            val operation = lineParts.first
-            if (operation.startsWith("mask")) {
-                mask = lineParts.second
-            } else {
-                val address = memoryPattern.matchEntire(lineParts.first)!!.groupValues[1]
-                setMemory(address, lineParts.second.toLong())
+        input
+            .map {
+                val parts = it.split(" = ")
+                Pair(parts[0], parts[1])
+            }.forEach { lineParts ->
+                val operation = lineParts.first
+                if (operation.startsWith("mask")) {
+                    mask = lineParts.second
+                } else {
+                    val address = memoryPattern.matchEntire(lineParts.first)!!.groupValues[1]
+                    setMemory(address, lineParts.second.toLong())
+                }
             }
-        }
 
         memory.values.sum().call { println(it) }
     }
 
-    private fun setMemory(address: String, value: Long) {
+    private fun setMemory(
+        address: String,
+        value: Long,
+    ) {
         val valueToSetAsString = applyBitmask(value)
-        val valueToSet =  valueToSetAsString.toLong(2)
+        val valueToSet = valueToSetAsString.toLong(2)
         println("result: $valueToSetAsString (decimal $valueToSet)")
         memory[address] = valueToSet
     }
@@ -168,32 +171,43 @@ Execute the initialization program using an emulator for a version 2 decoder chi
         println("value:  $value36Bit (decimal $value)")
         println("mask:   $mask")
 
-        return value.to36BitString().mapIndexed { index, c ->
-            when (mask[index]) {
-                'X' -> c
-                else -> mask[index]
-            }
-        }.joinToString(separator = "")
+        return value
+            .to36BitString()
+            .mapIndexed { index, c ->
+                when (mask[index]) {
+                    'X' -> c
+                    else -> mask[index]
+                }
+            }.joinToString(separator = "")
     }
 
     fun getResultPart2() {
-        input.map {
-            val parts = it.split(" = ")
-            Pair(parts[0], parts[1])
-        }.forEach { lineParts ->
-            val operation = lineParts.first
-            if (operation.startsWith("mask")) {
-                mask = lineParts.second
-            } else {
-                val address = memoryPattern.matchEntire(lineParts.first)!!.groupValues[1].toLong().to36BitString()
-                setMemoryWithMask(address, lineParts.second.toLong())
+        input
+            .map {
+                val parts = it.split(" = ")
+                Pair(parts[0], parts[1])
+            }.forEach { lineParts ->
+                val operation = lineParts.first
+                if (operation.startsWith("mask")) {
+                    mask = lineParts.second
+                } else {
+                    val address =
+                        memoryPattern
+                            .matchEntire(lineParts.first)!!
+                            .groupValues[1]
+                            .toLong()
+                            .to36BitString()
+                    setMemoryWithMask(address, lineParts.second.toLong())
+                }
             }
-        }
 
         memory.values.sum().call { println(it) }
     }
 
-    private fun setMemoryWithMask(address: String, value: Long) {
+    private fun setMemoryWithMask(
+        address: String,
+        value: Long,
+    ) {
         val maskedAddress = applyBitmaskToAddress(mask, address)
 
         println("address: $address")
@@ -217,15 +231,18 @@ Execute the initialization program using an emulator for a version 2 decoder chi
         return getAddressesForMaskedAddress(maskedAddressWithZero) + getAddressesForMaskedAddress(maskedAddressWithOne)
     }
 
-    private fun applyBitmaskToAddress(modifiedMask: String, address: String): String {
-        return modifiedMask.mapIndexed { index, c ->
-            when (c) {
-                '0' -> address[index]
-                '1' -> '1'
-                else -> 'X'
-            }
-        }.joinToString(separator = "")
-    }
+    private fun applyBitmaskToAddress(
+        modifiedMask: String,
+        address: String,
+    ): String =
+        modifiedMask
+            .mapIndexed { index, c ->
+                when (c) {
+                    '0' -> address[index]
+                    '1' -> '1'
+                    else -> 'X'
+                }
+            }.joinToString(separator = "")
 
     private fun Long.to36BitString() = this.toString(2).padStart(36, '0')
 }

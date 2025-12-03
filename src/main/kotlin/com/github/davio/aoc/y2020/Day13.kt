@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day13 : Day() {
-
     /*
      * --- Day 13: Shuttle Search ---
 
@@ -146,28 +145,29 @@ However, with so many bus IDs in your list, surely the actual earliest timestamp
 What is the earliest timestamp such that all of the listed bus IDs depart at offsets matching their positions in the list?
      */
 
-    private val input = getInputAsList()
+    private val input = getInputAsLines()
     private val earliestDepartureTime = input[0].toInt()
     private val busSchedules = input[1].split(",").asSequence()
 
     fun getResultPart1() {
-        val busSchedulesWithTime = busSchedules
-            .filterNot { it == "x" }
-            .map { it.toInt() }
+        val busSchedulesWithTime =
+            busSchedules
+                .filterNot { it == "x" }
+                .map { it.toInt() }
 
         getEarliestBusAndWaitingTime(busSchedulesWithTime)
             .call { println(it.first * it.second) }
     }
 
-    private fun getEarliestBusAndWaitingTime(busSchedules: Sequence<Int>): Pair<Int, Int> {
-        return busSchedules.map {
-            val remainder = earliestDepartureTime % it
-            val waitingTime = if (remainder == 0) 0 else it - remainder
-            Pair(it, waitingTime)
-        }.minByOrNull {
-            it.second
-        }!!
-    }
+    private fun getEarliestBusAndWaitingTime(busSchedules: Sequence<Int>): Pair<Int, Int> =
+        busSchedules
+            .map {
+                val remainder = earliestDepartureTime % it
+                val waitingTime = if (remainder == 0) 0 else it - remainder
+                Pair(it, waitingTime)
+            }.minByOrNull {
+                it.second
+            }!!
 
     fun getResultPart2() {
         getDepartureTimeForAllSchedules(busSchedules)
@@ -175,12 +175,14 @@ What is the earliest timestamp such that all of the listed bus IDs depart at off
     }
 
     private fun getDepartureTimeForAllSchedules(busSchedules: Sequence<String>): Long {
-        val schedulesWithIndex = busSchedules.toList().mapIndexed { index, schedule ->
-            Pair(index, schedule)
-        }
-            .filterNot { it.second == "x" }
-            .map { Pair(it.first, it.second.toInt()) }
-            .toList()
+        val schedulesWithIndex =
+            busSchedules
+                .toList()
+                .mapIndexed { index, schedule ->
+                    Pair(index, schedule)
+                }.filterNot { it.second == "x" }
+                .map { Pair(it.first, it.second.toInt()) }
+                .toList()
 
         val sortedSchedules = listOf(schedulesWithIndex[0]) + schedulesWithIndex.drop(1).sortedByDescending { it.second }
 
@@ -190,16 +192,15 @@ What is the earliest timestamp such that all of the listed bus IDs depart at off
 
         return generateSequence(0L) {
             it + step
-        }
-            .first { departureTime ->
-                if ((departureTime + checkSchedule.first) % checkSchedule.second == 0L) {
-                    step = sortedSchedules.take(checkIndex + 1).map { it.second.toLong() }.reduce { acc, value -> acc * value }
-                    checkIndex++
-                    if (checkIndex <= sortedSchedules.lastIndex) {
-                        checkSchedule = sortedSchedules[checkIndex]
-                    }
+        }.first { departureTime ->
+            if ((departureTime + checkSchedule.first) % checkSchedule.second == 0L) {
+                step = sortedSchedules.take(checkIndex + 1).map { it.second.toLong() }.reduce { acc, value -> acc * value }
+                checkIndex++
+                if (checkIndex <= sortedSchedules.lastIndex) {
+                    checkSchedule = sortedSchedules[checkIndex]
                 }
-                checkIndex > sortedSchedules.lastIndex
             }
+            checkIndex > sortedSchedules.lastIndex
+        }
     }
 }

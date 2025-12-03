@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 
 fun main() {
     Day2.getResultPart1()
@@ -10,7 +10,6 @@ fun main() {
 }
 
 object Day2 : Day() {
-
     /*
     --- Day 2: Dive! ---
 
@@ -50,16 +49,18 @@ What do you get if you multiply your final horizontal position by your final dep
 
     fun getResultPart1() {
         var position = Point.of(0, 0)
-        getInputAsSequence().map {
-            Instruction.parse(it)
-        }.forEach {
-            val distance = it.amount
-            position += when (it.direction) {
-                Direction.FORWARD -> Point.of(distance, 0)
-                Direction.UP -> Point.of(0, -distance)
-                Direction.DOWN -> Point.of(0, distance)
+        getInputAsLineSequence()
+            .map {
+                Instruction.parse(it)
+            }.forEach {
+                val distance = it.amount
+                position +=
+                    when (it.direction) {
+                        Direction.FORWARD -> Point.of(distance, 0)
+                        Direction.UP -> Point.of(0, -distance)
+                        Direction.DOWN -> Point.of(0, distance)
+                    }
             }
-        }
         println(position.x * position.y)
     }
 
@@ -94,18 +95,20 @@ Using this new interpretation of the commands, calculate the horizontal position
 */
     fun getResultPart2() {
         val sub = Submarine()
-        getInputAsSequence().map {
-            Instruction.parse(it)
-        }.forEach {
-            sub.move(it)
-        }
+        getInputAsLineSequence()
+            .map {
+                Instruction.parse(it)
+            }.forEach {
+                sub.move(it)
+            }
         println(sub.position.x * sub.position.y)
     }
 
-    private data class Instruction(val direction: Direction, val amount: Int) {
-
+    private data class Instruction(
+        val direction: Direction,
+        val amount: Int,
+    ) {
         companion object {
-
             private val pattern = Regex("""([a-z]+) (\d+)""")
 
             fun parse(line: String): Instruction {
@@ -118,7 +121,6 @@ Using this new interpretation of the commands, calculate the horizontal position
     private enum class Direction { FORWARD, UP, DOWN }
 
     private class Submarine {
-
         var position = Point.of(0, 0)
         var aim = 0
 
@@ -127,9 +129,12 @@ Using this new interpretation of the commands, calculate the horizontal position
             if (direction == Direction.FORWARD) {
                 position += Point.of(amount, aim * amount)
             } else {
-                aim += if (direction == Direction.DOWN) {
-                    amount
-                } else -amount
+                aim +=
+                    if (direction == Direction.DOWN) {
+                        amount
+                    } else {
+                        -amount
+                    }
             }
         }
     }

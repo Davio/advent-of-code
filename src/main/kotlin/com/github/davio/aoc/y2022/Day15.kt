@@ -3,7 +3,7 @@ package com.github.davio.aoc.y2022
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -18,7 +18,6 @@ fun main() {
  * See [Advent of Code 2022 Day 15](https://adventofcode.com/2022/day/15#part2])
  */
 object Day15 : Day() {
-
     private lateinit var sensors: Set<Sensor>
     private lateinit var sensorPoints: Set<Point>
     private lateinit var beaconPoints: Set<Point>
@@ -28,12 +27,16 @@ object Day15 : Day() {
     private var minY = 0
     private var maxY = 0
 
-    data class Sensor(val point: Point, val closestBeacon: Point)
+    data class Sensor(
+        val point: Point,
+        val closestBeacon: Point,
+    )
 
     fun initialize() {
-        sensors = getInputAsList()
-            .map { parseLineAsSensor((it)) }
-            .toSet()
+        sensors =
+            getInputAsLines()
+                .map { parseLineAsSensor((it)) }
+                .toSet()
 
         sensorPoints = sensors.map { it.point }.toSet()
         beaconPoints = sensors.map { it.closestBeacon }.toSet()
@@ -46,6 +49,7 @@ object Day15 : Day() {
     }
 
     private val lineRegex = Regex("""Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)""")
+
     private fun parseLineAsSensor(line: String): Sensor {
         val (sX, sY, bX, bY) = lineRegex.matchEntire(line)!!.destructured
         return Sensor(Point.of(sX.toInt(), sY.toInt()), Point.of(bX.toInt(), bY.toInt()))
@@ -64,11 +68,14 @@ object Day15 : Day() {
     fun getResultPart2(): Long {
         val maxSearchIndex = 4_000_000
         val multiplier = 4_000_000L
-        val beaconPoint = sensors.asSequence().flatMap {
-            getPointsOutsideBeaconRange(it, maxSearchIndex)
-        }.first { point ->
-            pointIsUnknownBeacon(point)
-        }
+        val beaconPoint =
+            sensors
+                .asSequence()
+                .flatMap {
+                    getPointsOutsideBeaconRange(it, maxSearchIndex)
+                }.first { point ->
+                    pointIsUnknownBeacon(point)
+                }
         return beaconPoint.x * multiplier + beaconPoint.y
     }
 
@@ -80,12 +87,18 @@ object Day15 : Day() {
         return sensors.none { sensor -> isInsideSensorToClosestBeaconRegion(sensor, point) }
     }
 
-    private fun isInsideSensorToClosestBeaconRegion(sensor: Sensor, point: Point): Boolean {
+    private fun isInsideSensorToClosestBeaconRegion(
+        sensor: Sensor,
+        point: Point,
+    ): Boolean {
         val manhattanDistance = sensor.point.manhattanDistanceTo(sensor.closestBeacon)
         return point.manhattanDistanceTo(sensor.point) <= manhattanDistance
     }
 
-    private fun getPointsOutsideBeaconRange(sensor: Sensor, maxSearchIndex: Int): Sequence<Point> {
+    private fun getPointsOutsideBeaconRange(
+        sensor: Sensor,
+        maxSearchIndex: Int,
+    ): Sequence<Point> {
         val sensorPoint = sensor.point
         val pointDistanceJustOutOfRange = sensorPoint.manhattanDistanceTo(sensor.closestBeacon) + 1
 
@@ -98,7 +111,7 @@ object Day15 : Day() {
                     if (isValidNonBeaconPoint(point, sensor, maxSearchIndex)) yield(point)
                 } else {
                     var yOffset = y - minY
-                     val pointLeft: Point
+                    val pointLeft: Point
                     val pointRight: Point
                     if (y < sensorPoint.y) {
                         pointLeft = Point.of(sensorPoint.x - yOffset, y)
@@ -118,8 +131,11 @@ object Day15 : Day() {
         }
     }
 
-    private fun isValidNonBeaconPoint(point: Point, sensor: Sensor, maxSearchIndex: Int) =
-        !sensorPoints.contains(point) && point != sensor.closestBeacon
-                && point.x >= 0 && point.x <= maxSearchIndex
-                && point.y >= 0 && point.y <= maxSearchIndex
+    private fun isValidNonBeaconPoint(
+        point: Point,
+        sensor: Sensor,
+        maxSearchIndex: Int,
+    ) = !sensorPoints.contains(point) && point != sensor.closestBeacon &&
+        point.x >= 0 && point.x <= maxSearchIndex &&
+        point.y >= 0 && point.y <= maxSearchIndex
 }

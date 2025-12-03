@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -12,7 +12,6 @@ fun main() {
 }
 
 object Day19 : Day() {
-
     /*
      * --- Day 19: Monster Messages ---
 
@@ -173,32 +172,33 @@ However, after updating rules 8 and 11, a total of 12 messages match:
 After updating rules 8 and 11, how many messages completely match rule 0?
      */
 
-    private val input = getInputAsSequence()
+    private val input = getInputAsLineSequence()
     private val rules = hashMapOf<Int, Rule>()
     private val characterRegex = Regex("\"([a-z])\"")
     private const val maxRecursionDepth = 20
 
     fun getResult() {
-        input.count { line ->
-            if (line.isNotBlank() && line[0].isDigit()) {
-                when (line) {
-                    "8: 42" -> {
-                        parseRule("8: 42 | 42 8")
+        input
+            .count { line ->
+                if (line.isNotBlank() && line[0].isDigit()) {
+                    when (line) {
+                        "8: 42" -> {
+                            parseRule("8: 42 | 42 8")
+                        }
+                        "11: 42 31" -> {
+                            parseRule("11: 42 31 | 42 11 31")
+                        }
+                        else -> {
+                            parseRule(line)
+                        }
                     }
-                    "11: 42 31" -> {
-                        parseRule("11: 42 31 | 42 11 31")
-                    }
-                    else -> {
-                        parseRule(line)
-                    }
+                    false
+                } else if (line.isNotBlank() && line[0].isLetter()) {
+                    rules[0]!!.toRegex().matches(line)
+                } else {
+                    false
                 }
-                false
-            } else if (line.isNotBlank() && line[0].isLetter()) {
-                rules[0]!!.toRegex().matches(line)
-            } else {
-                false
-            }
-        }.call { println(it) }
+            }.call { println(it) }
     }
 
     private fun parseRule(line: String) {
@@ -220,8 +220,9 @@ After updating rules 8 and 11, how many messages completely match rule 0?
         }
     }
 
-    private class Rule(val number: Int) {
-
+    private class Rule(
+        val number: Int,
+    ) {
         var subRules = ArrayList<MutableList<Rule>>(2)
         var char: Char? = null
         var regex: Regex? = null
@@ -231,7 +232,10 @@ After updating rules 8 and 11, how many messages completely match rule 0?
             subRules.add(arrayListOf())
         }
 
-        fun addRule(rule: Rule, index: Int) {
+        fun addRule(
+            rule: Rule,
+            index: Int,
+        ) {
             subRules[index].add(rule)
         }
 
@@ -240,27 +244,32 @@ After updating rules 8 and 11, how many messages completely match rule 0?
                 return regex!!
             }
 
-            regex = when {
-                char != null -> Regex("$char")
-                else -> {
-                    val leftHandSide = subRules[0].map {
-                        it.toRegex(recursionDepth + 1)
-                    }.joinToString("")
+            regex =
+                when {
+                    char != null -> Regex("$char")
+                    else -> {
+                        val leftHandSide =
+                            subRules[0]
+                                .map {
+                                    it.toRegex(recursionDepth + 1)
+                                }.joinToString("")
 
-                    if (subRules[1].isEmpty()) {
-                        Regex(leftHandSide)
-                    } else {
-                        val rightHandSide = subRules[1].map {
-                            if (it.number != number || recursionDepth < maxRecursionDepth) {
-                                it.toRegex(recursionDepth + 1)
-                            } else {
-                                ""
-                            }
-                        }.joinToString("")
-                        Regex("(?:$leftHandSide|$rightHandSide)")
+                        if (subRules[1].isEmpty()) {
+                            Regex(leftHandSide)
+                        } else {
+                            val rightHandSide =
+                                subRules[1]
+                                    .map {
+                                        if (it.number != number || recursionDepth < maxRecursionDepth) {
+                                            it.toRegex(recursionDepth + 1)
+                                        } else {
+                                            ""
+                                        }
+                                    }.joinToString("")
+                            Regex("(?:$leftHandSide|$rightHandSide)")
+                        }
                     }
                 }
-            }
 
             return regex!!
         }

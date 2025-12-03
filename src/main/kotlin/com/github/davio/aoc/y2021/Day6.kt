@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -12,7 +12,6 @@ fun main() {
 }
 
 object Day6 : Day() {
-
     /*
     --- Day 6: Lanternfish ---
 
@@ -67,10 +66,10 @@ Each day, a 0 becomes a 6 and adds a new 8 to the end of the list, while each ot
 In this example, after 18 days, there are a total of 26 fish. After 80 days, there would be a total of 5934.
 
 Find a way to simulate lanternfish. How many lanternfish would there be after 80 days?
-    */
+     */
 
     fun getResultPart1() {
-        val state = getInputAsList()[0].split(",").map { Lanternfish(it.toInt()) }.toMutableList()
+        val state = getInputAsLines()[0].split(",").map { Lanternfish(it.toInt()) }.toMutableList()
         println("Initial state: ${state.map { it.timer }.joinToString(",")}")
 
         val days = 80
@@ -96,10 +95,13 @@ Suppose the lanternfish live forever and have unlimited food and space. Would th
 After 256 days in the example above, there would be a total of 26984457539 lanternfish!
 
 How many lanternfish would there be after 256 days?
-    */
+     */
     fun getResultPart2() {
         var state = (0..8).associateWith { 0L }.toMutableMap()
-        getInputAsList()[0].split(",").map { it.toInt() }.groupBy { it }
+        getInputAsLines()[0]
+            .split(",")
+            .map { it.toInt() }
+            .groupBy { it }
             .forEach { (k, v) -> state[k] = v.size.toLong() }
         println("Initial state: ${state.toSortedMap()}")
 
@@ -115,8 +117,9 @@ How many lanternfish would there be after 256 days?
         println("${state.values.sum()}")
     }
 
-    private data class Lanternfish(var timer: Int) {
-
+    private data class Lanternfish(
+        var timer: Int,
+    ) {
         fun advanceTimerAndSpawnFish(): Lanternfish? {
             if (--timer == -1) {
                 timer = 6

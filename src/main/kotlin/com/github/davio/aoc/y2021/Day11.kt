@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day11 : Day() {
-
     /*
     --- Day 11: Dumbo Octopus ---
 
@@ -70,7 +69,7 @@ An octopus is highlighted when it flashed during the given step.
 After 100 steps, there have been a total of 1656 flashes.
 
 Given the starting energy levels of the dumbo octopuses in your cavern, simulate 100 steps. How many total flashes are there after 100 steps?
-    */
+     */
 
     private var grid: Array<Array<Octopus>> = emptyArray()
 
@@ -107,11 +106,12 @@ Given the starting energy levels of the dumbo octopuses in your cavern, simulate
         printGrid()
 
         (grid.indices).forEach { y ->
-            (grid.indices).filter { x ->
-                grid[y][x].energyLevel > 9
-            }.forEach { x ->
-                flash(grid[y][x])
-            }
+            (grid.indices)
+                .filter { x ->
+                    grid[y][x].energyLevel > 9
+                }.forEach { x ->
+                    flash(grid[y][x])
+                }
         }
 
         println("After step $step:")
@@ -123,14 +123,15 @@ Given the starting energy levels of the dumbo octopuses in your cavern, simulate
         octopus.flashed = true
         flashes++
 
-        getNeighbors(octopus).filter {
-            !it.flashed && it.energyLevel <= 9
-        }.forEach { neighbor ->
-            neighbor.energyLevel++
-            if (neighbor.energyLevel > 9) {
-                flash(neighbor)
+        getNeighbors(octopus)
+            .filter {
+                !it.flashed && it.energyLevel <= 9
+            }.forEach { neighbor ->
+                neighbor.energyLevel++
+                if (neighbor.energyLevel > 9) {
+                    flash(neighbor)
+                }
             }
-        }
     }
 
     private fun printGrid() {
@@ -190,7 +191,7 @@ After step 195:
 0000000000
 
 If you can calculate the exact moments when the octopuses will all flash simultaneously, you should be able to navigate through the cavern. What is the first step during which all octopuses flash?
-    */
+     */
 
     fun getResultPart2() {
         grid = getOctopusGrid()
@@ -199,41 +200,49 @@ If you can calculate the exact moments when the octopuses will all flash simulta
         println("Before any steps:")
         printGrid()
 
-        while(!gridIsSynchronized()) {
+        while (!gridIsSynchronized()) {
             doStep(++step)
         }
 
         println(step)
     }
 
-    private fun gridIsSynchronized(): Boolean {
-        return grid.all { row ->
-            row.all { it.energyLevel == 0}
+    private fun gridIsSynchronized(): Boolean =
+        grid.all { row ->
+            row.all { it.energyLevel == 0 }
         }
-    }
 
     private fun getNeighbors(octopus: Octopus): Sequence<Octopus> {
         val x = octopus.x
         val y = octopus.y
 
         return (y - 1..y + 1).asSequence().flatMap { yNeighbor ->
-            (x - 1..x + 1).asSequence().filter { xNeighbor ->
-                (yNeighbor != y || xNeighbor != x)
-                        && yNeighbor in grid.indices
-                        && xNeighbor in grid[0].indices
-            }.map { xNeighbor ->
-                grid[yNeighbor][xNeighbor]
-            }
+            (x - 1..x + 1)
+                .asSequence()
+                .filter { xNeighbor ->
+                    (yNeighbor != y || xNeighbor != x) &&
+                        yNeighbor in grid.indices &&
+                        xNeighbor in grid[0].indices
+                }.map { xNeighbor ->
+                    grid[yNeighbor][xNeighbor]
+                }
         }
     }
 
-    private fun getOctopusGrid(): Array<Array<Octopus>> {
-        return getInputAsList().mapIndexed { y, line ->
-            line.toCharArray().mapIndexed { x, energyLevel ->
-                Octopus(x, y, energyLevel.digitToInt())
+    private fun getOctopusGrid(): Array<Array<Octopus>> =
+        getInputAsLines()
+            .mapIndexed { y, line ->
+                line
+                    .toCharArray()
+                    .mapIndexed { x, energyLevel ->
+                        Octopus(x, y, energyLevel.digitToInt())
+                    }.toTypedArray()
             }.toTypedArray()
-        }.toTypedArray()
-    }
 
-    private data class Octopus(val x: Int, val y: Int, var energyLevel: Int, var flashed: Boolean = false)
+    private data class Octopus(
+        val x: Int,
+        val y: Int,
+        var energyLevel: Int,
+        var flashed: Boolean = false,
+    )
 }

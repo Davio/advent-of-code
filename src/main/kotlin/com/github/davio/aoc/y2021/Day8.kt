@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day8 : Day() {
-
     /*
 --- Day 8: Seven Segment Search ---
 
@@ -86,17 +85,19 @@ fgae cfgab fg bagce
 Because the digits 1, 4, 7, and 8 each use a unique number of segments, you should be able to tell which combinations of signals correspond to those digits. Counting only digits in the output values (the part after | on each line), in the above example, there are 26 instances of digits that use a unique number of segments (highlighted above).
 
 In the output values, how many times do digits 1, 4, 7, or 8 appear?
-    */
+     */
 
     fun getResultPart1() {
         val uniqueDigitPatterns = setOf(2, 3, 4, 7)
 
-        getInputAsSequence().map { line ->
-            val outputDigits = line.split("|")[1].trim().split(" ")
-            outputDigits.count { uniqueDigitPatterns.contains(it.length) }
-        }.sum().call {
-            println(it)
-        }
+        getInputAsLineSequence()
+            .map { line ->
+                val outputDigits = line.split("|")[1].trim().split(" ")
+                outputDigits.count { uniqueDigitPatterns.contains(it.length) }
+            }.sum()
+            .call {
+                println(it)
+            }
     }
 
     /*
@@ -155,24 +156,27 @@ Following this same process for each entry in the second, larger example above, 
 Adding all of the output values in this larger example produces 61229.
 
 For each entry, determine all of the wire/segment connections and decode the four-digit output values. What do you get if you add up all of the output values?
-    */
+     */
 
     fun getResultPart2() {
-        getInputAsSequence().map { line ->
-            val lineParts = line.split("|")
-            val signalPatterns = lineParts[0].trim().split(" ")
-            val outputDigitPatterns = lineParts[1].trim().split(" ")
-            val patternToDigitMap = getPatternToDigitMap(signalPatterns)
-            println(patternToDigitMap)
-            outputDigitPatterns.fold(0) { acc, digitPattern ->
-                val sortedPattern = digitPattern.toCharArray().also { it.sort() }.concatToString()
-                10 * acc + patternToDigitMap[sortedPattern]!!
-            }.also {
-                println("Output: $it")
+        getInputAsLineSequence()
+            .map { line ->
+                val lineParts = line.split("|")
+                val signalPatterns = lineParts[0].trim().split(" ")
+                val outputDigitPatterns = lineParts[1].trim().split(" ")
+                val patternToDigitMap = getPatternToDigitMap(signalPatterns)
+                println(patternToDigitMap)
+                outputDigitPatterns
+                    .fold(0) { acc, digitPattern ->
+                        val sortedPattern = digitPattern.toCharArray().also { it.sort() }.concatToString()
+                        10 * acc + patternToDigitMap[sortedPattern]!!
+                    }.also {
+                        println("Output: $it")
+                    }
+            }.sum()
+            .call {
+                println(it)
             }
-        }.sum().call {
-            println(it)
-        }
     }
 
     private fun getPatternToDigitMap(signalPatterns: List<String>): Map<String, Int> {
@@ -198,18 +202,32 @@ For each entry, determine all of the wire/segment connections and decode the fou
             digitToPatternMap[findDigitWith5Segments(digitToPatternMap, charSet)] = pattern
         }
 
-        return digitToPatternMap.map { entry -> entry.value.toCharArray().also { it.sort() }.concatToString() to entry.key }.toMap()
+        return digitToPatternMap
+            .map { entry ->
+                entry.value
+                    .toCharArray()
+                    .also { it.sort() }
+                    .concatToString() to entry.key
+            }.toMap()
     }
 
-    private fun findDigitWith6Segments(digitToPatternMap: MutableMap<Int, String>, charSet: Set<Char>): Int {
-        return if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) {
+    private fun findDigitWith6Segments(
+        digitToPatternMap: MutableMap<Int, String>,
+        charSet: Set<Char>,
+    ): Int =
+        if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) {
             if (charSet.containsAll(digitToPatternMap[4]!!.toSet())) 9 else 0
-        } else 6
-    }
+        } else {
+            6
+        }
 
-    private fun findDigitWith5Segments(digitToPatternMap: MutableMap<Int, String>, charSet: Set<Char>): Int {
-        return if (digitToPatternMap[6]!!.count { charSet.contains(it) } == 5) 5 else {
+    private fun findDigitWith5Segments(
+        digitToPatternMap: MutableMap<Int, String>,
+        charSet: Set<Char>,
+    ): Int =
+        if (digitToPatternMap[6]!!.count { charSet.contains(it) } == 5) {
+            5
+        } else {
             if (charSet.containsAll(digitToPatternMap[7]!!.toSet())) 3 else 2
         }
-    }
 }

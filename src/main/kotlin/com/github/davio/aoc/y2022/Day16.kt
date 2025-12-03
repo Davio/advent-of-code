@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 /**
  * See [Advent of Code 2022 Day 16](https://adventofcode.com/2022/day/16)
@@ -14,7 +14,7 @@ object Day16 : Day() {
     private val valveMap: HashMap<String, Valve> = hashMapOf()
 
     override fun part1(): Long {
-        getInputAsList()
+        getInputAsLines()
             .map { parseLine(it) }
             .onEach { println(it) }
 

@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2023
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 /**
  * See [Advent of Code 2023 Day X](https://adventofcode.com/2023/day/2#part2])
@@ -16,14 +16,14 @@ object Day2 : Day() {
 
     override fun part1(): Long {
         val games =
-            getInputAsList()
+            getInputAsLines()
                 .map { it.toGame() }
                 .toList()
 
         return games.filter { it.isPossible() }.sumOf { it.id }
     }
 
-    override fun part2(): Long = getInputAsList().sumOf { it.toGame().getPower() }
+    override fun part2(): Long = getInputAsLines().sumOf { it.toGame().getPower() }
 
     private fun String.toGame(): Game {
         val id = substringBefore(":").substringAfter("Game ").toLong()

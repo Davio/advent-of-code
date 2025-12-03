@@ -3,7 +3,7 @@ package com.github.davio.aoc.y2021
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -131,7 +131,7 @@ Find the initial velocity that causes the probe to reach the highest y position 
     private lateinit var yRange: IntRange
 
     override fun parseInput() {
-        val line = getInputAsList()[0]
+        val line = getInputAsLines()[0]
         val (x1, x2, y1, y2) = inputPattern.matchEntire(line)!!.destructured
         xRange = (x1.toInt()..x2.toInt())
         yRange = (y1.toInt()..y2.toInt())

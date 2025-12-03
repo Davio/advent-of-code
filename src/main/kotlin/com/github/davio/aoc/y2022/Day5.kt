@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2022
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import com.github.davio.aoc.general.split
 import kotlin.system.measureTimeMillis
 
@@ -26,7 +26,7 @@ object Day5 : Day() {
 
     override fun parseInput() {
         val parts =
-            getInputAsSequence()
+            getInputAsLineSequence()
                 .split(String::isBlank)
                 .toList()
         val stackLines = parts.first()

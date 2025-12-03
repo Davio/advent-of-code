@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.math.*
 
 fun main() {
@@ -10,7 +10,6 @@ fun main() {
 }
 
 object Day12 : Day() {
-
     /*
      * --- Day 12: Rain Risk ---
 
@@ -77,18 +76,18 @@ The waypoint starts 10 units east and 1 unit north relative to the ship.
 For example, using the same instructions as above:
 
     F10 moves the ship to the waypoint 10 times (a total of 100 units east and 10 units north), leaving the ship at east 100, north 10.
-    * The waypoint stays 10 units east and 1 unit north of the ship.
-    *
+     * The waypoint stays 10 units east and 1 unit north of the ship.
+     *
     N3 moves the waypoint 3 units north to 10 units east and 4 units north of the ship.
-    * The ship remains at east 100, north 10.
-    *
+     * The ship remains at east 100, north 10.
+     *
     F7 moves the ship to the waypoint 7 times (a total of 70 units east and 28 units north), leaving the ship at east 170, north 38.
-    * The waypoint stays 10 units east and 4 units north of the ship.
-    *
+     * The waypoint stays 10 units east and 4 units north of the ship.
+     *
     R90 rotates the waypoint around the ship clockwise 90 degrees, moving it to 4 units east and 10 units south of the ship.
-    *  The ship remains at east 170, north 38.
+     *  The ship remains at east 170, north 38.
     F11 moves the ship to the waypoint 11 times (a total of 44 units east and 110 units south), leaving the ship at east 214, south 72.
-    * The waypoint stays 4 units east and 10 units south of the ship.
+     * The waypoint stays 4 units east and 10 units south of the ship.
 
 After these operations, the ship's Manhattan distance from its starting position is 214 + 72 = 286.
 
@@ -97,7 +96,7 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
 
     fun getResult() {
         val ship = Ship()
-        getInputAsSequence().forEach {
+        getInputAsLineSequence().forEach {
             val direction = Direction.fromChar(it[0])
             val amount = it.substring(1).toInt()
             val movement = Movement(direction, amount)
@@ -108,7 +107,6 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
     }
 
     private class Ship {
-
         var position = Point.ZERO
         var waypointPosition = Point.of(10, 1)
 
@@ -116,25 +114,33 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
         private var headingInCoords = Pair(1, 0) // East
 
         @Suppress("unused") // Only used by part 1
-        fun changeHeading(direction: Direction, degrees: Int) {
+        fun changeHeading(
+            direction: Direction,
+            degrees: Int,
+        ) {
             headingInDegrees = (headingInDegrees + if (direction == Direction.RIGHT) degrees else 360 - degrees) % 360
             val headingInRadians = headingInDegrees.toRadians()
             headingInCoords = Pair(cos(headingInRadians).roundToInt(), -sin(headingInRadians).roundToInt())
             println("New heading is $headingInCoords")
         }
 
-        fun rotateWaypoint(direction: Direction, degrees: Int) {
+        fun rotateWaypoint(
+            direction: Direction,
+            degrees: Int,
+        ) {
             val normalizedWaypointX = waypointPosition.x - position.x
             val normalizedWaypointY = waypointPosition.y - position.y
 
-            val normalizedWaypointVector = if (degrees == 180) {
-                Point.of(-normalizedWaypointX, -normalizedWaypointY)
-            } else if ((degrees == 90 && direction == Direction.RIGHT)
-                || (degrees == 270 && direction == Direction.LEFT)) {
-                Point.of(normalizedWaypointY, -normalizedWaypointX)
-            } else {
-                Point.of(-normalizedWaypointY, normalizedWaypointX)
-            }
+            val normalizedWaypointVector =
+                if (degrees == 180) {
+                    Point.of(-normalizedWaypointX, -normalizedWaypointY)
+                } else if ((degrees == 90 && direction == Direction.RIGHT) ||
+                    (degrees == 270 && direction == Direction.LEFT)
+                ) {
+                    Point.of(normalizedWaypointY, -normalizedWaypointX)
+                } else {
+                    Point.of(-normalizedWaypointY, normalizedWaypointX)
+                }
 
             waypointPosition = position + normalizedWaypointVector
         }
@@ -145,18 +151,21 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
                 rotateWaypoint(movement.direction, movement.amount)
             } else if (movement.direction != Direction.FORWARD) {
                 println("Moving waypoint ${movement.amount} ${movement.direction}")
-                waypointPosition = when (movement.direction) {
-                    Direction.NORTH -> waypointPosition up movement.amount
-                    Direction.EAST -> waypointPosition right movement.amount
-                    Direction.SOUTH -> waypointPosition down movement.amount
-                    Direction.WEST -> waypointPosition left movement.amount
-                    else -> waypointPosition
-                }
+                waypointPosition =
+                    when (movement.direction) {
+                        Direction.NORTH -> waypointPosition up movement.amount
+                        Direction.EAST -> waypointPosition right movement.amount
+                        Direction.SOUTH -> waypointPosition down movement.amount
+                        Direction.WEST -> waypointPosition left movement.amount
+                        else -> waypointPosition
+                    }
             } else {
                 println("Moving ship towards waypoint ${movement.amount} steps")
-                val forwardVector = Point.of(
-                    movement.amount * (waypointPosition.x - position.x),
-                    movement.amount * (waypointPosition.y - position.y))
+                val forwardVector =
+                    Point.of(
+                        movement.amount * (waypointPosition.x - position.x),
+                        movement.amount * (waypointPosition.y - position.y),
+                    )
                 position += forwardVector
                 waypointPosition += forwardVector
             }
@@ -168,16 +177,22 @@ Figure out where the navigation instructions actually lead. What is the Manhatta
         private fun Double.toRadians() = (this * PI) / 180.0
     }
 
-    private data class Movement(val direction: Direction, val amount: Int)
+    private data class Movement(
+        val direction: Direction,
+        val amount: Int,
+    )
 
-    private enum class Direction(val char: Char) {
+    private enum class Direction(
+        val char: Char,
+    ) {
         NORTH('N'),
         EAST('E'),
         SOUTH('S'),
         WEST('W'),
         FORWARD('F'),
         RIGHT('R'),
-        LEFT('L');
+        LEFT('L'),
+        ;
 
         companion object {
             fun fromChar(c: Char) = entries.first { it.char == c }

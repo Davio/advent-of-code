@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -117,7 +117,7 @@ Decode the structure of your hexadecimal-encoded BITS transmission; what do you 
 
     override fun parseInput() {
         val binaryString =
-            getInputAsList()[0]
+            getInputAsLines()[0]
                 .map { hexChar ->
                     val intVal = hexChar.digitToInt(16)
                     intVal.toString(2).padStart(4, '0')

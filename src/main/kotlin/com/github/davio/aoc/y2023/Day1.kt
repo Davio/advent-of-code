@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2023
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 /**
  * See [Advent of Code 2023 Day 1](https://adventofcode.com/2023/day/1#part2])
@@ -10,11 +10,11 @@ class Day1(
     exampleNumber: Int? = null,
 ) : Day(exampleNumber) {
     override fun part1() =
-        getInputAsList().sumOf { line ->
+        getInputAsLines().sumOf { line ->
             line.filter { c -> c.isDigit() }.let { 10L * it.first().digitToInt() + it.last().digitToInt() }
         }
 
-    override fun part2() = getInputAsList().sumOf { line -> 10L * getFirstDigit(line) + getLastDigit(line) }
+    override fun part2() = getInputAsLines().sumOf { line -> 10L * getFirstDigit(line) + getLastDigit(line) }
 
     private val digitWords =
         listOf(

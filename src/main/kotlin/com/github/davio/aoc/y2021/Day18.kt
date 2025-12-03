@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2021
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -13,7 +13,6 @@ fun main() {
 }
 
 object Day18 : Day() {
-
     /*
 --- Day 18: Snailfish ---
 
@@ -177,25 +176,30 @@ The final sum is:
 The magnitude of this final sum is 4140.
 
 Add up all of the snailfish numbers from the homework assignment in the order they appear. What is the magnitude of the final sum?
-    */
+     */
 
     fun getResultPart1() {
-        val finalSum = getInputAsSequence().map { line ->
-            parseSnailfishPair(line)
-        }.reduce { acc, snailfishNumber ->
-            println("  $acc")
-            println("+ $snailfishNumber")
-            val newNumber = acc + snailfishNumber
-            newNumber.reduce()
-            println("= $newNumber")
-            println()
-            newNumber
-        }
+        val finalSum =
+            getInputAsLineSequence()
+                .map { line ->
+                    parseSnailfishPair(line)
+                }.reduce { acc, snailfishNumber ->
+                    println("  $acc")
+                    println("+ $snailfishNumber")
+                    val newNumber = acc + snailfishNumber
+                    newNumber.reduce()
+                    println("= $newNumber")
+                    println()
+                    newNumber
+                }
 
         println(finalSum.getMagnitude())
     }
 
-    private fun parseSnailfishPair(input: String, parent: SnailfishPair? = null): SnailfishPair {
+    private fun parseSnailfishPair(
+        input: String,
+        parent: SnailfishPair? = null,
+    ): SnailfishPair {
         var openingChars = 0
         var closingChars = 0
 
@@ -215,13 +219,15 @@ Add up all of the snailfish numbers from the homework assignment in the order th
         return SnailfishPair()
     }
 
-    private fun parsePart(part: String, parent: SnailfishPair): SnailfishNumber {
-        return if (part.startsWith("[")) {
+    private fun parsePart(
+        part: String,
+        parent: SnailfishPair,
+    ): SnailfishNumber =
+        if (part.startsWith("[")) {
             parseSnailfishPair(part, parent)
         } else {
             RegularNumber(part.toInt(), parent)
         }
-    }
 
     /*
 --- Part Two ---
@@ -248,7 +254,7 @@ Again considering the last example homework assignment above:
 The largest magnitude of the sum of any two snailfish numbers in this list is 3993. This is the magnitude of [[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]] + [[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]], which reduces to [[[[7,8],[6,6]],[[6,0],[7,7]]],[[[7,8],[8,8]],[[7,9],[0,6]]]].
 
 What is the largest magnitude of any sum of two different snailfish numbers from the homework assignment?
-    */
+     */
 
 //    fun getResultPart2() {
 //        val numbers = getInputAsList().map { line ->
@@ -268,8 +274,9 @@ What is the largest magnitude of any sum of two different snailfish numbers from
 //        }.call { println(it) }
 //    }
 
-    private sealed class SnailfishNumber(var parent: SnailfishPair? = null) {
-
+    private sealed class SnailfishNumber(
+        var parent: SnailfishPair? = null,
+    ) {
         operator fun plus(other: SnailfishNumber): SnailfishPair {
             val snailfishPair = SnailfishPair()
             this.parent = snailfishPair
@@ -286,8 +293,9 @@ What is the largest magnitude of any sum of two different snailfish numbers from
         abstract fun getMagnitude(): Int
     }
 
-    private class SnailfishPair(parent: SnailfishPair? = null) : SnailfishNumber(parent) {
-
+    private class SnailfishPair(
+        parent: SnailfishPair? = null,
+    ) : SnailfishNumber(parent) {
         lateinit var left: SnailfishNumber
         lateinit var right: SnailfishNumber
 
@@ -376,42 +384,36 @@ What is the largest magnitude of any sum of two different snailfish numbers from
             }
         }
 
-        override fun getValue(): String {
-            return "pair"
-        }
+        override fun getValue(): String = "pair"
 
         override fun getMagnitude() = 3 * left.getMagnitude() + 2 * right.getMagnitude()
 
-        override fun toString(): String {
-            return "[$left,$right]"
-        }
+        override fun toString(): String = "[$left,$right]"
     }
 
-    private class RegularNumber(var value: Int, parent: SnailfishPair?) : SnailfishNumber(parent) {
+    private class RegularNumber(
+        var value: Int,
+        parent: SnailfishPair?,
+    ) : SnailfishNumber(parent) {
+        override fun copy(): SnailfishNumber = RegularNumber(this.value, null)
 
-        override fun copy(): SnailfishNumber {
-            return RegularNumber(this.value, null)
-        }
-
-        override fun getValue(): String {
-            return value.toString()
-        }
+        override fun getValue(): String = value.toString()
 
         override fun getMagnitude() = value
 
-        override fun toString(): String {
-            return value.toString()
-        }
+        override fun toString(): String = value.toString()
     }
 
     private data class FourthNestedPair(
         val root: SnailfishPair,
         var pair: SnailfishPair? = null,
         var regularNumberLeft: RegularNumber? = null,
-        var regularNumberRight: RegularNumber? = null
+        var regularNumberRight: RegularNumber? = null,
     ) {
-
-        fun findFourthNestedPair(snailfishNumber: SnailfishNumber = root, depth: Int = 0) {
+        fun findFourthNestedPair(
+            snailfishNumber: SnailfishNumber = root,
+            depth: Int = 0,
+        ) {
             if (snailfishNumber is RegularNumber && pair == null) {
                 regularNumberLeft = snailfishNumber
                 return
@@ -434,9 +436,12 @@ What is the largest magnitude of any sum of two different snailfish numbers from
         }
     }
 
-
     private fun traverseNodes(
-        sb: StringBuilder, padding: String?, pointer: String?, node: SnailfishNumber?, hasRightSibling: Boolean
+        sb: StringBuilder,
+        padding: String?,
+        pointer: String?,
+        node: SnailfishNumber?,
+        hasRightSibling: Boolean,
     ) {
         if (node != null) {
             sb.appendLine()

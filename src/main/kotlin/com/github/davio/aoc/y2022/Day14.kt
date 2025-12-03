@@ -17,13 +17,14 @@ fun main() {
  * See [Advent of Code 2022 Day 14](https://adventofcode.com/2022/day/14#part2])
  */
 object Day14 : Day() {
-
     @JvmInline
-    value class Path(private val points: List<Point>) {
+    value class Path(
+        private val points: List<Point>,
+    ) {
         fun getStraightLines() = points.zipWithNext()
     }
 
-    private lateinit var scan : List<List<Pair<Point, Point>>>
+    private lateinit var scan: List<List<Pair<Point, Point>>>
     private var minX: Int = 0
     private var maxX: Int = 0
     private var maxY: Int = 0
@@ -39,7 +40,7 @@ object Day14 : Day() {
         do {
 //            printScan(blockedPoints, sandAtRest, currentSand, minX, maxX, maxY)
             currentSand = doStep(blockedPoints, sandAtRest, currentSand, maxY + 3)
-        } while(currentSand.y < maxY)
+        } while (currentSand.y < maxY)
 
         return sandAtRest.size
     }
@@ -52,28 +53,36 @@ object Day14 : Day() {
             currentSand = doStep(blockedPoints, sandAtRest, currentSand, maxY + 2)
             if (currentSand.x < minX) minX = currentSand.x
             if (currentSand.x > maxX) maxX = currentSand.x
-        } while(!sandAtRest.contains(Point.of(500, 0)))
+        } while (!sandAtRest.contains(Point.of(500, 0)))
 
         return sandAtRest.size
     }
 
     fun initialize() {
-        scan = getInputAsList()
-            .map { parseLine(it).getStraightLines() }
+        scan =
+            getInputAsLines()
+                .map { parseLine(it).getStraightLines() }
         minX = scan.minOf { path -> path.minOf { line -> min(line.first.x, line.second.x) } }
         maxX = scan.maxOf { path -> path.maxOf { line -> max(line.first.x, line.second.x) } }
         maxY = scan.maxOf { path -> path.maxOf { line -> max(line.first.y, line.second.y) } }
         lines = scan.flatten()
-        blockedPoints = (0..maxY).flatMap { y ->
-            (minX..maxX).map { x ->
-                Point.of(x, y)
-            }
-        }.filter { p ->
-            lines.any { lineContains(it, p) }
-        }.toSet()
+        blockedPoints =
+            (0..maxY)
+                .flatMap { y ->
+                    (minX..maxX).map { x ->
+                        Point.of(x, y)
+                    }
+                }.filter { p ->
+                    lines.any { lineContains(it, p) }
+                }.toSet()
     }
 
-    private fun doStep(blockedPoints: Set<Point>, sandAtRest: MutableSet<Point>, currentSand: Point, maxY: Int): Point {
+    private fun doStep(
+        blockedPoints: Set<Point>,
+        sandAtRest: MutableSet<Point>,
+        currentSand: Point,
+        maxY: Int,
+    ): Point {
         val pointBelow = Point.of(currentSand.x, currentSand.y + 1)
         if (pointBelow.y == maxY) {
             sandAtRest.add(currentSand)
@@ -98,17 +107,26 @@ object Day14 : Day() {
         }
     }
 
-    private fun parseLine(line: String): Path =
-        Path(line.split(" -> ").map { it.toPoint() })
+    private fun parseLine(line: String): Path = Path(line.split(" -> ").map { it.toPoint() })
 
-    private fun lineContains(line: Pair<Point, Point>, point: Point): Boolean {
+    private fun lineContains(
+        line: Pair<Point, Point>,
+        point: Point,
+    ): Boolean {
         if (line.first.x == line.second.x) {
             return point.x == line.first.x && point.y in (min(line.first.y, line.second.y)..max(line.first.y, line.second.y))
         }
         return point.y == line.first.y && point.x in (min(line.first.x, line.second.x)..max(line.first.x, line.second.x))
     }
 
-    private fun printScan(blockedPoints: Set<Point>, sandAtRest: Set<Point>, currentSand: Point, minX: Int, maxX: Int, maxY: Int) {
+    private fun printScan(
+        blockedPoints: Set<Point>,
+        sandAtRest: Set<Point>,
+        currentSand: Point,
+        minX: Int,
+        maxX: Int,
+        maxY: Int,
+    ) {
         println()
         repeat(3) { index ->
             print("  ")

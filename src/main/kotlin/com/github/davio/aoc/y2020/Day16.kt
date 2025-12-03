@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -12,7 +12,6 @@ fun main() {
 }
 
 object Day16 : Day() {
-
     /*
      * --- Day 16: Ticket Translation ---
 
@@ -106,16 +105,17 @@ Once you work out which field is which, look for the six fields on your ticket t
 * What do you get if you multiply those six values together?
      */
 
-    private val input = getInputAsSequence()
+    private val input = getInputAsLineSequence()
 
     private val rules = hashMapOf<String, Pair<IntRange, IntRange>>()
     private val ruleRangeRegex = Regex("""(\d+)-(\d+) or (\d+)-(\d+)""")
 
-    private var processors: List<(String) -> Unit> = arrayListOf(
-        { processRule(it) },
-        { processMyTicket(it) },
-        { processNearbyTicket(it) }
-    )
+    private var processors: List<(String) -> Unit> =
+        arrayListOf(
+            { processRule(it) },
+            { processMyTicket(it) },
+            { processNearbyTicket(it) },
+        )
 
     private var myTicket: List<Int> = emptyList()
     private val fieldCandidates: MutableList<MutableSet<String>> = arrayListOf()
@@ -136,13 +136,14 @@ Once you work out which field is which, look for the six fields on your ticket t
         validTickets.forEach { processValidTicket(it) }
         processRemainingCandidates()
         println(fieldCandidates)
-        fieldCandidates.mapIndexed { index, candidates ->
-            if (candidates.first().startsWith("departure")) {
-                myTicket[index].toLong()
-            } else {
-                1L
-            }
-        }.reduce { acc, value -> acc * value }
+        fieldCandidates
+            .mapIndexed { index, candidates ->
+                if (candidates.first().startsWith("departure")) {
+                    myTicket[index].toLong()
+                } else {
+                    1L
+                }
+            }.reduce { acc, value -> acc * value }
             .call { println(it) }
     }
 
@@ -151,7 +152,12 @@ Once you work out which field is which, look for the six fields on your ticket t
         val ruleParts = line.split(":")
         val fieldName = ruleParts[0]
         val rangePart = ruleParts[1].substringAfter(" ")
-        val rangeValues = ruleRangeRegex.matchEntire(rangePart)!!.groupValues.drop(1).map { it.toInt() }
+        val rangeValues =
+            ruleRangeRegex
+                .matchEntire(rangePart)!!
+                .groupValues
+                .drop(1)
+                .map { it.toInt() }
         rules[fieldName] = Pair(rangeValues[0]..rangeValues[1], rangeValues[2]..rangeValues[3])
     }
 
@@ -185,13 +191,9 @@ Once you work out which field is which, look for the six fields on your ticket t
 
     private fun parseTicket(line: String) = line.split(",").map { it.toInt() }
 
-    private fun isValidTicket(ticket: List<Int>): Boolean {
-        return ticket.all { isValidValue(it) }
-    }
+    private fun isValidTicket(ticket: List<Int>): Boolean = ticket.all { isValidValue(it) }
 
-    private fun isValidValue(value: Int): Boolean {
-        return rules.values.any { value in it.first || value in it.second }
-    }
+    private fun isValidValue(value: Int): Boolean = rules.values.any { value in it.first || value in it.second }
 
     private fun processValidTicket(ticket: List<Int>) {
         fieldCandidates.forEachIndexed { index, candidate ->
@@ -199,7 +201,10 @@ Once you work out which field is which, look for the six fields on your ticket t
         }
     }
 
-    private fun processFieldCandidates(candidates: MutableSet<String>, field: Int) {
+    private fun processFieldCandidates(
+        candidates: MutableSet<String>,
+        field: Int,
+    ) {
         candidates.removeIf { candidate ->
             val rule = rules[candidate]!!
             field !in rule.first && field !in rule.second
@@ -208,10 +213,11 @@ Once you work out which field is which, look for the six fields on your ticket t
 
     private fun processRemainingCandidates() {
         while (fieldCandidates.any { it.size > 1 }) {
-            val candidatesToRemove = fieldCandidates
-                .filter { it.size == 1 }
-                .map { it.first() }
-                .toSet()
+            val candidatesToRemove =
+                fieldCandidates
+                    .filter { it.size == 1 }
+                    .map { it.first() }
+                    .toSet()
 
             fieldCandidates.forEach { candidate ->
                 if (candidate.size > 1) {

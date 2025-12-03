@@ -3,7 +3,7 @@ package com.github.davio.aoc.y2021
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.Point
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import kotlin.math.max
 
 fun main() {
@@ -12,7 +12,6 @@ fun main() {
 }
 
 object Day5 : Day() {
-
     /*
 --- Day 5: Hydrothermal Venture ---
 
@@ -56,13 +55,13 @@ In this diagram, the top left corner is 0,0 and the bottom right corner is 9,9. 
 To avoid the most dangerous areas, you need to determine the number of points where at least two lines overlap. In the above example, this is anywhere in the diagram with a 2 or larger - a total of 5 points.
 
 Consider only horizontal and vertical lines. At how many points do at least two lines overlap?
-    */
+     */
     private val regex = Regex("""(\d+),(\d+) -> (\d+),(\d+)""")
 
     fun getResultPart1() {
         val grid = HydrothermalGrid()
 
-        getInputAsSequence().forEach { line ->
+        getInputAsLineSequence().forEach { line ->
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
             val startCoordinate = Point.of(x1.toInt(), y1.toInt())
             val endCoordinate = Point.of(x2.toInt(), y2.toInt())
@@ -74,11 +73,12 @@ Consider only horizontal and vertical lines. At how many points do at least two 
 
         println(grid)
 
-        grid.lines.count { coordinate ->
-            coordinate.value > 1
-        }.call {
-            println(it)
-        }
+        grid.lines
+            .count { coordinate ->
+                coordinate.value > 1
+            }.call {
+                println(it)
+            }
     }
 
     /*
@@ -107,11 +107,11 @@ Considering all lines from the above example would now produce the following dia
 You still need to determine the number of points where at least two lines overlap. In the above example, this is still anywhere in the diagram with a 2 or larger - now a total of 12 points.
 
 Consider all of the lines. At how many points do at least two lines overlap?
-    */
+     */
     fun getResultPart2() {
         val grid = HydrothermalGrid()
 
-        getInputAsSequence().forEach { line ->
+        getInputAsLineSequence().forEach { line ->
             val (x1, y1, x2, y2) = regex.matchEntire(line)!!.destructured
             val startCoordinate = Point.of(x1.toInt(), y1.toInt())
             val endCoordinate = Point.of(x2.toInt(), y2.toInt())
@@ -121,21 +121,24 @@ Consider all of the lines. At how many points do at least two lines overlap?
 
         println(grid)
 
-        grid.lines.count { coordinate ->
-            coordinate.value > 1
-        }.call {
-            println(it)
-        }
+        grid.lines
+            .count { coordinate ->
+                coordinate.value > 1
+            }.call {
+                println(it)
+            }
     }
 
     private class HydrothermalGrid {
-
         var maxX = 0
         var maxY = 0
 
         val lines = mutableMapOf<Point, Int>()
 
-        fun addLine(startCoordinate: Point, endCoordinate: Point) {
+        fun addLine(
+            startCoordinate: Point,
+            endCoordinate: Point,
+        ) {
             maxX = max(maxX, max(startCoordinate.x, endCoordinate.x))
             maxY = max(maxY, max(startCoordinate.x, endCoordinate.y))
 

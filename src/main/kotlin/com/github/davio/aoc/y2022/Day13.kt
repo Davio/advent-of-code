@@ -15,11 +15,12 @@ fun main() {
  * See [Advent of Code 2022 Day 13](https://adventofcode.com/2022/day/13#part2])
  */
 object Day13 : Day() {
-
     sealed interface Packet : Comparable<Packet>
 
     @JvmInline
-    value class PacketValue(private val i: Int) : Packet {
+    value class PacketValue(
+        private val i: Int,
+    ) : Packet {
         override fun compareTo(other: Packet) =
             if (other is PacketValue) {
                 this.i.compareTo(other.i)
@@ -31,7 +32,9 @@ object Day13 : Day() {
     }
 
     @JvmInline
-    value class PacketList(val packets: List<Packet>) : Packet {
+    value class PacketList(
+        val packets: List<Packet>,
+    ) : Packet {
         override fun compareTo(other: Packet): Int {
             if (other is PacketValue) {
                 return this.compareTo(PacketList(mutableListOf(other)))
@@ -55,7 +58,7 @@ object Day13 : Day() {
     }
 
     fun getResultPart1() =
-        getInputAsList()
+        getInputAsLines()
             .split { it.isBlank() }
             .map { parsePacketPair(it) }
             .withIndex()
@@ -69,7 +72,7 @@ object Day13 : Day() {
         val divider1 = parsePacket("[[2]]")
         val divider2 = parsePacket("[[6]]")
 
-        return getInputAsSequence()
+        return getInputAsLineSequence()
             .filter(String::isNotBlank)
             .map { parsePacket(it) }
             .plus(sequenceOf(divider1, divider2))
@@ -83,11 +86,10 @@ object Day13 : Day() {
 
     private fun parsePacket(line: String) = parseJson(Json.decodeFromString<JsonArray>(line))
 
-    private fun parseJson(jsonElement: JsonElement) : Packet {
-        return when (jsonElement) {
+    private fun parseJson(jsonElement: JsonElement): Packet =
+        when (jsonElement) {
             is JsonArray -> PacketList(jsonElement.map { parseJson(it) })
             is JsonPrimitive -> PacketValue(jsonElement.int)
             else -> throw IllegalStateException()
         }
-    }
 }

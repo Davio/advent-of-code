@@ -1,7 +1,7 @@
 package com.github.davio.aoc.y2016
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 import com.github.davio.aoc.y2016.Day1.Orientation.*
 import kotlin.math.abs
 
@@ -10,7 +10,6 @@ fun main() {
 }
 
 object Day1 : Day() {
-
     /*
      * --- Day 1: No Time for a Taxicab ---
 Santa's sleigh uses a very high-precision clock to guide its movements, and the clock's oscillator is regulated by stars.
@@ -50,7 +49,7 @@ How many blocks away is the first location you visit twice?
     private var coordinates = Pair(0, 0)
 
     fun getResultPart1() {
-        val directions = getInputAsList()[0].split(", ")
+        val directions = getInputAsLines()[0].split(", ")
         directions.forEach {
             val direction = it[0]
             val steps = it.substring(1).toInt()
@@ -60,7 +59,10 @@ How many blocks away is the first location you visit twice?
         println(abs(coordinates.first) + abs(coordinates.second))
     }
 
-    private fun processMovement(direction: Char, steps: Int): Pair<Int, Int> {
+    private fun processMovement(
+        direction: Char,
+        steps: Int,
+    ): Pair<Int, Int> {
         var orientationIndex: Int
         when (direction) {
             'R' -> {
@@ -91,6 +93,6 @@ How many blocks away is the first location you visit twice?
         NORTH,
         EAST,
         SOUTH,
-        WEST
+        WEST,
     }
 }

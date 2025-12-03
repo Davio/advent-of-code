@@ -2,7 +2,7 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 import java.lang.System.lineSeparator
 import java.util.*
 import kotlin.system.measureTimeMillis
@@ -14,7 +14,6 @@ fun main() {
 }
 
 object Day18 : Day() {
-
     /*
      * --- Day 18: Operation Order ---
 
@@ -89,42 +88,45 @@ Here are the other examples from above:
 What do you get if you add up the results of evaluating the homework problems using these new rules?
      */
 
-    private val input = getInputAsSequence()
+    private val input = getInputAsLineSequence()
     private val outputQueue = arrayListOf<OutputToken>()
     private val operatorStack = Stack<Operator>()
 
     fun getResult() {
-        input.map { line ->
-            operatorStack.clear()
-            outputQueue.clear()
+        input
+            .map { line ->
+                operatorStack.clear()
+                outputQueue.clear()
 
-            val tokens = line.replace("(", "( ").replace(")", " )").split(" ")
-            tokens.forEach { parseToken(it) }
-            while (!operatorStack.isEmpty()) {
-                outputQueue.add(operatorStack.pop())
-            }
-
-            val stack = Stack<Long>()
-            outputQueue.forEach {
-                print("$it ")
-                val newValue = when (it) {
-                    is Number -> {
-                        it.value
-                    }
-                    else -> {
-                        val right = stack.pop()
-                        val left = stack.pop()
-                        if (it is Plus) {
-                            left + right
-                        } else {
-                            left * right
-                        }
-                    }
+                val tokens = line.replace("(", "( ").replace(")", " )").split(" ")
+                tokens.forEach { parseToken(it) }
+                while (!operatorStack.isEmpty()) {
+                    outputQueue.add(operatorStack.pop())
                 }
-                stack.push(newValue)
-            }
-            stack.pop().also { res -> print("= $res ${lineSeparator()}") }
-        }.sum().call { println(it) }
+
+                val stack = Stack<Long>()
+                outputQueue.forEach {
+                    print("$it ")
+                    val newValue =
+                        when (it) {
+                            is Number -> {
+                                it.value
+                            }
+                            else -> {
+                                val right = stack.pop()
+                                val left = stack.pop()
+                                if (it is Plus) {
+                                    left + right
+                                } else {
+                                    left * right
+                                }
+                            }
+                        }
+                    stack.push(newValue)
+                }
+                stack.pop().also { res -> print("= $res ${lineSeparator()}") }
+            }.sum()
+            .call { println(it) }
     }
 
     private fun parseToken(token: String) {
@@ -132,9 +134,9 @@ What do you get if you add up the results of evaluating the homework problems us
             outputQueue.add(Number(token.toLong()))
         } else if (token == "*" || token == "+") {
             val operator = parseOperator(token[0])
-            while (!operatorStack.isEmpty()
-                && operatorStack.peek().precedence >= operator.precedence
-                && operatorStack.peek() != LeftParenthesis
+            while (!operatorStack.isEmpty() &&
+                operatorStack.peek().precedence >= operator.precedence &&
+                operatorStack.peek() != LeftParenthesis
             ) {
                 outputQueue.add(operatorStack.pop())
             }
@@ -156,18 +158,22 @@ What do you get if you add up the results of evaluating the homework problems us
 }
 
 sealed class OutputToken
-data class Number(val value: Long) : OutputToken() {
-    override fun toString(): String {
-        return value.toString()
-    }
+
+data class Number(
+    val value: Long,
+) : OutputToken() {
+    override fun toString(): String = value.toString()
 }
 
-abstract class Operator(private val symbol: Char, val precedence: Int) : OutputToken() {
-    override fun toString(): String {
-        return symbol.toString()
-    }
+abstract class Operator(
+    private val symbol: Char,
+    val precedence: Int,
+) : OutputToken() {
+    override fun toString(): String = symbol.toString()
 }
 
 object Plus : Operator('+', 2)
+
 object Multiply : Operator('*', 1)
+
 object LeftParenthesis : Operator('(', Int.MAX_VALUE)

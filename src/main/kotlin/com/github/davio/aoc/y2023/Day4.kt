@@ -1,14 +1,14 @@
 package com.github.davio.aoc.y2023
 
 import com.github.davio.aoc.general.Day
-import com.github.davio.aoc.general.getInputAsList
+import com.github.davio.aoc.general.getInputAsLines
 
 /**
  * See [Advent of Code 2023 Day 4](https://adventofcode.com/2023/day/4#part2])
  */
 object Day4 : Day() {
     private val cards =
-        getInputAsList()
+        getInputAsLines()
             .map { Card.parse(it) }
 
     override fun part1(): Long =

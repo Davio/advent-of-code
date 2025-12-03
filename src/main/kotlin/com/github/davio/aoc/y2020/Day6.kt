@@ -2,14 +2,13 @@ package com.github.davio.aoc.y2020
 
 import com.github.davio.aoc.general.Day
 import com.github.davio.aoc.general.call
-import com.github.davio.aoc.general.getInputAsSequence
+import com.github.davio.aoc.general.getInputAsLineSequence
 
 fun main() {
     Day6.getResult()
 }
 
 object Day6 : Day() {
-
     /*
      * --- Day 6: Custom Customs ---
 
@@ -102,38 +101,43 @@ For each group, count the number of questions to which everyone answered "yes". 
     fun getResult() {
         var activeGroup = Group()
 
-        (getInputAsSequence().sumOf { line: String ->
-            if (line.isBlank()) {
-                val yesAnswerCount = activeGroup.getAllYesAnswerCount()
-                activeGroup = Group()
-                yesAnswerCount
-            } else {
-                parseAnswerLine(line, activeGroup)
-                0
-            }
-        } + activeGroup.getAllYesAnswerCount()).call { println(it) }
+        (
+            getInputAsLineSequence().sumOf { line: String ->
+                if (line.isBlank()) {
+                    val yesAnswerCount = activeGroup.getAllYesAnswerCount()
+                    activeGroup = Group()
+                    yesAnswerCount
+                } else {
+                    parseAnswerLine(line, activeGroup)
+                    0
+                }
+            } + activeGroup.getAllYesAnswerCount()
+        ).call { println(it) }
     }
 
-    private fun parseAnswerLine(line: String, group: Group) {
+    private fun parseAnswerLine(
+        line: String,
+        group: Group,
+    ) {
         group.addYesAnswers(line)
     }
 
     class Group {
-
         private val yesAnswers: MutableList<String> = arrayListOf()
 
         fun addYesAnswers(answers: String) {
             yesAnswers.add(answers)
         }
 
-        fun getAllYesAnswerCount() = yesAnswers
-            .flatMap {
-                it.asSequence()
-            }.toSet()
-            .filter { c ->
-                yesAnswers.all {
-                    it.contains(c)
-                }
-            }.size
+        fun getAllYesAnswerCount() =
+            yesAnswers
+                .flatMap {
+                    it.asSequence()
+                }.toSet()
+                .filter { c ->
+                    yesAnswers.all {
+                        it.contains(c)
+                    }
+                }.size
     }
 }

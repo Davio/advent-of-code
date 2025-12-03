@@ -4,6 +4,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
+fun String.toIntArray() =
+    this
+        .map {
+            it.digitToInt()
+        }.toIntArray()
+
 inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long {
     var mul = 1.toLong()
     for (element in this) {
