@@ -12,7 +12,7 @@ import kotlin.time.toKotlinDuration
 
 private const val TYPE = "y2025"
 private const val PREFIX = "Day"
-private const val INSTANCE = 3
+private const val INSTANCE = 4
 private const val PART = 2
 private const val COPY_TO_CLIPBOARD = true
 

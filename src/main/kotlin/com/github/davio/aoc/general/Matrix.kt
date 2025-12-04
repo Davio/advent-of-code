@@ -1,7 +1,7 @@
 package com.github.davio.aoc.general
 
 data class Matrix<T>(
-    val data: List<List<T>>,
+    val data: List<MutableList<T>>,
 ) {
     val maxX: Int = data.lastIndex
     val maxY: Int = data[0].lastIndex
@@ -16,12 +16,21 @@ data class Matrix<T>(
                     }.toList()
             }
 
+    val size: Int = rows.size * columns.size
+
     operator fun get(
         x: Int,
         y: Int,
-    ): T = data[ y][x]
+    ): T = data[y][x]
 
     operator fun get(p: Point): T = data[p.y][p.x]
+
+    operator fun set(
+        p: Point,
+        value: T,
+    ) {
+        data[p.y][p.x] = value
+    }
 
     fun getAdjacentPoints(p: Point): Sequence<Point> {
         if (data.isEmpty()) return emptySequence()
@@ -38,6 +47,16 @@ data class Matrix<T>(
             }
         }
     }
+
+    fun getAdjacentPointsWithValues(p: Point): Sequence<PointIndexedValue<T>> =
+        getAdjacentPoints(p).map {
+            PointIndexedValue(it, this[it])
+        }
+
+    fun getAdjacentValues(p: Point): Sequence<T> =
+        getAdjacentPoints(p).map {
+            this[it]
+        }
 
     fun getOrthogonallyAdjacentPoints(p: Point): Sequence<Point> {
         if (data.isEmpty()) return emptySequence()
@@ -66,5 +85,18 @@ data class Matrix<T>(
         }
     }
 
+    fun getPointsWithValues(): Sequence<PointIndexedValue<T>> =
+        getPoints().map {
+            PointIndexedValue(it, this[it])
+        }
+
     override fun toString(): String = data.joinToString(separator = System.lineSeparator()) { it.joinToString(separator = " ") }
+
+    fun toString(transform: (T) -> CharSequence): String =
+        data.joinToString(separator = System.lineSeparator()) { it.joinToString(separator = "", transform = transform) }
 }
+
+data class PointIndexedValue<out T>(
+    val point: Point,
+    val value: T,
+)

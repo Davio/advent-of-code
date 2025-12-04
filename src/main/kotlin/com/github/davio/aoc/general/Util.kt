@@ -26,14 +26,14 @@ fun Day.getInputAsFlow() = getInputReader().lineSequence().asFlow()
 fun <T> Day.getInputAsMatrix(transformer: (Char) -> T): Matrix<T> =
     Matrix(
         getInputAsLines().map {
-            it.toList().map(transformer)
+            it.toList().map(transformer).toMutableList()
         },
     )
 
 fun Day.getInputAsMatrix(): Matrix<Char> =
     Matrix(
         getInputAsLines().map {
-            it.toList()
+            it.toMutableList()
         },
     )
 
