@@ -1,42 +1,5 @@
 package com.github.davio.aoc.general
 
-import kotlinx.coroutines.flow.asFlow
-
-fun Day.getInputReader() = ClassLoader.getSystemResourceAsStream(getCallingClassResourceFile())!!.bufferedReader()
-
-fun Day.getInputAsLine(): String = getInputReader().readLine()
-
-fun Day.getInputAsLines(): List<String> = getInputReader().readLines()
-
-fun Day.getInputAsLineSequence(): Sequence<String> = getInputReader().lineSequence()
-
-fun Day.getInputAsIntSequence() = getInputAsLineSequence().map { it.toInt() }
-
-fun Day.getInputAsIntList() = getInputAsLines().map { it.toInt() }
-
-fun Day.getInputAsLongSequence() = getInputAsLineSequence().map { it.toLong() }
-
-fun Day.getInputAsLongList() = getInputAsLines().map { it.toLong() }
-
-fun Day.getInputAsChunks(delimiter: String = System.lineSeparator() + System.lineSeparator()) =
-    getInputReader().readAllAsString().split(delimiter)
-
-fun Day.getInputAsFlow() = getInputReader().lineSequence().asFlow()
-
-fun <T> Day.getInputAsMatrix(transformer: (Char) -> T): Matrix<T> =
-    Matrix(
-        getInputAsLines().map {
-            it.toList().map(transformer).toMutableList()
-        },
-    )
-
-fun Day.getInputAsMatrix(): Matrix<Char> =
-    Matrix(
-        getInputAsLines().map {
-            it.toMutableList()
-        },
-    )
-
 fun <T> Sequence<T>.split(separatorPredicate: (T) -> Boolean): Sequence<List<T>> {
     val iterator = this.iterator()
     val buffer = mutableListOf<T>()
@@ -107,7 +70,7 @@ fun Day.getCallingClassResourceFile(): String {
     val classRegex = Regex("""(Day|P)(\d+)""")
     val (name, dayNumber) = classRegex.matchEntire(callingClassName.substringAfterLast("."))!!.destructured
     val folder = callingClassName.substringBeforeLast(".").replace('.', '/') + "/${name.lowercase()}$dayNumber"
-    val fileName = if (!isTest) "input" else "example" + (exampleNumber?.let { "-$it" } ?: "")
+    val fileName = if (!isTest || exampleNumber == null) "input" else "example-$exampleNumber"
     return "$folder/$fileName.txt"
 }
 

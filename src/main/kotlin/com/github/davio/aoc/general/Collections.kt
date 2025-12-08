@@ -5,10 +5,38 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
 fun String.toIntArray() =
-    this
-        .map {
-            it.digitToInt()
-        }.toIntArray()
+    map {
+        it.digitToInt()
+    }.toIntArray()
+
+fun String.toIntRange() =
+    split('-').let { (left, right) ->
+        left.toInt()..right.toInt()
+    }
+
+fun String.toLongRange() =
+    split('-').let { (left, right) ->
+        left.toLong()..right.toLong()
+    }
+
+fun String.toULongRange() =
+    split('-').let { (left, right) ->
+        left.toULong()..right.toULong()
+    }
+
+val LongRange.size: Long
+    get() {
+        if (first > last) return 0
+
+        return (last - first) + 1
+    }
+
+val ULongRange.size: ULong
+    get() {
+        if (first > last) return 0uL
+
+        return (last - first) + 1uL
+    }
 
 inline fun <T> Iterable<T>.productOf(selector: (T) -> Long): Long {
     var mul = 1.toLong()
